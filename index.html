@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的連環漫畫存檔</title>
+    <title>連環漫畫SMALL存檔</title>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -227,9 +227,46 @@
             border-radius: 10px;
         }
 
+        /* 選中的日期 */
         .flatpickr-day.selected {
             background: #4299e1;
             border-color: #4299e1;
+        }
+
+        /* ⭐ 有漫畫的日期（啟用的日期）視覺強化 */
+        .flatpickr-day.enabled {
+            background-color: #e6f7ff;
+            font-weight: 600;
+            color: #2c5282;
+            position: relative;
+        }
+
+        .flatpickr-day.enabled:hover {
+            background-color: #4299e1;
+            color: white;
+        }
+
+        /* 禁用的日期（沒有漫畫的日期）*/
+        .flatpickr-day.flatpickr-disabled {
+            color: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        /* 為有漫畫的日期添加小圓點指示器 */
+        .flatpickr-day.enabled::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: #4299e1;
+            border-radius: 50%;
+        }
+
+        .flatpickr-day.selected.enabled::after {
+            background-color: white;
         }
 
         /* ==================== 響應式設計 ==================== */
@@ -324,18 +361,37 @@
 
     <script>
         // ==================== 配置區域 ====================
-        // ⚠️ 請在這裡填入你的圖片基礎網址
-        const IMAGE_BASE_URL = 'https://res.cloudinary.com/你的帳號/image/upload/';
         
-        // 漫畫開始日期（你的第一幅漫畫的日期）
-        const FIRST_COMIC_DATE = new Date('2021-01-01');
+        // Cloudinary 配置
+        const CLOUDINARY_CLOUD_NAME = 'ddotapoxu';
+        const IMAGE_BASE_URL = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/`;
         
-        // 漫畫最新日期（預設為今天，如果你有特定的最後更新日期可以修改）
-        const LAST_COMIC_DATE = new Date();
+        // ==================== 可用日期資料庫 ====================
+        // ⚠️ 這個陣列存放所有有漫畫的日期（格式：YYYY-MM-DD）
+        // 📝 如何批量貼入 1200 個日期：
+        //    1. 準備你的日期清單（每行一個日期，或用逗號分隔）
+        //    2. 全部貼在下方陣列中，用單引號包住每個日期，用逗號分隔
+        //    3. 範例格式：['2025-01-30', '2025-01-31', '2025-02-01', ...]
+        //    4. 提示：可以用 Excel 或 Python 批量生成日期字串後貼入
+        const availableDates = [
+            '2025-01-30',
+            // 在這裡貼入更多日期...
+            // '2025-01-31',
+            // '2025-02-01',
+            // '2025-02-02',
+            // ... 持續加入你的 1200 個日期
+        ];
+        
+        // 自動計算第一幅和最後一幅漫畫的日期
+        const FIRST_COMIC_DATE = availableDates.length > 0 ? new Date(availableDates[0]) : new Date();
+        const LAST_COMIC_DATE = availableDates.length > 0 ? new Date(availableDates[availableDates.length - 1]) : new Date();
 
         // ==================== 全域變數 ====================
-        let currentDate = new Date();
+        let currentDate = LAST_COMIC_DATE; // 預設顯示最新漫畫
         let flatpickrInstance;
+        
+        // 將日期陣列轉換為 Set 以便快速查找
+        const availableDatesSet = new Set(availableDates);
 
         // ==================== DOM 元素 ====================
         const dateButton = document.getElementById('dateButton');
@@ -348,6 +404,12 @@
 
         // ==================== 初始化 ====================
         function init() {
+            // 檢查是否有可用日期
+            if (availableDates.length === 0) {
+                alert('錯誤：沒有可用的漫畫日期。請在 availableDates 陣列中添加日期。');
+                return;
+            }
+            
             // 初始化 Flatpickr
             flatpickrInstance = flatpickr(dateButton, {
                 locale: 'zh_tw',
@@ -355,22 +417,33 @@
                 defaultDate: currentDate,
                 minDate: FIRST_COMIC_DATE,
                 maxDate: LAST_COMIC_DATE,
+                
+                // 啟用年份和月份快速選擇
+                yearSelectorType: 'static',
+                monthSelectorType: 'static',
+                
+                // ⭐ 核心功能：只啟用有漫畫的日期
+                enable: availableDates,
+                
+                // 日期變更時的回調
                 onChange: function(selectedDates, dateStr, instance) {
                     if (selectedDates.length > 0) {
                         currentDate = selectedDates[0];
                         loadComic();
                     }
                 },
-                // 啟用年份和月份快速選擇
-                yearSelectorType: 'static',
-                monthSelectorType: 'static'
+                
+                // 日曆渲染完成後的回調（用於添加自定義樣式）
+                onReady: function(selectedDates, dateStr, instance) {
+                    styleEnabledDates();
+                }
             });
 
             // 綁定按鈕事件
             prevBtn.addEventListener('click', showPreviousComic);
             nextBtn.addEventListener('click', showNextComic);
 
-            // 載入當前漫畫
+            // 載入當前漫畫（最新的那一幅）
             loadComic();
 
             // 鍵盤導覽
@@ -397,7 +470,8 @@
         // ==================== 生成漫畫網址 ====================
         function getComicUrl(date) {
             const dateStr = formatDate(date);
-            return `${IMAGE_BASE_URL}comic_${dateStr}.jpg`;
+            // Cloudinary 格式：https://res.cloudinary.com/ddotapoxu/image/upload/2025-01-30.png
+            return `${IMAGE_BASE_URL}${dateStr}.png`;
         }
 
         // ==================== 載入漫畫 ====================
@@ -448,34 +522,61 @@
         }
 
         // ==================== 導覽功能 ====================
-        function showPreviousComic() {
-            const newDate = new Date(currentDate);
-            newDate.setDate(newDate.getDate() - 1);
+        // ⭐ 尋找前一個有漫畫的日期
+        function findPreviousAvailableDate(date) {
+            const currentDateStr = formatDate(date);
+            const currentIndex = availableDates.indexOf(currentDateStr);
             
-            if (newDate >= FIRST_COMIC_DATE) {
-                currentDate = newDate;
+            if (currentIndex > 0) {
+                return new Date(availableDates[currentIndex - 1]);
+            }
+            return null; // 已經是第一幅漫畫
+        }
+        
+        // ⭐ 尋找下一個有漫畫的日期
+        function findNextAvailableDate(date) {
+            const currentDateStr = formatDate(date);
+            const currentIndex = availableDates.indexOf(currentDateStr);
+            
+            if (currentIndex !== -1 && currentIndex < availableDates.length - 1) {
+                return new Date(availableDates[currentIndex + 1]);
+            }
+            return null; // 已經是最新漫畫
+        }
+        
+        function showPreviousComic() {
+            const prevDate = findPreviousAvailableDate(currentDate);
+            
+            if (prevDate) {
+                currentDate = prevDate;
                 flatpickrInstance.setDate(currentDate);
                 loadComic();
             }
         }
 
         function showNextComic() {
-            const newDate = new Date(currentDate);
-            newDate.setDate(newDate.getDate() + 1);
+            const nextDate = findNextAvailableDate(currentDate);
             
-            if (newDate <= LAST_COMIC_DATE) {
-                currentDate = newDate;
+            if (nextDate) {
+                currentDate = nextDate;
                 flatpickrInstance.setDate(currentDate);
                 loadComic();
             }
         }
 
         function updateNavigationButtons() {
-            // 檢查是否到達第一幅漫畫
-            prevBtn.disabled = currentDate <= FIRST_COMIC_DATE;
+            // 檢查是否還有前一幅漫畫
+            prevBtn.disabled = findPreviousAvailableDate(currentDate) === null;
             
-            // 檢查是否到達最新漫畫
-            nextBtn.disabled = currentDate >= LAST_COMIC_DATE;
+            // 檢查是否還有下一幅漫畫
+            nextBtn.disabled = findNextAvailableDate(currentDate) === null;
+        }
+
+        // ==================== 日曆視覺美化 ====================
+        function styleEnabledDates() {
+            // 為有漫畫的日期添加特殊視覺效果
+            // Flatpickr 會自動為 enable 陣列中的日期添加 'enabled' class
+            // 我們透過 CSS 來美化這些日期
         }
 
         // ==================== 鍵盤控制 ====================
