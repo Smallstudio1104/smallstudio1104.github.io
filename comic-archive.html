@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的連環漫畫存檔</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <style>
+        /* ==================== 全域樣式 ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* ==================== 導覽列 ==================== */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4a5568;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #718096;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #4299e1;
+        }
+
+        /* ==================== 主容器 ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* ==================== 控制面板 ==================== */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .date-button {
+            background: white;
+            border: 2px solid #4299e1;
+            color: #4299e1;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .date-button:hover {
+            background: #4299e1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .date-button:active {
+            transform: translateY(0);
+        }
+
+        /* ==================== 漫畫顯示區 ==================== */
+        .comic-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-btn {
+            background: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: #4299e1;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .comic-container {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            flex: 1;
+            max-width: 900px;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comic-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            transition: opacity 0.3s ease;
+        }
+
+        .comic-image.loading {
+            opacity: 0.5;
+        }
+
+        /* 載入動畫 */
+        .loading-spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #4299e1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: absolute;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 無漫畫提示 */
+        .no-comic-message {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+
+        .no-comic-message.active {
+            display: block;
+        }
+
+        .no-comic-message h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+
+        .no-comic-message p {
+            font-size: 1rem;
+        }
+
+        /* ==================== 日期顯示 ==================== */
+        .current-date-display {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        /* ==================== Flatpickr 自訂樣式 ==================== */
+        .flatpickr-calendar {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        .flatpickr-day.selected {
+            background: #4299e1;
+            border-color: #4299e1;
+        }
+
+        /* ==================== 響應式設計 ==================== */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .comic-wrapper {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .date-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .comic-container {
+                padding: 1rem;
+                min-height: 300px;
+            }
+
+            .current-date-display {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 導覽列 -->
+    <nav class="navbar">
+        <a href="#" class="logo">📚 我的連環漫畫存檔</a>
+        <ul class="nav-links">
+            <li><a href="#about">關於我</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 日期控制 -->
+        <div class="controls">
+            <button class="date-button" id="dateButton">
+                📅 選擇日期
+            </button>
+        </div>
+
+        <!-- 當前日期顯示 -->
+        <div class="current-date-display" id="currentDateDisplay"></div>
+
+        <!-- 漫畫顯示區 -->
+        <div class="comic-wrapper">
+            <button class="nav-btn" id="prevBtn" aria-label="前一天">‹</button>
+            
+            <div class="comic-container">
+                <div class="loading-spinner" id="loadingSpinner"></div>
+                <img src="" alt="連環漫畫" class="comic-image" id="comicImage" style="display: none;">
+                <div class="no-comic-message" id="noComicMessage">
+                    <h2>😔 當天尚未更新</h2>
+                    <p>這個日期還沒有漫畫喔！<br>請選擇其他日期。</p>
+                </div>
+            </div>
+            
+            <button class="nav-btn" id="nextBtn" aria-label="下一天">›</button>
+        </div>
+    </div>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh-tw.js"></script>
+
+    <script>
+        // ==================== 配置區域 ====================
+        // ⚠️ 請在這裡填入你的圖片基礎網址
+        const IMAGE_BASE_URL = 'https://res.cloudinary.com/你的帳號/image/upload/';
+        
+        // 漫畫開始日期（你的第一幅漫畫的日期）
+        const FIRST_COMIC_DATE = new Date('2021-01-01');
+        
+        // 漫畫最新日期（預設為今天，如果你有特定的最後更新日期可以修改）
+        const LAST_COMIC_DATE = new Date();
+
+        // ==================== 全域變數 ====================
+        let currentDate = new Date();
+        let flatpickrInstance;
+
+        // ==================== DOM 元素 ====================
+        const dateButton = document.getElementById('dateButton');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const comicImage = document.getElementById('comicImage');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const noComicMessage = document.getElementById('noComicMessage');
+        const currentDateDisplay = document.getElementById('currentDateDisplay');
+
+        // ==================== 初始化 ====================
+        function init() {
+            // 初始化 Flatpickr
+            flatpickrInstance = flatpickr(dateButton, {
+                locale: 'zh_tw',
+                dateFormat: 'Y-m-d',
+                defaultDate: currentDate,
+                minDate: FIRST_COMIC_DATE,
+                maxDate: LAST_COMIC_DATE,
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 0) {
+                        currentDate = selectedDates[0];
+                        loadComic();
+                    }
+                },
+                // 啟用年份和月份快速選擇
+                yearSelectorType: 'static',
+                monthSelectorType: 'static'
+            });
+
+            // 綁定按鈕事件
+            prevBtn.addEventListener('click', showPreviousComic);
+            nextBtn.addEventListener('click', showNextComic);
+
+            // 載入當前漫畫
+            loadComic();
+
+            // 鍵盤導覽
+            document.addEventListener('keydown', handleKeyPress);
+        }
+
+        // ==================== 日期格式化 ====================
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function formatDateDisplay(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const weekday = weekdays[date.getDay()];
+            return `${year} 年 ${month} 月 ${day} 日 ${weekday}`;
+        }
+
+        // ==================== 生成漫畫網址 ====================
+        function getComicUrl(date) {
+            const dateStr = formatDate(date);
+            return `${IMAGE_BASE_URL}comic_${dateStr}.jpg`;
+        }
+
+        // ==================== 載入漫畫 ====================
+        function loadComic() {
+            // 更新日期顯示
+            currentDateDisplay.textContent = formatDateDisplay(currentDate);
+            dateButton.textContent = `📅 ${formatDate(currentDate)}`;
+
+            // 更新按鈕狀態
+            updateNavigationButtons();
+
+            // 顯示載入動畫
+            showLoading();
+
+            // 嘗試載入圖片
+            const comicUrl = getComicUrl(currentDate);
+            const img = new Image();
+
+            img.onload = function() {
+                comicImage.src = comicUrl;
+                showComic();
+            };
+
+            img.onerror = function() {
+                showNoComicMessage();
+            };
+
+            img.src = comicUrl;
+        }
+
+        // ==================== 顯示狀態管理 ====================
+        function showLoading() {
+            loadingSpinner.classList.add('active');
+            comicImage.style.display = 'none';
+            noComicMessage.classList.remove('active');
+        }
+
+        function showComic() {
+            loadingSpinner.classList.remove('active');
+            comicImage.style.display = 'block';
+            noComicMessage.classList.remove('active');
+        }
+
+        function showNoComicMessage() {
+            loadingSpinner.classList.remove('active');
+            comicImage.style.display = 'none';
+            noComicMessage.classList.add('active');
+        }
+
+        // ==================== 導覽功能 ====================
+        function showPreviousComic() {
+            const newDate = new Date(currentDate);
+            newDate.setDate(newDate.getDate() - 1);
+            
+            if (newDate >= FIRST_COMIC_DATE) {
+                currentDate = newDate;
+                flatpickrInstance.setDate(currentDate);
+                loadComic();
+            }
+        }
+
+        function showNextComic() {
+            const newDate = new Date(currentDate);
+            newDate.setDate(newDate.getDate() + 1);
+            
+            if (newDate <= LAST_COMIC_DATE) {
+                currentDate = newDate;
+                flatpickrInstance.setDate(currentDate);
+                loadComic();
+            }
+        }
+
+        function updateNavigationButtons() {
+            // 檢查是否到達第一幅漫畫
+            prevBtn.disabled = currentDate <= FIRST_COMIC_DATE;
+            
+            // 檢查是否到達最新漫畫
+            nextBtn.disabled = currentDate >= LAST_COMIC_DATE;
+        }
+
+        // ==================== 鍵盤控制 ====================
+        function handleKeyPress(e) {
+            if (e.key === 'ArrowLeft') {
+                showPreviousComic();
+            } else if (e.key === 'ArrowRight') {
+                showNextComic();
+            }
+        }
+
+        // ==================== 啟動應用 ====================
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
