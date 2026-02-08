@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>連環漫畫SMALL存檔</title>
+    <title>我的連環漫畫存檔</title>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -366,14 +366,24 @@
         const CLOUDINARY_CLOUD_NAME = 'ddotapoxu';
         const IMAGE_BASE_URL = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/`;
         
+        // ==================== 日期載入模式選擇 ====================
+        // 📌 選擇日期載入方式：
+        // 'json'  : 從 dates.json 檔案載入（推薦，適合大量日期）
+        // 'inline': 直接使用下方的 availableDates 陣列（適合少量日期或測試）
+        const DATE_LOAD_MODE = 'inline'; // ⬅️ 修改為 'json' 以使用 JSON 檔案
+        
         // ==================== 可用日期資料庫 ====================
         // ⚠️ 這個陣列存放所有有漫畫的日期（格式：YYYY-MM-DD）
-        // 📝 如何批量貼入 1200 個日期：
-        //    1. 準備你的日期清單（每行一個日期，或用逗號分隔）
-        //    2. 全部貼在下方陣列中，用單引號包住每個日期，用逗號分隔
-        //    3. 範例格式：['2025-01-30', '2025-01-31', '2025-02-01', ...]
-        //    4. 提示：可以用 Excel 或 Python 批量生成日期字串後貼入
-        const availableDates = [
+        // 
+        // 📝 方式 1 - 手動貼入（適合測試或少量日期）：
+        //    直接在下方陣列中貼入日期
+        //
+        // 📝 方式 2 - 使用 JSON 檔案（推薦，適合 1200+ 日期）：
+        //    1. 執行 fetch-cloudinary-dates.js 生成 dates.json
+        //    2. 將 dates.json 上傳到與 HTML 相同的目錄
+        //    3. 將上方的 DATE_LOAD_MODE 改為 'json'
+        //
+        let availableDates = [
             '2025-01-30',
             // 在這裡貼入更多日期...
             // '2025-01-31',
@@ -382,16 +392,14 @@
             // ... 持續加入你的 1200 個日期
         ];
         
-        // 自動計算第一幅和最後一幅漫畫的日期
-        const FIRST_COMIC_DATE = availableDates.length > 0 ? new Date(availableDates[0]) : new Date();
-        const LAST_COMIC_DATE = availableDates.length > 0 ? new Date(availableDates[availableDates.length - 1]) : new Date();
+        // 日期範圍變數（稍後會設定）
+        let FIRST_COMIC_DATE;
+        let LAST_COMIC_DATE;
 
         // ==================== 全域變數 ====================
-        let currentDate = LAST_COMIC_DATE; // 預設顯示最新漫畫
+        let currentDate;
         let flatpickrInstance;
-        
-        // 將日期陣列轉換為 Set 以便快速查找
-        const availableDatesSet = new Set(availableDates);
+        let availableDatesSet;
 
         // ==================== DOM 元素 ====================
         const dateButton = document.getElementById('dateButton');
@@ -402,13 +410,54 @@
         const noComicMessage = document.getElementById('noComicMessage');
         const currentDateDisplay = document.getElementById('currentDateDisplay');
 
-        // ==================== 初始化 ====================
-        function init() {
-            // 檢查是否有可用日期
-            if (availableDates.length === 0) {
-                alert('錯誤：沒有可用的漫畫日期。請在 availableDates 陣列中添加日期。');
-                return;
+        // ==================== 載入日期資料 ====================
+        async function loadDates() {
+            if (DATE_LOAD_MODE === 'json') {
+                try {
+                    console.log('📥 正在從 dates.json 載入日期...');
+                    const response = await fetch('dates.json');
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    availableDates = data.availableDates;
+                    
+                    console.log(`✅ 成功載入 ${availableDates.length} 個日期`);
+                    console.log(`📅 日期範圍: ${data.firstDate} 至 ${data.lastDate}`);
+                    
+                } catch (error) {
+                    console.error('❌ 載入 dates.json 失敗:', error);
+                    alert('無法載入漫畫日期清單。請確認 dates.json 檔案存在。\n\n錯誤訊息: ' + error.message);
+                    return false;
+                }
+            } else {
+                console.log('📝 使用內嵌日期陣列');
             }
+            
+            // 檢查是否有可用日期
+            if (!availableDates || availableDates.length === 0) {
+                alert('錯誤：沒有可用的漫畫日期。\n\n請在 availableDates 陣列中添加日期，或設定 DATE_LOAD_MODE 為 "json" 並提供 dates.json 檔案。');
+                return false;
+            }
+            
+            // 設定日期範圍
+            FIRST_COMIC_DATE = new Date(availableDates[0]);
+            LAST_COMIC_DATE = new Date(availableDates[availableDates.length - 1]);
+            currentDate = LAST_COMIC_DATE; // 預設顯示最新漫畫
+            
+            // 建立日期集合以便快速查找
+            availableDatesSet = new Set(availableDates);
+            
+            return true;
+        }
+
+        // ==================== 初始化 ====================
+        async function init() {
+            // 先載入日期資料
+            const loaded = await loadDates();
+            if (!loaded) return;
             
             // 初始化 Flatpickr
             flatpickrInstance = flatpickr(dateButton, {
