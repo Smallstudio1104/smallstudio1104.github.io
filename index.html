@@ -937,20 +937,37 @@
             dateButton.textContent = `📅 ${formatDate(currentDate)}`;
             updateNavigationButtons();
             showLoading();
-
-            const comicUrl = getComicUrl(currentDate);
-            const img = new Image();
-
-            img.onload = function() {
-                comicImage.src = comicUrl;
-                showComic();
-            };
-
-            img.onerror = function() {
-                showNoComicMessage();
-            };
-
-            img.src = comicUrl;
+        
+            const dateStr = formatDate(currentDate);
+            const timestamp = new Date().getTime();
+            
+            // 嘗試多種格式
+            const formats = ['png', 'jpg', 'jpeg'];
+            let formatIndex = 0;
+            
+            function tryLoadImage() {
+                if (formatIndex >= formats.length) {
+                    showNoComicMessage();
+                    return;
+                }
+                
+                const comicUrl = `${IMAGE_BASE_URL}${dateStr}.${formats[formatIndex]}?t=${timestamp}`;
+                const img = new Image();
+                
+                img.onload = function() {
+                    comicImage.src = comicUrl;
+                    showComic();
+                };
+                
+                img.onerror = function() {
+                    formatIndex++;
+                    tryLoadImage();
+                };
+                
+                img.src = comicUrl;
+            }
+            
+            tryLoadImage();
         }
 
         // ==================== 顯示狀態管理 ====================
