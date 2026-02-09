@@ -219,31 +219,53 @@
                 margin-bottom: 0.5rem;
             }
             
+            /* ==================== 漫畫顯示區：徹底去留白 ==================== */
             .comic-container {
-                max-height: 75vh;
-                overflow: auto;
-                padding: 0.5rem;
-                min-height: auto;
+                background: white;
+                border-radius: 10px;
+                /* 這裡設為 0，徹底消除白框內部的間距 */
+                padding: 0; 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+                flex: 1;
+                max-width: 1200px;
+                position: relative;
+                /* 移除 min-height，讓容器高度隨圖片自動撐開 */
+                min-height: auto; 
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto;
+                width: 100%;
+                overflow: hidden;
             }
             
             .comic-image {
-                max-width: 100% !important;
-                max-height: 70vh;
-                width: auto !important;
+                /* 讓圖片寬度 100% 撐滿容器 */
+                width: 100%; 
                 height: auto;
+                display: block;
+                border-radius: 10px; /* 讓圖片圓角跟隨容器 */
+                pointer-events: auto;
             }
-        }
-        
-        .comic-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            display: block;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
+            
+            /* ⭐ 手機模式優化 */
+            @media (max-width: 768px) {
+                .comic-container {
+                    /* 如果漫畫是橫向長條，允許左右滑動讀取 */
+                    overflow-x: auto; 
+                    -webkit-overflow-scrolling: touch;
+                    /* 增加一點點邊距讓它不要貼死螢幕邊緣 */
+                    width: 95%; 
+                }
+            
+                .comic-image {
+                    /* 確保在手機上漫畫不會縮成一團 */
+                    min-width: 100%; 
+                    width: auto;
+                    /* 限制最大高度，避免手機上一張圖佔掉三頁螢幕 */
+                    max-height: 70vh; 
+                }
+            }
         
         .comic-image.loading {
             opacity: 0.5;
