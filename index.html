@@ -182,12 +182,15 @@
                 overflow-x: auto;
                 overflow-y: hidden;
                 padding: 1rem;
+                scroll-snap-type: x mandatory;  /* 新增:滑動對齊 */
             }
             
             .comic-image {
                 max-width: none !important;
                 width: 200% !important;
                 height: auto;
+                margin-left: 0;  /* 新增:確保從左邊開始 */
+                display: block;
             }
         }
         
@@ -480,9 +483,10 @@
             }
         
             .nav-btn {
-                width: 100%;
+                width: 50px;  /* 改回固定寬度 */
                 height: 50px;
                 font-size: 1.2rem;
+                flex-shrink: 0;  /* 新增:防止按鈕被壓縮 */
             }
 
             .date-button {
@@ -949,10 +953,16 @@
             noComicMessage.classList.remove('active');
         }
 
-        function showComic() {
+            function showComic() {
             loadingSpinner.classList.remove('active');
             comicImage.style.display = 'block';
             noComicMessage.classList.remove('active');
+            
+            // 新增:重置滑動位置到最左邊
+            const comicContainer = document.querySelector('.comic-container');
+            if (comicContainer) {
+                comicContainer.scrollLeft = 0;
+            }
         }
 
         function showNoComicMessage() {
