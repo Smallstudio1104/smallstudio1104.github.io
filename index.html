@@ -179,23 +179,81 @@
             width: 100%;
         }
         
-        /* ⭐ 手機直式模式 - 正常顯示，可左右滑動查看完整圖片 */
+        /* ⭐ 手機直式模式 - 放大圖片並可左右滑動 */
         @media (max-width: 768px) and (orientation: portrait) {
+            .header {
+                padding: 1rem 1rem 0.5rem;
+            }
+            
+            .comic-title {
+                font-size: 1.8rem;
+            }
+            
+            .comic-title img {
+                max-height: 50px;
+            }
+            
+            .comic-date {
+                font-size: 0.9rem;
+            }
+            
+            .container {
+                padding: 0 0.5rem 1rem;
+            }
+            
+            .date-controls {
+                margin-bottom: 0.5rem;
+            }
+            
+            .comic-wrapper {
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+                gap: 0.5rem;
+            }
+            
             .comic-container {
                 overflow-x: auto;
                 overflow-y: hidden;
-                padding: 1rem;
+                padding: 0.5rem;
                 align-items: flex-start;
                 justify-content: flex-start;
                 min-height: auto;
+                border-radius: 8px;
+                /* 顯示滑動條 */
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* 自訂滑動條樣式 */
+            .comic-container::-webkit-scrollbar {
+                height: 8px;
+            }
+            
+            .comic-container::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 4px;
+            }
+            
+            .comic-container::-webkit-scrollbar-thumb {
+                background: #888;
+                border-radius: 4px;
+            }
+            
+            .comic-container::-webkit-scrollbar-thumb:hover {
+                background: #555;
             }
             
             .comic-image {
-                max-width: 100%;
+                max-width: none;
                 width: auto;
-                height: auto;
+                height: 60vh;
+                min-height: 400px;
                 margin: 0;
                 display: block;
+            }
+            
+            .share-container {
+                padding: 0.5rem 0;
+                gap: 0.8rem;
             }
         }
         
