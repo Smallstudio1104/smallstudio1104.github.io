@@ -82,6 +82,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;  /* 新增:置中對齊 */
         }
 
         /* ==================== 日期選擇按鈕 ==================== */
@@ -112,17 +113,16 @@
         }
 
         /* ==================== 漫畫顯示區 ==================== */
-        ..comic-wrapper {
+        .comic-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 1rem;
             margin-bottom: 1rem;
             margin-top: 2rem;
-            width: 100%;           /* 新增:保持100%寬度 */
-            max-width: 400px;      /* 新增:最大寬度400px */
-            margin-left: auto;     /* 新增:水平置中 */
-            margin-right: auto;    /* 新增:水平置中 */
+            width: 100vw;          /* 新增:使用視窗寬度 */
+            max-width: 400px;      /* 新增:限制最大寬度 */
+            position: relative;    /* 新增:獨立定位 */
         }
 
         .nav-btn {
@@ -203,14 +203,29 @@
         
         /* ⭐ 手機橫式模式 - 填滿螢幕 */
         @media (max-width: 768px) and (orientation: landscape) {
+            .header {
+                padding: 1rem 1rem 0.5rem;  /* 新增:減少頂部區域的padding */
+            }
+            
+            .container {
+                padding: 0 1rem 0.5rem;  /* 新增:減少容器的padding */
+            }
+            
+            .comic-wrapper {
+                margin-top: 0.5rem;  /* 新增:減少按鈕區的上邊距 */
+                margin-bottom: 0.5rem;  /* 新增:減少按鈕區的下邊距 */
+            }
+            
             .comic-container {
-                max-height: 70vh;
+                max-height: 80vh;  /* 改為80vh,增加可用高度 */
                 overflow: auto;
+                padding: 0.5rem;  /* 新增:減少內邊距 */
+                margin: 0;  /* 新增:移除外邊距 */
             }
             
             .comic-image {
                 max-width: 100% !important;
-                max-height: 70vh;
+                max-height: 80vh;  /* 改為80vh */
                 width: auto !important;
                 height: auto;
             }
