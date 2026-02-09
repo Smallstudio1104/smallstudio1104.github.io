@@ -219,7 +219,6 @@
                 justify-content: flex-start;
                 min-height: auto;
                 border-radius: 8px;
-                /* 顯示滑動條 */
                 -webkit-overflow-scrolling: touch;
             }
             
@@ -243,12 +242,14 @@
             }
             
             .comic-image {
-                max-width: none;
-                width: auto;
-                height: 60vh;
-                min-height: 400px;
+                max-width: none !important;
+                width: auto !important;
+                height: 55vh !important;
+                min-height: 350px !important;
+                max-height: none !important;
                 margin: 0;
                 display: block;
+                object-fit: contain;
             }
             
             .share-container {
