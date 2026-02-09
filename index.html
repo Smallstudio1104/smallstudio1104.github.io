@@ -167,13 +167,43 @@
             padding: 1.5rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             flex: 1;
-            max-width: 1200px;  /* ← 原本是 800px，改成 1200px 或更大 */
+            max-width: 1200px;
             position: relative;
             min-height: 400px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+        }
+        
+        /* ⭐ 手機直式模式 - 可左右滑動 */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .comic-container {
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 1rem;
+            }
+            
+            .comic-image {
+                max-width: none;
+                width: 200%;  /* 放大到兩倍寬 */
+                height: auto;
+            }
+        }
+        
+        /* ⭐ 手機橫式模式 - 填滿螢幕 */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .comic-container {
+                max-height: 70vh;
+                overflow: auto;
+            }
+            
+            .comic-image {
+                max-width: 100%;
+                max-height: 70vh;
+                width: auto;
+                height: auto;
+            }
         }
 
         .comic-image {
@@ -441,7 +471,16 @@
             }
 
             .comic-wrapper {
-                flex-direction: column;
+                flex-direction: row;  /* ← 改回 row，原本是 column */
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+        
+            .nav-btn {
+                width: 50px;   /* ← 原本是 60px */
+                height: 50px;  /* ← 原本是 60px */
+                font-size: 1.3rem;  /* ← 原本是 1.8rem */
             }
 
             .nav-btn {
@@ -880,14 +919,28 @@
             nextBtn.addEventListener('click', showNextComic);
             lastBtn.addEventListener('click', showLastComic);
 
-            // ← 加這段
-            comicTitle.addEventListener('click', function() {
-                currentDate = LAST_COMIC_DATE;
-                flatpickrInstance.setDate(currentDate);
-                updateURL(currentDate);
-                loadComic();
-            });
-            comicTitle.style.cursor = 'pointer';  // 加上手指游標
+            // ✅ 改成只綁定 LOGO 圖片
+            const logoImage = document.getElementById('logoImage');
+            const logoText = document.getElementById('logoText');
+            
+            if (CONFIG.logoImageUrl) {
+                logoImage.style.cursor = 'pointer';
+                logoImage.addEventListener('click', function() {
+                    currentDate = LAST_COMIC_DATE;
+                    flatpickrInstance.setDate(currentDate);
+                    updateURL(currentDate);
+                    loadComic();
+                });
+            } else {
+                // 如果沒有圖片，用文字
+                logoText.style.cursor = 'pointer';
+                logoText.addEventListener('click', function() {
+                    currentDate = LAST_COMIC_DATE;
+                    flatpickrInstance.setDate(currentDate);
+                    updateURL(currentDate);
+                    loadComic();
+                });
+            }
 
             loadComic();
 
