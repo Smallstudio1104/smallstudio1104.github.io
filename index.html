@@ -513,20 +513,20 @@
         </div>
 
         <!-- 漫畫顯示區 -->
+        <div class="comic-container">
+            <div class="loading-spinner" id="loadingSpinner"></div>
+            <img src="" alt="SMALL 連環漫畫" class="comic-image" id="comicImage" style="display: none;">
+            <div class="no-comic-message" id="noComicMessage">
+                <h2>😔 當天尚未更新</h2>
+                <p>這個日期還沒有漫畫喔！<br>請選擇其他日期。</p>
+            </div>
+        </div>
+        
+        <!-- 導航按鈕 -->
         <div class="comic-wrapper">
             <button class="nav-btn" id="firstBtn" aria-label="最舊" title="最舊的漫畫">«</button>
             <button class="nav-btn" id="prevBtn" aria-label="前一天" title="上一幅">‹</button>
             <button class="nav-btn random-btn" id="randomBtn" aria-label="隨機" title="隨機漫畫">🎲</button>
-            
-            <div class="comic-container">
-                <div class="loading-spinner" id="loadingSpinner"></div>
-                <img src="" alt="SMALL 連環漫畫" class="comic-image" id="comicImage" style="display: none;">
-                <div class="no-comic-message" id="noComicMessage">
-                    <h2>😔 當天尚未更新</h2>
-                    <p>這個日期還沒有漫畫喔！<br>請選擇其他日期。</p>
-                </div>
-            </div>
-            
             <button class="nav-btn" id="nextBtn" aria-label="下一天" title="下一幅">›</button>
             <button class="nav-btn" id="lastBtn" aria-label="最新" title="最新的漫畫">»</button>
         </div>
