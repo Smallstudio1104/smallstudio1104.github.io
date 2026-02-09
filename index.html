@@ -118,6 +118,7 @@
             justify-content: center;
             gap: 1rem;
             margin-bottom: 1rem;
+            margin-top: 2rem;  /* ← 加這行 */
         }
 
         .nav-btn {
@@ -181,6 +182,9 @@
             border-radius: 5px;
             display: block;
             transition: opacity 0.3s ease;
+            pointer-events: none;  /* ← 加這行，禁止所有滑鼠互動 */
+            user-select: none;     /* ← 加這行，禁止選取 */
+            -webkit-user-drag: none;  /* ← 加這行，禁止拖曳 */
         }
 
         .comic-image.loading {
@@ -872,6 +876,15 @@
             nextBtn.addEventListener('click', showNextComic);
             lastBtn.addEventListener('click', showLastComic);
 
+            // ← 加這段
+            comicTitle.addEventListener('click', function() {
+                currentDate = LAST_COMIC_DATE;
+                flatpickrInstance.setDate(currentDate);
+                updateURL(currentDate);
+                loadComic();
+            });
+            comicTitle.style.cursor = 'pointer';  // 加上手指游標
+
             loadComic();
 
             document.addEventListener('keydown', handleKeyPress);
@@ -882,6 +895,18 @@
                     flatpickrInstance.setDate(currentDate);
                     loadComic();
                 }
+            });
+
+            // 禁止圖片右鍵選單
+            comicImage.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // 禁止拖曳圖片
+            comicImage.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
             });
         }
 
