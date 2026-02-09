@@ -246,7 +246,7 @@
             font-size: 1rem;
         }
         
-        /* ==================== 社群分享按鈕(素色版) ==================== */
+        /* ==================== 社群分享按鈕(純圖片版) ==================== */
         .share-container {
             display: flex;
             justify-content: center;
@@ -259,46 +259,37 @@
         .share-icon {
             width: 45px;
             height: 45px;
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
+            border: none;
+            background-color: transparent;
+            padding: 0;
         }
         
         .share-icon:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateY(-3px) scale(1.1);
         }
         
         .share-icon.facebook {
-            background-color: #e8f0fe;
             background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641549/20673.png');
-            border-color: #1877f2;
         }
         
         .share-icon.twitter {
-            background-color: #e8f5fd;
             background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641592/X_icon.svg.png');
-            border-color: #1da1f2;
         }
         
         .share-icon.line {
-            background-color: #e8fae8;
             background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641570/82105.png');
-            border-color: #00b900;
         }
         
         .share-icon.copy {
-            background-color: #f0f0f0;
             background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641690/copy-link-face.png');
-            border-color: #636e72;
         }
         
         /* ==================== 橫幅廣告區 ==================== */
@@ -416,6 +407,22 @@
         
         .flatpickr-day.selected.enabled::after {
             background-color: white;
+        }
+        
+        /* CCC獨家內容標記 */
+        .flatpickr-day.ccc-exclusive {
+            background-color: rgb(200, 187, 155) !important;
+            color: #2d3436;
+        }
+        
+        .flatpickr-day.ccc-exclusive:hover {
+            background-color: rgb(180, 167, 135) !important;
+            color: white;
+        }
+        
+        .flatpickr-day.ccc-exclusive.selected {
+            background-color: rgb(160, 147, 115) !important;
+            color: white;
         }
         
         /* ==================== 複製成功提示 ==================== */
@@ -560,6 +567,24 @@
         const comicDate = document.getElementById('comicDate');
         const copyToast = document.getElementById('copyToast');
         const bannerAds = document.getElementById('bannerAds');
+
+        // CCC獨家內容日期列表
+        const cccExclusiveDates = [
+            '2021-01-28', '2021-01-29', '2021-01-30', '2021-04-06', '2021-04-16',
+            '2021-04-19', '2021-04-24', '2021-04-26', '2021-04-28', '2021-04-29',
+            '2021-05-07', '2021-05-10', '2021-05-12', '2021-05-29', '2021-05-30',
+            '2021-05-31', '2021-06-05', '2021-06-12', '2021-06-15', '2021-06-14',
+            '2021-06-22', '2021-06-23', '2021-06-25', '2021-06-26', '2021-06-28',
+            '2021-06-29', '2021-07-01', '2021-07-04', '2021-07-02', '2021-07-22',
+            '2021-08-06', '2021-08-16', '2021-08-29', '2021-08-13', '2021-08-28',
+            '2021-09-24', '2021-10-20', '2021-10-25', '2021-11-01', '2021-11-02',
+            '2021-12-18', '2022-01-02', '2022-01-06', '2022-01-08', '2022-01-24',
+            '2022-02-13', '2022-02-15', '2022-02-18', '2022-02-19', '2022-03-30',
+            '2022-03-19', '2022-03-13', '2022-03-27', '2022-04-05', '2022-04-06',
+            '2022-04-12', '2022-04-14', '2022-04-16', '2022-04-21', '2022-04-23',
+            '2022-04-25', '2022-04-26', '2022-05-22', '2022-07-17', '2022-07-05',
+            '2022-07-03'
+        ];
 
         function applyCustomBackground() {
             document.body.style.background = CONFIG.backgroundColor;
@@ -740,6 +765,12 @@
                 },
                 onOpen: function(selectedDates, dateStr, instance) {
                     instance.jumpToDate(currentDate);
+                },
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const dateStr = formatDate(dayElem.dateObj);
+                    if (cccExclusiveDates.includes(dateStr)) {
+                        dayElem.classList.add('ccc-exclusive');
+                    }
                 }
             });
 
@@ -798,32 +829,14 @@
         }
 
         function loadComic() {
-            const cccExclusiveDates = [
-                '2021-01-28', '2021-01-29', '2021-01-30', '2021-04-06', '2021-04-16',
-                '2021-04-19', '2021-04-24', '2021-04-26', '2021-04-28', '2021-04-29',
-                '2021-05-07', '2021-05-10', '2021-05-12', '2021-05-29', '2021-05-30',
-                '2021-05-31', '2021-06-05', '2021-06-12', '2021-06-15', '2021-06-14',
-                '2021-06-22', '2021-06-23', '2021-06-25', '2021-06-26', '2021-06-28',
-                '2021-06-29', '2021-07-01', '2021-07-04', '2021-07-02', '2021-07-22',
-                '2021-08-06', '2021-08-16', '2021-08-29', '2021-08-13', '2021-08-28',
-                '2021-09-24', '2021-10-20', '2021-10-25', '2021-11-01', '2021-11-02',
-                '2021-12-18', '2022-01-02', '2022-01-06', '2022-01-08', '2022-01-24',
-                '2022-02-13', '2022-02-15', '2022-02-18', '2022-02-19', '2022-03-30',
-                '2022-03-19', '2022-03-13', '2022-03-27', '2022-04-05', '2022-04-06',
-                '2022-04-12', '2022-04-14', '2022-04-16', '2022-04-21', '2022-04-23',
-                '2022-04-25', '2022-04-26', '2022-05-22', '2022-07-17', '2022-07-05',
-                '2022-07-03'
-            ];
-            
             const currentDateStr = formatDate(currentDate);
+            
+            // 修改3: 如果選擇CCC獨家日期,顯示確認對話框
             if (cccExclusiveDates.includes(currentDateStr)) {
                 if (confirm('這個日期的漫畫是 CCC追漫台 獨家內容!\n\n是否前往 CCC追漫台 觀看?')) {
                     window.location.href = 'https://www.creative-comic.tw/zh/book/268/content';
-                } else {
-                    currentDate = LAST_COMIC_DATE;
-                    flatpickrInstance.setDate(currentDate);
-                    updateURL(currentDate);
                 }
+                // 如果選擇取消,currentDate保持不變,不做任何操作
                 return;
             }
         
@@ -896,9 +909,31 @@
             }
         }
 
+        // 修改4和5: 隨機漫畫排除CCC獨家且至少差3天
         function showRandomComic() {
-            const randomIndex = Math.floor(Math.random() * availableDates.length);
-            currentDate = new Date(availableDates[randomIndex]);
+            // 過濾出非CCC獨家的日期
+            const nonCCCDates = availableDates.filter(date => !cccExclusiveDates.includes(date));
+            
+            if (nonCCCDates.length === 0) {
+                alert('沒有可用的隨機漫畫!');
+                return;
+            }
+            
+            const currentDateStr = formatDate(currentDate);
+            const currentIndex = availableDates.indexOf(currentDateStr);
+            
+            // 找出與當前日期至少差3天的候選日期
+            const candidateDates = nonCCCDates.filter(dateStr => {
+                const candidateIndex = availableDates.indexOf(dateStr);
+                const daysDiff = Math.abs(candidateIndex - currentIndex);
+                return daysDiff >= 3;
+            });
+            
+            // 如果沒有符合條件的日期,放寬到所有非CCC日期
+            const finalCandidates = candidateDates.length > 0 ? candidateDates : nonCCCDates;
+            
+            const randomIndex = Math.floor(Math.random() * finalCandidates.length);
+            currentDate = new Date(finalCandidates[randomIndex]);
             flatpickrInstance.setDate(currentDate);
             updateURL(currentDate);
             loadComic();
