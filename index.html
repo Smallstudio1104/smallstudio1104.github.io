@@ -867,6 +867,10 @@
                         updateURL(currentDate);
                         loadComic();
                     }
+                },
+                onOpen: function(selectedDates, dateStr, instance) {
+                    // 每次打開日曆時，跳到當前顯示的日期
+                    instance.jumpToDate(currentDate);
                 }
             });
 
