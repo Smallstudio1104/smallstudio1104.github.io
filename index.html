@@ -48,6 +48,24 @@
         .header {
             text-align: center;
             padding: 2rem 1rem 1rem;
+            position: relative;  /* 加這行 */
+        }
+        
+        /* 加入這段 */
+        .characters-link {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #2d3436;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .characters-link:hover {
+            color: #636e72;
+            transform: translateY(-2px);
         }
         
         .comic-title {
@@ -449,6 +467,7 @@
 <body>
     <!-- 頂部標題區 -->
     <div class="header">
+        <a href="characters.html" class="characters-link">👥 角色介紹</a>
         <h1 class="comic-title" id="comicTitle">
             <img src="" alt="SMALL" id="logoImage" style="display: none;">
             <span id="logoText">SMALL</span>
@@ -482,10 +501,6 @@
                 <button class="nav-btn random-btn" id="randomBtn" aria-label="隨機" title="隨機漫畫">🎲</button>
                 <button class="nav-btn" id="nextBtn" aria-label="下一天" title="下一幅">›</button>
                 <button class="nav-btn" id="lastBtn" aria-label="最新" title="最新的漫畫">»</button>
-                <!-- 加入這個 -->
-                <div style="text-align: center; margin-top: 1rem;">
-                    <button class="date-button" onclick="location.href='characters.html'">👥 角色介紹</button>
-                </div>
             </div>
         </div>
 
