@@ -34,7 +34,6 @@
 
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            /* ⭐ 自訂背景 - 可在 CONFIG 中設定 */
             background: #ffffff;
             background-size: cover;
             background-position: center;
@@ -150,6 +149,17 @@
             cursor: not-allowed;
         }
 
+        .nav-btn.random-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .nav-btn.random-btn:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: scale(1.1) rotate(360deg);
+        }
+
         .comic-container {
             background: white;
             border-radius: 10px;
@@ -220,52 +230,132 @@
             font-size: 1rem;
         }
 
-        /* ==================== 社群分享小圖示 ==================== */
+        /* ==================== 社群分享按鈕（素色版） ==================== */
         .share-container {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 1rem;
             padding: 1rem 0;
+            flex-wrap: wrap;
         }
 
         .share-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1.2rem;
-            border: none;
+            border: 2px solid transparent;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
         .share-icon:hover {
-            transform: translateY(-3px) scale(1.1);
+            transform: translateY(-3px) scale(1.05);
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .share-icon.facebook {
-            background: #1877f2;
-            color: white;
+            background-color: #e8f0fe;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMTg3N2YyIj48cGF0aCBkPSJNMjQgMTJjMC02LjYyNy01LjM3My0xMi0xMi0xMlMwIDUuMzczIDAgMTJjMCA1Ljk5IDQuMzg4IDEwLjk1NCAxMC4xMjUgMTEuODU0di04LjM4NUg3LjA3OHYtMy40N2gzLjA0N1Y5LjM1NmMwLTMuMDA3IDEuNzkyLTQuNjY5IDQuNTMzLTQuNjY5IDEuMzEyIDAgMi42ODYuMjM0IDIuNjg2LjIzNHYyLjk1M0gxNS44M2MtMS40OTEgMC0xLjk1Ni45MjUtMS45NTYgMS44NzRWMTJoMy4zMjhsLS41MzIgMy40N2gtMi43OTZ2OC4zODVDMTkuNjEyIDIyLjk1NCAyNCAyMi45OSAyNCAxMnoiLz48L3N2Zz4=');
+            border-color: #1877f2;
         }
 
         .share-icon.twitter {
-            background: #1da1f2;
-            color: white;
+            background-color: #e8f5fd;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMWRhMWYyIj48cGF0aCBkPSJNMjMuOTUzIDQuNTdhMTAgMTAgMCAwMS0yLjgyNS43NzUgNC45NTggNC45NTggMCAwMDIuMTYzLTIuNzIzYzAtLjAxLS4wMDktLjAxOS0uMDE0LS4wMjdhLjA5Ni4wOTYgMCAwMC0uMDk2LS4wMTIgOS45OSA5Ljk5IDAgMDEtMy4xMjcgMS4xOTUgNC45OTEgNC45OTEgMCAwMC0xLjc5My0xLjA0NiA0Ljk1MiA0Ljk1MiAwIDAwLTMuOTE3LjIxMyA0Ljk4IDQuOTggMCAwMC0xLjc5NyAxLjQ0IDQuOTA4IDQuOTA4IDAgMDAtLjkyIDIuODMzYy4wMDIuMzA0LjAzLjYwNy4wODUuOTA1QTEzLjk4IDE0LjA0NSAwIDAgMSAxLjY3IDMuMTQ5Yy0uMDE0LS4wMTgtLjAzNy0uMDIzLS4wNTUtLjAxMy0uMDE4LjAxLS4wMjguMDI4LS4wMjcuMDQ4YTQuOTg2IDQuOTg2IDAgMDAxLjUzNCA1LjM3NiAxMS4xMTMgMTEuMTEzIDAgMDEtLjYyNS0uMjM0Yy0uMDE2LS4wMDktLjAzNiAwLS4wNDYuMDFhLjA1Mi4wNTIgMCAwMC0uMDE5LjA0MiA1LjAwNCA1LjAwNCAwIDAwMy4wMjcgNC41NThjLS4xODYuMDUtLjM3Ni4wODktLjU2Ny4xMTZhNC40OTggNC40OTggMCAwMS0uNTg5LjAyMy4wNTMuMDUzIDAgMDAtLjAzMy4wNjVjLS4wMDYuMDE5LjAwMy4wNC4wMi4wNDdhNC45OCA0Ljk4IDAgMDAzLjY3IDIuNDU1IDkuOTM1IDkuOTM1IDAgMDEtNi4xMzcgMi4xMDhjLS40MSAwLS44MTctLjAyMi0xLjIxNC0uMDY3LS4wMzQtLjAwNC0uMDU4LjAyNS0uMDQzLjA1NWE1LjAxNSA1LjAxNSAwIDAgMCAxLjA3LjU5NCA0Ljk3IDQuOTcgMCAwIDAgMS40MjguNTg5IDE0LjAyNiAxNC4wMjYgMCAwMDE2Ljg2My0xNS40NjJjLS4wMDItLjE4Ny0uMDA1LS4zNzMtLjAwNS0uNTU1YTEwLjA5NiAxMC4wOTYgMCAwMDIuNDQ1LTIuNjA1Yy4wMi0uMDIzLjAwMS0uMDU2LS4wMjYtLjA1OXoiLz48L3N2Zz4=');
+            border-color: #1da1f2;
         }
 
         .share-icon.line {
-            background: #00b900;
-            color: white;
+            background-color: #e8fae8;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMDBiOTAwIj48cGF0aCBkPSJNMTkuMzY1IDkuODYzYy4zNDkgMCAuNjMuMjg1LjYzLjYzOS0uMDE0LjM1NC0uMjgxLjYzOS0uNjMuNjM5aC0xLjg0NHYuOTAxaDEuNDQzYS42MzcuNjM3IDAgMDEuNjMxLjYzOS42MzcuNjM3IDAgMDEtLjYzMS42MzloLTEuNDQzdi45aDEuODQ0Yy4zNDkgMCAuNjMuMjg1LjYzLjY0YTEuNjM3IDEuNjM3IDAgMDEtLjYzLjYzOWgtMi44NDZhLjY5Ny42OTcgMCAwMS0uNjk5LS42OTdWOS43NjFjMC0uMzg2LjMxMy0uNjk5LjY5OS0uNjk5aDIuODQ2em0tMy40MiAwYy4zNDkgMCAuNjMuMjg1LjYzLjYzOXY0LjEzNGEuNjM3LjYzNyAwIDAxLS42My42MzkuNjM3LjYzNyAwIDAxLS42MzEtLjYzOXYtNC4xMzRhLjYzNy42MzcgMCAwMS42MzEtLjYzOXptLTMuNDA1IDBjLjM0OSAwIC42My4yODUuNjMuNjM5djIuNTAzbDEuNzE2LTIuODkyYS42MzcuNjM3IDAgMDEuNTQ4LS4yNWMuMzQ5IDAgLjYzLjI4NS42My42Mzl2NC4xMzRhLjYzNy42MzcgMCAwMS0uNjMuNjM5LjYzNy42MzcgMCAwMS0uNjMxLS42Mzl2LTIuNDk4bC0xLjcxNCAyLjg4NmEuNjM3LjYzNyAwIDAxLS41NDguMjUuNjM3LjYzNyAwIDAxLS42MzEtLjYzOXYtNC4xMzRhLjYzNy42MzcgMCAwMS42My0uNjM5em0tMy40MDUgMGMuMzQ5IDAgLjYzLjI4NS42My42Mzl2My40OTVoMS44MDFhLjYzNy42MzcgMCAwMS42My42MzkuNjM3LjYzNyAwIDAxLS42My42MzlINy44MzhhLjY5Ny42OTcgMCAwMS0uNjk5LS42OTdWOS43NjFjMC0uMzg2LjMxMy0uNjk5LjY5OS0uNjk5em04LjExNi0yLjQzNGMzLjI5OCAwIDUuOTczIDIuMTE2IDUuOTczIDQuNzIxIDAgMS4yNzgtLjY0NSAyLjQzLTEuNjg0IDMuMzQ4LS40NTIuMzk3LS45NjkuNzIzLTEuNTM3Ljk2OGE4LjAyIDguMDIgMCAwMS0yLjc1Mi40MDJjLS4wNzkgMC0uMTY1IDAtLjI1MS0uMDA0LS4wNTEtLjAwNC0uMTAyLS4wMDktLjE1My0uMDA5LS4wODEgMC0uMTYyLjAxMy0uMjQzLjAyM2ExLjAzIDEuMDMgMCAwMC0uMjI3LjA1NGMtLjA0Ny4wMTgtLjA5NC4wMzUtLjE0LjA1M2wtLjM4NS4xNDQtMS43MTcuNjM2Yy0uMDI1LjAwOS0uMDUuMDE4LS4wNzUuMDI3YTE4LjQxOCAxOC40MTggMCAwMC0uODE1LjI5OGMtLjAwMy4wMDEtLjAwNi4wMDItLjAwOS4wMDQtLjA5Mi4wMzktLjE4NC4wNzYtLjI3Ni4xMTNhLjkxNS45MTUgMCAwMS0uMzYzLjA3NmMtLjExMyAwLS4yMjctLjAyMS0uMzMtLjA2OGEuOTMzLjkzMyAwIDAxLS41MDUtLjgzYy0uMDAxLS4wNDcuMDAzLS4wOTMuMDEzLS4xMzhsLjA4NC0uMzc1YS45LjkgMCAwMC4wMzctLjI0NWMwLS4wNjItLjAwOC0uMTI0LS4wMjMtLjE4NWEuOTMyLjkzMiAwIDAwLS4wNTUtLjE4Yy0uMDE4LS4wNDctLjAzNS0uMDk0LS4wNTItLjE0bC0uMTQ5LS4zOTJjLS4wMDYtLjAxNi0uMDEzLS4wMzItLjAyLS4wNDgtLjEwMi0uMjY4LS4yMDUtLjUzOC0uMzA4LS44MDktLjAxOC0uMDQ3LS4wMzYtLjA5NS0uMDU1LS4xNDJhOC41MzcgOC41MzcgMCAwMS0uOTU2LTMuNDM4YzAtMi42MDUgMi42NzUtNC43MjEgNS45NzMtNC43MjF6Ii8+PC9zdmc+');
+            border-color: #00b900;
         }
 
         .share-icon.copy {
-            background: #636e72;
+            background-color: #f0f0f0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjNjM2ZTcyIj48cGF0aCBkPSJNMTYgMUg0Yy0xLjEgMC0yIC45LTIgMnYxNGgyVjNoMTJWMXptMyA0SDhjLTEuMSAwLTIgLjktMiAydjE0YzAgMS4xLjkgMiAyIDJoMTFjMS4xIDAgMi0uOSAyLTJWN2MwLTEuMS0uOS0yLTItMnptMCAxNkg4VjdoMTF2MTR6Ii8+PC9zdmc+');
+            border-color: #636e72;
+        }
+
+        /* ==================== 橫幅廣告區 ==================== */
+        .banner-ads {
+            max-width: 1000px;
+            margin: 2rem auto 1rem;
+            padding: 0 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .banner-ad {
+            flex: 1;
+            min-width: 250px;
+            max-width: 320px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .banner-ad:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .banner-ad img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ==================== 底部資訊面板 ==================== */
+        .footer {
+            background: #2d3436;
             color: white;
+            padding: 1.5rem 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-left {
+            font-size: 0.9rem;
+            color: #dfe6e9;
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-logo {
+            height: 50px;
+            width: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .footer-logo:hover {
+            transform: scale(1.1);
         }
 
         /* ==================== Flatpickr 自訂樣式 ==================== */
@@ -362,9 +452,17 @@
             }
 
             .share-icon {
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            .banner-ad {
+                max-width: 100%;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
             }
         }
 
@@ -387,9 +485,12 @@
             }
 
             .share-icon {
-                width: 40px;
+                width: 38px;
+                height: 38px;
+            }
+
+            .footer-logo {
                 height: 40px;
-                font-size: 1.1rem;
             }
         }
     </style>
@@ -413,7 +514,9 @@
 
         <!-- 漫畫顯示區 -->
         <div class="comic-wrapper">
-            <button class="nav-btn" id="prevBtn" aria-label="前一天">‹</button>
+            <button class="nav-btn" id="firstBtn" aria-label="最舊" title="最舊的漫畫">«</button>
+            <button class="nav-btn" id="prevBtn" aria-label="前一天" title="上一幅">‹</button>
+            <button class="nav-btn random-btn" id="randomBtn" aria-label="隨機" title="隨機漫畫">🎲</button>
             
             <div class="comic-container">
                 <div class="loading-spinner" id="loadingSpinner"></div>
@@ -424,25 +527,39 @@
                 </div>
             </div>
             
-            <button class="nav-btn" id="nextBtn" aria-label="下一天">›</button>
+            <button class="nav-btn" id="nextBtn" aria-label="下一天" title="下一幅">›</button>
+            <button class="nav-btn" id="lastBtn" aria-label="最新" title="最新的漫畫">»</button>
         </div>
 
-        <!-- 社群分享小圖示 -->
+        <!-- 社群分享按鈕 -->
         <div class="share-container">
-            <button class="share-icon facebook" onclick="shareToFacebook()" title="分享到 Facebook">
-                📘
-            </button>
-            <button class="share-icon twitter" onclick="shareToTwitter()" title="分享到 Twitter">
-                🐦
-            </button>
-            <button class="share-icon line" onclick="shareToLine()" title="分享到 LINE">
-                💬
-            </button>
-            <button class="share-icon copy" onclick="copyLink()" title="複製連結">
-                🔗
-            </button>
+            <button class="share-icon facebook" onclick="shareToFacebook()" title="分享到 Facebook"></button>
+            <button class="share-icon twitter" onclick="shareToTwitter()" title="分享到 Twitter"></button>
+            <button class="share-icon line" onclick="shareToLine()" title="分享到 LINE"></button>
+            <button class="share-icon copy" onclick="copyLink()" title="複製連結"></button>
         </div>
     </div>
+
+    <!-- 橫幅廣告區 -->
+    <div class="banner-ads" id="bannerAds">
+        <!-- 廣告將由 JavaScript 動態生成 -->
+    </div>
+
+    <!-- 底部資訊面板 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                © Smallstudio1104 / 股等
+            </div>
+            <div class="footer-right">
+                <a href="https://lit.link/en/Smallstudio" target="_blank" rel="noopener noreferrer">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770608711/Small_studio%E6%A8%99%E8%AA%8C.png" 
+                         alt="Small Studio Logo" 
+                         class="footer-logo">
+                </a>
+            </div>
+        </div>
+    </footer>
 
     <!-- 複製成功提示 -->
     <div class="copy-toast" id="copyToast">✓ 連結已複製！</div>
@@ -459,8 +576,6 @@
             cloudinaryCloudName: 'ddotapoxu',
             
             // ⭐ 日期載入模式: 'json' 或 'inline'
-            // 'json'  : 從 dates.json 檔案載入（推薦，適合大量日期）
-            // 'inline': 使用下方的 availableDates 陣列
             dateLoadMode: 'json',
             
             // JSON 檔案路徑
@@ -469,31 +584,41 @@
             // ⭐ 漫畫標題
             comicTitle: 'SMALL',
             
-            // ⭐ LOGO 圖片網址（留空則使用文字標題）
-            logoImageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png',  // 例如: 'https://res.cloudinary.com/ddotapoxu/image/upload/logo.png'
+            // ⭐ LOGO 圖片網址
+            logoImageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png',
             
             // ⭐ 自訂背景
-            // 可以是：
-            // 1. 純色: '#ffffff'
-            // 2. 漸層: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-            // 3. 圖片: 'url(https://your-image-url.com/bg.jpg)'
-            // 4. 多重背景: 'url(pattern.png), linear-gradient(#fff, #eee)'
             backgroundColor: 'url(https://res.cloudinary.com/ddotapoxu/image/upload/v1770606869/%E8%83%8C%E6%99%AF.jpg)',
             
             // 社群分享文字
             shareTitle: 'SMALL 連環漫畫',
-            shareDescription: '每日 SMALL 連環漫畫精選'
+            shareDescription: '每日 SMALL 連環漫畫精選',
+            
+            // ⭐ 橫幅廣告配置（最多3個）
+            bannerAds: [
+                {
+                    imageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png',
+                    linkUrl: 'https://lit.link/en/Smallstudio'
+                },
+                {
+                    imageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770608711/Small_studio%E6%A8%99%E8%AA%8C.png',
+                    linkUrl: 'https://lit.link/en/Smallstudio'
+                }
+                // 可以新增第三個廣告
+                // {
+                //     imageUrl: 'https://your-image-url.com/ad3.jpg',
+                //     linkUrl: 'https://your-link.com'
+                // }
+            ]
         };
         
         const IMAGE_BASE_URL = `https://res.cloudinary.com/${CONFIG.cloudinaryCloudName}/image/upload/`;
         
         // ==================== 內嵌日期資料 ====================
-        // ⚠️ 如果 dateLoadMode 設為 'inline'，請在這裡貼入日期
         let availableDates = [
             '2025-01-30',
             '2025-01-31',
             '2025-02-01',
-            // ... 更多日期
         ];
         
         // 日期範圍變數
@@ -507,25 +632,53 @@
 
         // ==================== DOM 元素 ====================
         const dateButton = document.getElementById('dateButton');
+        const firstBtn = document.getElementById('firstBtn');
         const prevBtn = document.getElementById('prevBtn');
+        const randomBtn = document.getElementById('randomBtn');
         const nextBtn = document.getElementById('nextBtn');
+        const lastBtn = document.getElementById('lastBtn');
         const comicImage = document.getElementById('comicImage');
         const loadingSpinner = document.getElementById('loadingSpinner');
         const noComicMessage = document.getElementById('noComicMessage');
         const comicTitle = document.getElementById('comicTitle');
         const comicDate = document.getElementById('comicDate');
         const copyToast = document.getElementById('copyToast');
+        const bannerAds = document.getElementById('bannerAds');
 
         // ==================== 套用自訂背景 ====================
         function applyCustomBackground() {
             document.body.style.background = CONFIG.backgroundColor;
             
-            // 如果是圖片背景，確保設定正確的屬性
             if (CONFIG.backgroundColor.includes('url(')) {
                 document.body.style.backgroundSize = 'cover';
                 document.body.style.backgroundPosition = 'center';
                 document.body.style.backgroundAttachment = 'fixed';
             }
+        }
+
+        // ==================== 生成橫幅廣告 ====================
+        function generateBannerAds() {
+            if (!CONFIG.bannerAds || CONFIG.bannerAds.length === 0) {
+                bannerAds.style.display = 'none';
+                return;
+            }
+
+            bannerAds.innerHTML = '';
+            
+            CONFIG.bannerAds.slice(0, 3).forEach(ad => {
+                if (ad.imageUrl && ad.linkUrl) {
+                    const bannerDiv = document.createElement('div');
+                    bannerDiv.className = 'banner-ad';
+                    bannerDiv.onclick = () => window.open(ad.linkUrl, '_blank', 'noopener,noreferrer');
+                    
+                    const img = document.createElement('img');
+                    img.src = ad.imageUrl;
+                    img.alt = 'Advertisement';
+                    
+                    bannerDiv.appendChild(img);
+                    bannerAds.appendChild(bannerDiv);
+                }
+            });
         }
 
         // ==================== 載入日期資料 ====================
@@ -534,7 +687,6 @@
                 try {
                     console.log('📥 正在從 dates.json 載入日期...');
                     
-                    // 添加時間戳破解快取
                     const timestamp = new Date().getTime();
                     const response = await fetch(`${CONFIG.jsonFilePath}?t=${timestamp}`, {
                         cache: 'no-store',
@@ -569,11 +721,8 @@
                 return false;
             }
             
-            // 設定日期範圍
             FIRST_COMIC_DATE = new Date(availableDates[0]);
             LAST_COMIC_DATE = new Date(availableDates[availableDates.length - 1]);
-            
-            // 建立日期集合
             availableDatesSet = new Set(availableDates);
             
             return true;
@@ -675,37 +824,30 @@
 
         // ==================== 初始化 ====================
         async function init() {
-            // 套用自訂背景
             applyCustomBackground();
+            generateBannerAds();
             
-            // ⭐ 套用 LOGO 或文字標題
             const logoImage = document.getElementById('logoImage');
             const logoText = document.getElementById('logoText');
             
             if (CONFIG.logoImageUrl) {
-                // 使用圖片 LOGO
                 logoImage.src = CONFIG.logoImageUrl;
                 logoImage.style.display = 'block';
                 logoText.style.display = 'none';
             } else {
-                // 使用文字
                 logoText.textContent = CONFIG.comicTitle;
             }
             
-            // 載入日期資料
             const loaded = await loadDates();
             if (!loaded) return;
             
-            // 從 URL 獲取日期
             currentDate = getDateFromURL();
             
-            // 檢查 URL 中的日期是否有效
             if (!availableDatesSet.has(formatDate(currentDate))) {
                 console.log('⚠️ URL 中的日期無漫畫，顯示最新日期');
                 currentDate = LAST_COMIC_DATE;
             }
             
-            // 初始化 Flatpickr
             flatpickrInstance = flatpickr(dateButton, {
                 locale: 'zh_tw',
                 dateFormat: 'Y-m-d',
@@ -724,17 +866,16 @@
                 }
             });
 
-            // 綁定按鈕事件
+            firstBtn.addEventListener('click', showFirstComic);
             prevBtn.addEventListener('click', showPreviousComic);
+            randomBtn.addEventListener('click', showRandomComic);
             nextBtn.addEventListener('click', showNextComic);
+            lastBtn.addEventListener('click', showLastComic);
 
-            // 載入當前漫畫
             loadComic();
 
-            // 鍵盤導覽
             document.addEventListener('keydown', handleKeyPress);
             
-            // 處理瀏覽器前進/後退
             window.addEventListener('popstate', function(event) {
                 if (event.state && event.state.date) {
                     currentDate = new Date(event.state.date);
@@ -752,10 +893,8 @@
             return `${year}-${month}-${day}`;
         }
 
-        // ⭐ 自動判斷週日或每日
         function formatDateDisplay(date) {
             const dateStr = formatDate(date);
-            // 週日（getDay() === 0）顯示「週日」，其他顯示「每日」
             const prefix = date.getDay() === 0 ? '週日' : '每日';
             return `${prefix} ${CONFIG.comicTitle} ${dateStr}`;
         }
@@ -829,6 +968,13 @@
             return null;
         }
         
+        function showFirstComic() {
+            currentDate = FIRST_COMIC_DATE;
+            flatpickrInstance.setDate(currentDate);
+            updateURL(currentDate);
+            loadComic();
+        }
+
         function showPreviousComic() {
             const prevDate = findPreviousAvailableDate(currentDate);
             
@@ -838,6 +984,14 @@
                 updateURL(currentDate);
                 loadComic();
             }
+        }
+
+        function showRandomComic() {
+            const randomIndex = Math.floor(Math.random() * availableDates.length);
+            currentDate = new Date(availableDates[randomIndex]);
+            flatpickrInstance.setDate(currentDate);
+            updateURL(currentDate);
+            loadComic();
         }
 
         function showNextComic() {
@@ -851,9 +1005,18 @@
             }
         }
 
+        function showLastComic() {
+            currentDate = LAST_COMIC_DATE;
+            flatpickrInstance.setDate(currentDate);
+            updateURL(currentDate);
+            loadComic();
+        }
+
         function updateNavigationButtons() {
+            firstBtn.disabled = formatDate(currentDate) === formatDate(FIRST_COMIC_DATE);
             prevBtn.disabled = findPreviousAvailableDate(currentDate) === null;
             nextBtn.disabled = findNextAvailableDate(currentDate) === null;
+            lastBtn.disabled = formatDate(currentDate) === formatDate(LAST_COMIC_DATE);
         }
 
         // ==================== 鍵盤控制 ====================
@@ -862,6 +1025,12 @@
                 showPreviousComic();
             } else if (e.key === 'ArrowRight') {
                 showNextComic();
+            } else if (e.key === 'Home') {
+                showFirstComic();
+            } else if (e.key === 'End') {
+                showLastComic();
+            } else if (e.key === 'r' || e.key === 'R') {
+                showRandomComic();
             }
         }
 
