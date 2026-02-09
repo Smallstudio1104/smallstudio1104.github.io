@@ -112,20 +112,17 @@
         }
 
         /* ==================== 漫畫顯示區 ==================== */
-        .comic-wrapper {
+        ..comic-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 1rem;
             margin-bottom: 1rem;
             margin-top: 2rem;
-            position: sticky;  /* 新增:固定位置 */
-            bottom: 20px;      /* 新增:距離底部20px */
-            z-index: 10;       /* 新增:確保在最上層 */
-            background: rgba(255, 255, 255, 0.95);  /* 新增:半透明白色背景 */
-            padding: 1rem 0;   /* 新增:上下間距 */
-            border-radius: 50px;  /* 新增:圓角 */
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);  /* 新增:陰影效果 */
+            width: 100%;           /* 新增:保持100%寬度 */
+            max-width: 400px;      /* 新增:最大寬度400px */
+            margin-left: auto;     /* 新增:水平置中 */
+            margin-right: auto;    /* 新增:水平置中 */
         }
 
         .nav-btn {
@@ -143,6 +140,8 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            flex-shrink: 0;  /* 新增:防止按鈕被壓縮 */
+            min-width: 50px;  /* 新增:最小寬度 */
         }
 
         .nav-btn:hover:not(:disabled) {
