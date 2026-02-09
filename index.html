@@ -57,6 +57,15 @@
             color: #2d3436;
             margin-bottom: 0.5rem;
             letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comic-title img {
+            max-height: 80px;
+            height: auto;
+            width: auto;
         }
 
         .comic-date {
@@ -329,6 +338,10 @@
                 font-size: 2rem;
             }
 
+            .comic-title img {
+                max-height: 60px;
+            }
+
             .comic-date {
                 font-size: 1rem;
             }
@@ -360,6 +373,10 @@
                 font-size: 1.5rem;
             }
 
+            .comic-title img {
+                max-height: 50px;
+            }
+
             .comic-date {
                 font-size: 0.9rem;
             }
@@ -380,7 +397,10 @@
 <body>
     <!-- 頂部標題區 -->
     <div class="header">
-        <h1 class="comic-title" id="comicTitle">SMALL</h1>
+        <h1 class="comic-title" id="comicTitle">
+            <img src="" alt="SMALL" id="logoImage" style="display: none;">
+            <span id="logoText">SMALL</span>
+        </h1>
         <div class="comic-date" id="comicDate">每日 SMALL 2025-02-09</div>
     </div>
 
@@ -441,7 +461,7 @@
             // ⭐ 日期載入模式: 'json' 或 'inline'
             // 'json'  : 從 dates.json 檔案載入（推薦，適合大量日期）
             // 'inline': 使用下方的 availableDates 陣列
-            dateLoadMode: 'json',  // ⬅️ 改為 'json' 使用 JSON 檔案
+            dateLoadMode: 'json',
             
             // JSON 檔案路徑
             jsonFilePath: 'dates.json',
@@ -449,10 +469,8 @@
             // ⭐ 漫畫標題
             comicTitle: 'SMALL',
             
-            // ⭐ 日期顯示格式
-            // 'daily'  : 每日 SMALL YYYY-MM-DD
-            // 'weekly' : 週日 SMALL YYYY-MM-DD
-            dateDisplayType: 'daily',
+            // ⭐ LOGO 圖片網址（留空則使用文字標題）
+            logoImageUrl: '',  // 例如: 'https://res.cloudinary.com/ddotapoxu/image/upload/logo.png'
             
             // ⭐ 自訂背景
             // 可以是：
@@ -460,7 +478,7 @@
             // 2. 漸層: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
             // 3. 圖片: 'url(https://your-image-url.com/bg.jpg)'
             // 4. 多重背景: 'url(pattern.png), linear-gradient(#fff, #eee)'
-            backgroundColor: '#f5f7fa',
+            backgroundColor: 'url(https://res.cloudinary.com/ddotapoxu/image/upload/v1770606869/%E8%83%8C%E6%99%AF.jpg)',
             
             // 社群分享文字
             shareTitle: 'SMALL 連環漫畫',
@@ -660,8 +678,19 @@
             // 套用自訂背景
             applyCustomBackground();
             
-            // 套用漫畫標題
-            comicTitle.textContent = CONFIG.comicTitle;
+            // ⭐ 套用 LOGO 或文字標題
+            const logoImage = document.getElementById('logoImage');
+            const logoText = document.getElementById('logoText');
+            
+            if (CONFIG.logoImageUrl) {
+                // 使用圖片 LOGO
+                logoImage.src = CONFIG.logoImageUrl;
+                logoImage.style.display = 'block';
+                logoText.style.display = 'none';
+            } else {
+                // 使用文字
+                logoText.textContent = CONFIG.comicTitle;
+            }
             
             // 載入日期資料
             const loaded = await loadDates();
@@ -723,9 +752,11 @@
             return `${year}-${month}-${day}`;
         }
 
+        // ⭐ 自動判斷週日或每日
         function formatDateDisplay(date) {
             const dateStr = formatDate(date);
-            const prefix = CONFIG.dateDisplayType === 'weekly' ? '週日' : '每日';
+            // 週日（getDay() === 0）顯示「週日」，其他顯示「每日」
+            const prefix = date.getDay() === 0 ? '週日' : '每日';
             return `${prefix} ${CONFIG.comicTitle} ${dateStr}`;
         }
 
