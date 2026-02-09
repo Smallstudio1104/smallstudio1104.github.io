@@ -170,7 +170,7 @@
             flex: 1;
             max-width: 1200px;
             position: relative;
-            min-height: 400px;
+            min-height: 200px;  /* 改小:從 400px 改為 200px */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -187,6 +187,7 @@
                 padding: 1rem;
                 align-items: flex-start;
                 justify-content: flex-start;
+                min-height: auto;  /* 新增:移除最小高度限制 */
             }
             
             .comic-image {
