@@ -119,6 +119,13 @@
             gap: 1rem;
             margin-bottom: 1rem;
             margin-top: 2rem;
+            position: sticky;  /* 新增:固定位置 */
+            bottom: 20px;      /* 新增:距離底部20px */
+            z-index: 10;       /* 新增:確保在最上層 */
+            background: rgba(255, 255, 255, 0.95);  /* 新增:半透明白色背景 */
+            padding: 1rem 0;   /* 新增:上下間距 */
+            border-radius: 50px;  /* 新增:圓角 */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);  /* 新增:陰影效果 */
         }
 
         .nav-btn {
@@ -172,25 +179,26 @@
             min-height: 400px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;  /* 改為從左邊對齊 */
             justify-content: center;
         }
         
+        /* ⭐ 手機直式模式 - 可左右滑動 */
         /* ⭐ 手機直式模式 - 可左右滑動 */
         @media (max-width: 768px) and (orientation: portrait) {
             .comic-container {
                 overflow-x: auto;
                 overflow-y: hidden;
-                padding: 1rem;
-                scroll-snap-type: x mandatory;  /* 新增:滑動對齊 */
+                padding: 0;  /* 移除內邊距,避免切掉圖片 */
+                align-items: flex-start;  /* 確保從左邊開始 */
             }
             
             .comic-image {
                 max-width: none !important;
                 width: 200% !important;
                 height: auto;
-                margin-left: 0;  /* 新增:確保從左邊開始 */
-                display: block;
+                margin: 0;  /* 移除所有邊距 */
+                border-radius: 10px;  /* 保持圓角 */
             }
         }
         
