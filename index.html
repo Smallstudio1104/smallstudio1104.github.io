@@ -1,424 +1,424 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMALL 連環漫畫</title>
-    
-    <!-- Open Graph Meta Tags for Social Sharing -->
-    <meta property="og:title" content="SMALL 連環漫畫" id="ogTitle">
-    <meta property="og:description" content="每日 SMALL 連環漫畫" id="ogDescription">
-    <meta property="og:image" content="" id="ogImage">
-    <meta property="og:url" content="" id="ogUrl">
-    <meta property="og:type" content="website">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SMALL 連環漫畫" id="twitterTitle">
-    <meta name="twitter:description" content="每日 SMALL 連環漫畫" id="twitterDescription">
-    <meta name="twitter:image" content="" id="twitterImage">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    
-    <style>
-        /* ==================== 全域樣式 ==================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background: #ffffff;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* ==================== 頂部標題區 ==================== */
-        .header {
-            text-align: center;
-            padding: 2rem 1rem 1rem;
-        }
-        
-        .comic-title {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #2d3436;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.1em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .comic-title img {
-            max-height: 80px;
-            height: auto;
-            width: auto;
-        }
-        
-        .comic-date {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #636e72;
-        }
-        
-        /* ==================== 主容器 ==================== */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem 2rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        /* ==================== 日期選擇按鈕 ==================== */
-        .date-controls {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .date-button {
-            background: white;
-            border: 2px solid #2d3436;
-            color: #2d3436;
-            padding: 0.75rem 2rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .date-button:hover {
-            background: #2d3436;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-        
-        /* ==================== 漫畫顯示區 ==================== */
-        .comic-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            margin-top: 2rem;
-        }
-        
-        .nav-btn {
-            background: white;
-            border: 2px solid #2d3436;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            color: #2d3436;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-        
-        .nav-btn:hover:not(:disabled) {
-            background: #2d3436;
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-        
-        .nav-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        
-        .nav-btn.random-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-        }
-        
-        .nav-btn.random-btn:hover {
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-            transform: scale(1.1) rotate(360deg);
-        }
-        
-        .comic-container {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            flex: 1;
-            max-width: 1200px;
-            position: relative;
-            min-height: 200px;  /* 改小:從 400px 改為 200px */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            width: 100%;
-        }
-        
-        /* ⭐ 手機直式模式 - 可左右滑動 */
-        @media (max-width: 768px) and (orientation: portrait) {
-            .comic-container {
-                overflow-x: auto;
-                overflow-y: hidden;
-                padding: 1rem;
-                align-items: flex-start;
-                justify-content: flex-start;
-                min-height: auto;  /* 新增:移除最小高度限制 */
-            }
-            
-            .comic-image {
-                max-width: none !important;
-                width: 200% !important;
-                height: auto;
-                margin: 0;
-                display: block;
-            }
-        }
-        
-        /* ⭐ 手機橫式模式 - 填滿螢幕 */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .header {
-                padding: 0.5rem 1rem;
-            }
-            
-            .container {
-                padding: 0 1rem 0.5rem;
-                justify-content: flex-start;
-            }
-            
-            .date-controls {
-                margin-bottom: 0.5rem;
-            }
-            
-            .comic-wrapper {
-                margin-top: 0.5rem;
-                margin-bottom: 0.5rem;
-            }
-            
-            .comic-container {
-                max-height: 75vh;
-                overflow: auto;
-                padding: 0.5rem;
-                min-height: auto;
-            }
-            
-            .comic-image {
-                max-width: 100% !important;
-                max-height: 70vh;
-                width: auto !important;
-                height: auto;
-            }
-        }
-        
-        .comic-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            display: block;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
-        
-        .comic-image.loading {
-            opacity: 0.5;
-        }
-        
-        /* 載入動畫 */
-        .loading-spinner {
-            display: none;
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #2d3436;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            position: absolute;
-        }
-        
-        .loading-spinner.active {
-            display: block;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* 無漫畫提示 */
-        .no-comic-message {
-            display: none;
-            text-align: center;
-            padding: 3rem;
-            color: #636e72;
-        }
-        
-        .no-comic-message.active {
-            display: block;
-        }
-        
-        .no-comic-message h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #2d3436;
-        }
-        
-        .no-comic-message p {
-            font-size: 1rem;
-        }
-        
-        /* ==================== 社群分享按鈕（素色版） ==================== */
-        .share-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 0;
-            flex-wrap: wrap;
-        }
-        
-        .share-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        
-        .share-icon:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        
-        .share-icon.facebook {
-            background-color: #e8f0fe;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMTg3N2YyIj48cGF0aCBkPSJNMjQgMTJjMC02LjYyNy01LjM3My0xMi0xMi0xMlMwIDUuMzczIDAgMTJjMCA1Ljk5IDQuMzg4IDEwLjk1NCAxMC4xMjUgMTEuODU0di04LjM4NUg3LjA3OHYtMy40N2gzLjA0N1Y5LjM1NmMwLTMuMDA3IDEuNzkyLTQuNjY5IDQuNTMzLTQuNjY5IDEuMzEyIDAgMi42ODYuMjM0IDIuNjg2LjIzNHYyLjk1M0gxNS44M2MtMS40OTEgMC0xLjk1Ni45MjUtMS45NTYgMS44NzRWMTJoMy4zMjhsLS41MzIgMy40N2gtMi43OTZ2OC4zODVDMTkuNjEyIDIyLjk1NCAyNCAyMi45OSAyNCAxMnoiLz48L3N2Zz4=');
-            border-color: #1877f2;
-        }
-        
-        .share-icon.twitter {
-            background-color: #e8f5fd;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMWRhMWYyIj48cGF0aCBkPSJNMjMuOTUzIDQuNTdhMTAgMTAgMCAwMS0yLjgyNS43NzUgNC45NTggNC45NTggMCAwMDIuMTYzLTIuNzIzYzAtLjAxLS4wMDktLjAxOS0uMDE0LS4wMjdhLjA5Ni4wOTYgMCAwMC0uMDk2LS4wMTIgOS45OSA5Ljk5IDAgMDEtMy4xMjcgMS4xOTUgNC45OTEgNC45OTEgMCAwMC0xLjc5My0xLjA0NiA0Ljk1MiA0Ljk1MiAwIDAwLTMuOTE3LjIxMyA0Ljk4IDQuOTggMCAwMC0xLjc5NyAxLjQ0IDQuOTA4IDQuOTA4IDAgMDAtLjkyIDIuODMzYy4wMDIuMzA0LjAzLjYwNy4wODUuOTA1QTEzLjk4IDE0LjA0NSAwIDAgMSAxLjY3IDMuMTQ5Yy0uMDE0LS4wMTgtLjAzNy0uMDIzLS4wNTUtLjAxMy0uMDE4LjAxLS4wMjguMDI4LS4wMjcuMDQ4YTQuOTg2IDQuOTg2IDAgMDAxLjUzNCA1LjM3NiAxMS4xMTMgMTEuMTEzIDAgMDEtLjYyNS0uMjM0Yy0uMDE2LS4wMDktLjAzNiAwLS4wNDYuMDFhLjA1Mi4wNTIgMCAwMC0uMDE5LjA0MiA1LjAwNCA1LjAwNCAwIDAwMy4wMjcgNC41NThjLS4xODYuMDUtLjM3Ni4wODktLjU2Ny4xMTZhNC40OTggNC40OTggMCAwMS0uNTg5LjAyMy4wNTMuMDUzIDAgMDAtLjAzMy4wNjVjLS4wMDYuMDE5LjAwMy4wNC4wMi4wNDdhNC45OCA0Ljk4IDAgMDAzLjY3IDIuNDU1IDkuOTM1IDkuOTM1IDAgMDEtNi4xMzcgMi4xMDhjLS40MSAwLS44MTctLjAyMi0xLjIxNC0uMDY3LS4wMzQtLjAwNC0uMDU4LjAyNS0uMDQzLjA1NWE1LjAxNSA1LjAxNSAwIDAgMCAxLjA3LjU5NCA0Ljk3IDQuOTcgMCAwIDAgMS40MjguNTg5IDE0LjAyNiAxNC4wMjYgMCAwMDE2Ljg2My0xNS40NjJjLS4wMDItLjE4Ny0uMDA1LS4zNzMtLjAwNS0uNTU1YTEwLjA5NiAxMC4wOTYgMCAwMDIuNDQ1LTIuNjA1Yy4wMi0uMDIzLjAwMS0uMDU2LS4wMjYtLjA1OXoiLz48L3N2Zz4=');
-            border-color: #1da1f2;
-        }
-        
-        .share-icon.line {
-            background-color: #e8fae8;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMDBiOTAwIj48cGF0aCBkPSJNMTkuMzY1IDkuODYzYy4zNDkgMCAuNjMuMjg1LjYzLjYzOS0uMDE0LjM1NC0uMjgxLjYzOS0uNjMuNjM5aC0xLjg0NHYuOTAxaDEuNDQzYS42MzcuNjM3IDAgMDEuNjMxLjYzOS42MzcuNjM3IDAgMDEtLjYzMS42MzloLTEuNDQzdi45aDEuODQ0Yy4zNDkgMCAuNjMuMjg1LjYzLjY0YTEuNjM3IDEuNjM3IDAgMDEtLjYzLjYzOWgtMi44NDZhLjY5Ny42OTcgMCAwMS0uNjk5LS42OTdWOS43NjFjMC0uMzg2LjMxMy0uNjk5LjY5OS0uNjk5aDIuODQ2em0tMy40MiAwYy4zNDkgMCAuNjMuMjg1LjYzLjYzOXY0LjEzNGEuNjM3LjYzNyAwIDAxLS42My42MzkuNjM3LjYzNyAwIDAxLS42MzEtLjYzOXYtNC4xMzRhLjYzNy42MzcgMCAwMS42MzEtLjYzOXptLTMuNDA1IDBjLjM0OSAwIC42My4yODUuNjMuNjM5djIuNTAzbDEuNzE2LTIuODkyYS42MzcuNjM3IDAgMDEuNTQ4LS4yNWMuMzQ5IDAgLjYzLjI4NS42My42Mzl2NC4xMzRhLjYzNy42MzcgMCAwMS0uNjMuNjM5LjYzNy42MzcgMCAwMS0uNjMxLS42Mzl2LTIuNDk4bC0xLjcxNCAyLjg4NmEuNjM3LjYzNyAwIDAxLS41NDguMjUuNjM3LjYzNyAwIDAxLS42MzEtLjYzOXYtNC4xMzRhLjYzNy42MzcgMCAwMS42My0uNjM5em0tMy40MDUgMGMuMzQ5IDAgLjYzLjI4NS42My42Mzl2My40OTVoMS44MDFhLjYzNy42MzcgMCAwMS42My42MzkuNjM3LjYzNyAwIDAxLS42My42MzlINy44MzhhLjY5Ny42OTcgMCAwMS0uNjk5LS42OTdWOS43NjFjMC0uMzg2LjMxMy0uNjk5LjY5OS0uNjk5em04LjExNi0yLjQzNGMzLjI5OCAwIDUuOTczIDIuMTE2IDUuOTczIDQuNzIxIDAgMS4yNzgtLjY0NSAyLjQzLTEuNjg0IDMuMzQ4LS40NTIuMzk3LS45NjkuNzIzLTEuNTM3Ljk2OGE4LjAyIDguMDIgMCAwMS0yLjc1Mi40MDJjLS4wNzkgMC0uMTY1IDAtLjI1MS0uMDA0LS4wNTEtLjAwNC0uMTAyLS4wMDktLjE1My0uMDA5LS4wODEgMC0uMTYyLjAxMy0uMjQzLjAyM2ExLjAzIDEuMDMgMCAwMC0uMjI3LjA1NGMtLjA0Ny4wMTgtLjA5NC4wMzUtLjE0LjA1M2wtLjM4NS4xNDQtMS43MTcuNjM2Yy0uMDI1LjAwOS0uMDUuMDE4LS4wNzUuMDI3YTE4LjQxOCAxOC40MTggMCAwMC0uODE1LjI5OGMtLjAwMy4wMDEtLjAwNi4wMDItLjAwOS4wMDQtLjA5Mi4wMzktLjE4NC4wNzYtLjI3Ni4xMTNhLjkxNS45MTUgMCAwMS0uMzYzLjA3NmMtLjExMyAwLS4yMjctLjAyMS0uMzMtLjA2OGEuOTMzLjkzMyAwIDAxLS41MDUtLjgzYy0uMDAxLS4wNDcuMDAzLS4wOTMuMDEzLS4xMzhsLjA4NC0uMzc1YS45LjkgMCAwMC4wMzctLjI0NWMwLS4wNjItLjAwOC0uMTI0LS4wMjMtLjE4NWEuOTMyLjkzMiAwIDAwLS4wNTUtLjE4Yy0uMDE4LS4wNDctLjAzNS0uMDk0LS4wNTItLjE0bC0uMTQ5LS4zOTJjLS4wMDYtLjAxNi0uMDEzLS4wMzItLjAyLS4wNDgtLjEwMi0uMjY4LS4yMDUtLjUzOC0uMzA4LS44MDktLjAxOC0uMDQ3LS4wMzYtLjA5NS0uMDU1LS4xNDJhOC41MzcgOC41MzcgMCAwMS0uOTU2LTMuNDM4YzAtMi42MDUgMi42NzUtNC43MjEgNS45NzMtNC43MjF6Ii8+PC9zdmc+');
-            border-color: #00b900;
-        }
-        
-        .share-icon.copy {
-            background-color: #f0f0f0;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjNjM2ZTcyIj48cGF0aCBkPSJNMTYgMUg0Yy0xLjEgMC0yIC45LTIgMnYxNGgyVjNoMTJWMXptMyA0SDhjLTEuMSAwLTIgLjktMiAydjE0YzAgMS4xLjkgMiAyIDJoMTFjMS4xIDAgMi0uOSAyLTJWN2MwLTEuMS0uOS0yLTItMnptMCAxNkg4VjdoMTF2MTR6Ii8+PC9zdmc+');
-            border-color: #636e72;
-        }
-        
-        /* ==================== 橫幅廣告區 ==================== */
-        .banner-ads {
-            max-width: 1000px;
-            margin: 2rem auto 1rem;
-            padding: 0 1rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .banner-ad {
-            flex: 1;
-            min-width: 250px;
-            max-width: 320px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .banner-ad:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-        
-        .banner-ad img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        
-        /* ==================== 底部資訊面板 ==================== */
-        .footer {
-            background: #2d3436;
-            color: white;
-            padding: 1.5rem 1rem;
-            margin-top: 2rem;
-        }
-        
-        .footer-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .footer-left {
-            font-size: 0.9rem;
-            color: #dfe6e9;
-        }
-        
-        .footer-right {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .footer-logo {
-            height: 50px;
-            width: auto;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .footer-logo:hover {
-            transform: scale(1.1);
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMALL 連環漫畫</title>
+    
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="SMALL 連環漫畫" id="ogTitle">
+    <meta property="og:description" content="每日 SMALL 連環漫畫" id="ogDescription">
+    <meta property="og:image" content="" id="ogImage">
+    <meta property="og:url" content="" id="ogUrl">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SMALL 連環漫畫" id="twitterTitle">
+    <meta name="twitter:description" content="每日 SMALL 連環漫畫" id="twitterDescription">
+    <meta name="twitter:image" content="" id="twitterImage">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <style>
+        /* ==================== 全域樣式 ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: #ffffff;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* ==================== 頂部標題區 ==================== */
+        .header {
+            text-align: center;
+            padding: 2rem 1rem 1rem;
+        }
+        
+        .comic-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #2d3436;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .comic-title img {
+            max-height: 80px;
+            height: auto;
+            width: auto;
+        }
+        
+        .comic-date {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #636e72;
+        }
+        
+        /* ==================== 主容器 ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* ==================== 日期選擇按鈕 ==================== */
+        .date-controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .date-button {
+            background: white;
+            border: 2px solid #2d3436;
+            color: #2d3436;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .date-button:hover {
+            background: #2d3436;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* ==================== 漫畫顯示區 ==================== */
+        .comic-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 2px solid #2d3436;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            color: #2d3436;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            background: #2d3436;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn.random-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+        
+        .nav-btn.random-btn:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: scale(1.1) rotate(360deg);
+        }
+        
+        .comic-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            flex: 1;
+            max-width: 1200px;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* ⭐ 手機直式模式 - 正常顯示，可左右滑動查看完整圖片 */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .comic-container {
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 1rem;
+                align-items: flex-start;
+                justify-content: flex-start;
+                min-height: auto;
+            }
+            
+            .comic-image {
+                max-width: 100%;
+                width: auto;
+                height: auto;
+                margin: 0;
+                display: block;
+            }
+        }
+        
+        /* ⭐ 手機橫式模式 - 填滿螢幕 */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .header {
+                padding: 0.5rem 1rem;
+            }
+            
+            .container {
+                padding: 0 1rem 0.5rem;
+                justify-content: flex-start;
+            }
+            
+            .date-controls {
+                margin-bottom: 0.5rem;
+            }
+            
+            .comic-wrapper {
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .comic-container {
+                max-height: 75vh;
+                overflow: auto;
+                padding: 0.5rem;
+                min-height: auto;
+            }
+            
+            .comic-image {
+                max-width: 100%;
+                max-height: 70vh;
+                width: auto;
+                height: auto;
+            }
+        }
+        
+        .comic-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            display: block;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        
+        .comic-image.loading {
+            opacity: 0.5;
+        }
+        
+        /* 載入動畫 */
+        .loading-spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #2d3436;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: absolute;
+        }
+        
+        .loading-spinner.active {
+            display: block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 無漫畫提示 */
+        .no-comic-message {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            color: #636e72;
+        }
+        
+        .no-comic-message.active {
+            display: block;
+        }
+        
+        .no-comic-message h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2d3436;
+        }
+        
+        .no-comic-message p {
+            font-size: 1rem;
+        }
+        
+        /* ==================== 社群分享按鈕(素色版) ==================== */
+        .share-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .share-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .share-icon:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .share-icon.facebook {
+            background-color: #e8f0fe;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMTg3N2YyIj48cGF0aCBkPSJNMjQgMTJjMC02LjYyNy01LjM3My0xMi0xMi0xMlMwIDUuMzczIDAgMTJjMCA1Ljk5IDQuMzg4IDEwLjk1NCAxMC4xMjUgMTEuODU0di04LjM4NUg3LjA3OHYtMy40N2gzLjA0N1Y5LjM1NmMwLTMuMDA3IDEuNzkyLTQuNjY5IDQuNTMzLTQuNjY5IDEuMzEyIDAgMi42ODYuMjM0IDIuNjg2LjIzNHYyLjk1M0gxNS44M2MtMS40OTEgMC0xLjk1Ni45MjUtMS45NTYgMS44NzRWMTJoMy4zMjhsLS41MzIgMy40N2gtMi43OTZ2OC4zODVDMTkuNjEyIDIyLjk1NCAyNCAyMi45OSAyNCAxMnoiLz48L3N2Zz4=');
+            border-color: #1877f2;
+        }
+        
+        .share-icon.twitter {
+            background-color: #e8f5fd;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMWRhMWYyIj48cGF0aCBkPSJNMjMuOTUzIDQuNTdhMTAgMTAgMCAwMS0yLjgyNS43NzUgNC45NTggNC45NTggMCAwMDIuMTYzLTIuNzIzYzAtLjAxLS4wMDktLjAxOS0uMDE0LS4wMjdhLjA5Ni4wOTYgMCAwMC0uMDk2LS4wMTIgOS45OSA5Ljk5IDAgMDEtMy4xMjcgMS4xOTUgNC45OTEgNC45OTEgMCAwMC0xLjc5My0xLjA0NiA0Ljk1MiA0Ljk1MiAwIDAwLTMuOTE3LjIxMyA0Ljk4IDQuOTggMCAwMC0xLjc5NyAxLjQ0IDQuOTA4IDQuOTA4IDAgMDAtLjkyIDIuODMzYy4wMDIuMzA0LjAzLjYwNy4wODUuOTA1QTEzLjk4IDE0LjA0NSAwIDAgMSAxLjY3IDMuMTQ5Yy0uMDE0LS4wMTgtLjAzNy0uMDIzLS4wNTUtLjAxMy0uMDE4LjAxLS4wMjguMDI4LS4wMjcuMDQ4YTQuOTg2IDQuOTg2IDAgMDAxLjUzNCA1LjM3NiAxMS4xMTMgMTEuMTEzIDAgMDEtLjYyNS0uMjM0Yy0uMDE2LS4wMDktLjAzNiAwLS4wNDYuMDFhLjA1Mi4wNTIgMCAwMC0uMDE5LjA0MiA1LjAwNCA1LjAwNCAwIDAwMy4wMjcgNC41NThjLS4xODYuMDUtLjM3Ni4wODktLjU2Ny4xMTZhNC40OTggNC40OTggMCAwMS0uNTg5LjAyMy4wNTMuMDUzIDAgMDAtLjAzMy4wNjVjLS4wMDYuMDE5LjAwMy4wNC4wMi4wNDdhNC45OCA0Ljk4IDAgMDAzLjY3IDIuNDU1IDkuOTM1IDkuOTM1IDAgMDEtNi4xMzcgMi4xMDhjLS40MSAwLS44MTctLjAyMi0xLjIxNC0uMDY3LS4wMzQtLjAwNC0uMDU4LjAyNS0uMDQzLjA1NWE1LjAxNSA1LjAxNSAwIDAgMCAxLjA3LjU5NCA0Ljk3IDQuOTcgMCAwIDAgMS40MjguNTg5IDE0LjAyNiAxNC4wMjYgMCAwMDE2Ljg2My0xNS40NjJjLS4wMDItLjE4Ny0uMDA1LS4zNzMtLjAwNS0uNTU1YTEwLjA5NiAxMC4wOTYgMCAwMDIuNDQ1LTIuNjA1Yy4wMi0uMDIzLjAwMS0uMDU2LS4wMjYtLjA1OXoiLz48L3N2Zz4=');
+            border-color: #1da1f2;
+        }
+        
+        .share-icon.line {
+            background-color: #e8fae8;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMDBiOTAwIj48cGF0aCBkPSJNMTkuMzY1IDkuODYzYy4zNDkgMCAuNjMuMjg1LjYzLjYzOS0uMDE0LjM1NC0uMjgxLjYzOS0uNjMuNjM5aC0xLjg0NHYuOTAxaDEuNDQzYS42MzcuNjM3IDAgMDEuNjMxLjYzOS42MzcuNjM3IDAgMDEtLjYzMS42MzloLTEuNDQzdi45aDEuODQ0Yy4zNDkgMCAuNjMuMjg1LjYzLjY0YTEuNjM3IDEuNjM3IDAgMDEtLjYzLjYzOWgtMi44NDZhLjY5Ny42OTcgMCAwMS0uNjk5LS42OTdWOS43NjFjMC0uMzg2LjMxMy0uNjk5LjY5OS0uNjk5aDIuODQ2em0tMy40MiAwYy4zNDkgMCAuNjMuMjg1LjYzLjYzOXY0LjEzNGEuNjM3LjYzNyAwIDAxLS42My42MzkuNjM3LjYzNyAwIDAxLS42MzEtLjYzOXYtNC4xMzRhLjYzNy42MzcgMCAwMS42MzEtLjYzOXptLTMuNDA1IDBjLjM0OSAwIC42My4yODUuNjMuNjM5djIuNTAzbDEuNzE2LTIuODkyYS42MzcuNjM3IDAgMDEuNTQ4LS4yNWMuMzQ5IDAgLjYzLjI4NS42My42Mzl2NC4xMzRhLjYzNy42MzcgMCAwMS0uNjMuNjM5LjYzNy42MzcgMCAwMS0uNjMxLS42Mzl2LTIuNDk4bC0xLjcxNCAyLjg4NmEuNjM3LjYzNyAwIDAxLS41NDguMjUuNjM3LjYzNyAwIDAxLS42MzEtLjYzOXYtNC4xMzRhLjYzNy42MzcgMCAwMS42My0uNjM5em0tMy40MDUgMGMuMzQ5IDAgLjYzLjI4NS42My42Mzl2My40OTVoMS44MDFhLjYzNy42MzcgMCAwMS42My42MzkuNjM3LjYzNyAwIDAxLS42My42MzlINy44MzhhLjY5Ny42OTcgMCAwMS0uNjk5LS42OTdWOS43NjFjMC0uMzg2LjMxMy0uNjk5LjY5OS0uNjk5em04LjExNi0yLjQzNGMzLjI5OCAwIDUuOTczIDIuMTE2IDUuOTczIDQuNzIxIDAgMS4yNzgtLjY0NSAyLjQzLTEuNjg0IDMuMzQ4LS40NTIuMzk3LS45NjkuNzIzLTEuNTM3Ljk2OGE4LjAyIDguMDIgMCAwMS0yLjc1Mi40MDJjLS4wNzkgMC0uMTY1IDAtLjI1MS0uMDA0LS4wNTEtLjAwNC0uMTAyLS4wMDktLjE1My0uMDA5LS4wODEgMC0uMTYyLjAxMy0uMjQzLjAyM2ExLjAzIDEuMDMgMCAwMC0uMjI3LjA1NGMtLjA0Ny4wMTgtLjA5NC4wMzUtLjE0LjA1M2wtLjM4NS4xNDQtMS43MTcuNjM2Yy0uMDI1LjAwOS0uMDUuMDE4LS4wNzUuMDI3YTE4LjQxOCAxOC40MTggMCAwMC0uODE1LjI5OGMtLjAwMy4wMDEtLjAwNi4wMDItLjAwOS4wMDQtLjA5Mi4wMzktLjE4NC4wNzYtLjI3Ni4xMTNhLjkxNS45MTUgMCAwMS0uMzYzLjA3NmMtLjExMyAwLS4yMjctLjAyMS0uMzMtLjA2OGEuOTMzLjkzMyAwIDAxLS41MDUtLjgzYy0uMDAxLS4wNDcuMDAzLS4wOTMuMDEzLS4xMzhsLjA4NC0uMzc1YS45LjkgMCAwMC4wMzctLjI0NWMwLS4wNjItLjAwOC0uMTI0LS4wMjMtLjE4NWEuOTMyLjkzMiAwIDAwLS4wNTUtLjE4Yy0uMDE4LS4wNDctLjAzNS0uMDk0LS4wNTItLjE0bC0uMTQ5LS4zOTJjLS4wMDYtLjAxNi0uMDEzLS4wMzItLjAyLS4wNDgtLjEwMi0uMjY4LS4yMDUtLjUzOC0uMzA4LS44MDktLjAxOC0uMDQ3LS4wMzYtLjA5NS0uMDU1LS4xNDJhOC41MzcgOC41MzcgMCAwMS0uOTU2LTMuNDM4YzAtMi42MDUgMi42NzUtNC43MjEgNS45NzMtNC43MjF6Ii8+PC9zdmc+');
+            border-color: #00b900;
+        }
+        
+        .share-icon.copy {
+            background-color: #f0f0f0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjNjM2ZTcyIj48cGF0aCBkPSJNMTYgMUg0Yy0xLjEgMC0yIC45LTIgMnYxNGgyVjNoMTJWMXptMyA0SDhjLTEuMSAwLTIgLjktMiAydjE0YzAgMS4xLjkgMiAyIDJoMTFjMS4xIDAgMi0uOSAyLTJWN2MwLTEuMS0uOS0yLTItMnptMCAxNkg4VjdoMTF2MTR6Ii8+PC9zdmc+');
+            border-color: #636e72;
+        }
+        
+        /* ==================== 橫幅廣告區 ==================== */
+        .banner-ads {
+            max-width: 1000px;
+            margin: 2rem auto 1rem;
+            padding: 0 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .banner-ad {
+            flex: 1;
+            min-width: 250px;
+            max-width: 320px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .banner-ad:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .banner-ad img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* ==================== 底部資訊面板 ==================== */
+        .footer {
+            background: #2d3436;
+            color: white;
+            padding: 1.5rem 1rem;
+            margin-top: 2rem;
+        }
+        
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .footer-left {
+            font-size: 0.9rem;
+            color: #dfe6e9;
+        }
+        
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-logo {
+            height: 50px;
+            width: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-logo:hover {
+            transform: scale(1.1);
+        }
         
         /* ==================== Flatpickr 自訂樣式 ==================== */
         .flatpickr-calendar {
@@ -579,7 +579,7 @@
             <img src="" alt="SMALL 連環漫畫" class="comic-image" id="comicImage" style="display: none;">
             <div class="no-comic-message" id="noComicMessage">
                 <h2>😔 當天尚未更新</h2>
-                <p>這個日期還沒有漫畫喔！<br>請選擇其他日期。</p>
+                <p>這個日期還沒有漫畫喔!<br>請選擇其他日期。</p>
             </div>
         </div>
         
@@ -623,7 +623,7 @@
     </footer>
 
     <!-- 複製成功提示 -->
-    <div class="copy-toast" id="copyToast">✓ 連結已複製！</div>
+    <div class="copy-toast" id="copyToast">✓ 連結已複製!</div>
 
     <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -723,12 +723,12 @@
                     console.log(`✅ 成功載入 ${availableDates.length} 個日期`);
                 } catch (error) {
                     console.error('❌ 載入 dates.json 失敗:', error);
-                    alert('無法載入漫畫日期清單。\n\n請確認：\n1. dates.json 檔案存在\n2. 檔案格式正確\n3. 與 HTML 在同一目錄');
+                    alert('無法載入漫畫日期清單。\n\n請確認:\n1. dates.json 檔案存在\n2. 檔案格式正確\n3. 與 HTML 在同一目錄');
                     return false;
                 }
             }
             if (!availableDates || availableDates.length === 0) {
-                alert('錯誤：沒有可用的漫畫日期。');
+                alert('錯誤:沒有可用的漫畫日期。');
                 return false;
             }
             FIRST_COMIC_DATE = new Date(availableDates[0]);
@@ -802,7 +802,7 @@
                     document.execCommand('copy');
                     showCopyToast();
                 } catch (err) {
-                    alert('無法複製連結，請手動複製：\n' + url);
+                    alert('無法複製連結,請手動複製:\n' + url);
                 }
                 document.body.removeChild(textArea);
             }
@@ -931,7 +931,7 @@
             
             const currentDateStr = formatDate(currentDate);
             if (cccExclusiveDates.includes(currentDateStr)) {
-                if (confirm('這個日期的漫畫是 CCC追漫台 獨家內容！\n\n是否前往 CCC追漫台 觀看？')) {
+                if (confirm('這個日期的漫畫是 CCC追漫台 獨家內容!\n\n是否前往 CCC追漫台 觀看?')) {
                     window.location.href = 'https://www.creative-comic.tw/zh/book/268/content';
                 } else {
                     currentDate = LAST_COMIC_DATE;
@@ -971,12 +971,12 @@
             noComicMessage.classList.remove('active');
         }
 
-            function showComic() {
+        function showComic() {
             loadingSpinner.classList.remove('active');
             comicImage.style.display = 'block';
             noComicMessage.classList.remove('active');
             
-            // 新增:重置滑動位置到最左邊
+            // 重置滑動位置到最左邊
             const comicContainer = document.querySelector('.comic-container');
             if (comicContainer) {
                 comicContainer.scrollLeft = 0;
