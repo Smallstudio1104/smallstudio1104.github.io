@@ -188,89 +188,144 @@
             width: 100%;
         }
         
-        /* ⭐ 手機直式模式 - 放大圖片並可左右滑動 */
+        /* ⭐ 手機直式模式 - 全新優化設計 */
         @media (max-width: 768px) and (orientation: portrait) {
+            body {
+                background-attachment: scroll;
+            }
+            
             .header {
-                padding: 1rem 1rem 0.5rem;
+                padding: 0.8rem 1rem 0.5rem;
             }
             
             .comic-title {
-                font-size: 1.8rem;
+                font-size: 1.6rem;
             }
             
             .comic-title img {
-                max-height: 50px;
+                max-height: 45px;
             }
             
             .comic-date {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
+                margin-top: 0.3rem;
             }
             
             .container {
-                padding: 0 0.5rem 1rem;
+                padding: 0 0.8rem 1rem;
+                justify-content: flex-start;
             }
             
             .date-controls {
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.8rem;
+            }
+            
+            .date-button {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.9rem;
             }
             
             .comic-wrapper {
-                margin-top: 0.5rem;
-                margin-bottom: 0.5rem;
-                gap: 0.5rem;
+                margin-top: 0.8rem;
+                margin-bottom: 0.8rem;
+                gap: 0.8rem;
+            }
+            
+            .nav-buttons-container {
+                gap: 0.6rem;
+                order: 2;
             }
             
             .comic-container {
                 overflow-x: auto;
                 overflow-y: hidden;
-                padding: 0.5rem;
-                align-items: flex-start;
-                justify-content: flex-start;
+                padding: 0.8rem;
                 min-height: auto;
-                border-radius: 8px;
+                border-radius: 12px;
                 -webkit-overflow-scrolling: touch;
+                width: 100%;
+                order: 1;
+                background: white;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             }
             
-            /* 自訂滑動條樣式 */
+            /* 美化滑動條 */
             .comic-container::-webkit-scrollbar {
-                height: 8px;
+                height: 6px;
             }
             
             .comic-container::-webkit-scrollbar-track {
-                background: #f1f1f1;
-                border-radius: 4px;
+                background: #f8f9fa;
+                border-radius: 3px;
+                margin: 0 10px;
             }
             
             .comic-container::-webkit-scrollbar-thumb {
-                background: #888;
-                border-radius: 4px;
+                background: linear-gradient(90deg, #667eea, #764ba2);
+                border-radius: 3px;
             }
             
             .comic-container::-webkit-scrollbar-thumb:hover {
-                background: #555;
+                background: linear-gradient(90deg, #764ba2, #667eea);
             }
             
             .comic-image {
                 max-width: none !important;
                 width: auto !important;
-                height: 55vh !important;
-                min-height: 350px !important;
-                max-height: none !important;
+                height: calc(100vh - 280px) !important;
+                min-height: 300px !important;
+                max-height: 500px !important;
                 margin: 0;
                 display: block;
                 object-fit: contain;
             }
             
+            .nav-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            
             .share-container {
-                padding: 0.5rem 0;
-                gap: 0.8rem;
+                padding: 0.8rem 0;
+                gap: 0.7rem;
+            }
+            
+            .share-icon {
+                width: 42px;
+                height: 42px;
+            }
+            
+            .banner-ads {
+                margin: 1.5rem auto 1rem;
+            }
+            
+            .footer {
+                margin-top: 1.5rem;
+                padding: 1.2rem 1rem;
             }
         }
         
-        /* ⭐ 手機橫式模式 - 填滿螢幕 */
-        @media (max-width: 768px) and (orientation: landscape) {
+        /* ⭐ 手機橫式模式 - 全新優化設計 */
+        @media (max-width: 896px) and (orientation: landscape) {
+            body {
+                background-attachment: scroll;
+            }
+            
             .header {
-                padding: 0.5rem 1rem;
+                padding: 0.5rem 1rem 0.3rem;
+            }
+            
+            .comic-title {
+                font-size: 1.3rem;
+            }
+            
+            .comic-title img {
+                max-height: 35px;
+            }
+            
+            .comic-date {
+                font-size: 0.75rem;
             }
             
             .container {
@@ -282,23 +337,97 @@
                 margin-bottom: 0.5rem;
             }
             
+            .date-button {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.85rem;
+            }
+            
             .comic-wrapper {
                 margin-top: 0.5rem;
                 margin-bottom: 0.5rem;
+                gap: 0.5rem;
+            }
+            
+            .nav-buttons-container {
+                gap: 0.5rem;
+                order: 2;
             }
             
             .comic-container {
-                max-height: 75vh;
-                overflow: auto;
-                padding: 0.5rem;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 0.8rem;
                 min-height: auto;
+                border-radius: 10px;
+                -webkit-overflow-scrolling: touch;
+                width: 100%;
+                order: 1;
+                background: white;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+            
+            /* 美化滑動條 */
+            .comic-container::-webkit-scrollbar {
+                height: 6px;
+            }
+            
+            .comic-container::-webkit-scrollbar-track {
+                background: #f8f9fa;
+                border-radius: 3px;
+                margin: 0 10px;
+            }
+            
+            .comic-container::-webkit-scrollbar-thumb {
+                background: linear-gradient(90deg, #667eea, #764ba2);
+                border-radius: 3px;
+            }
+            
+            .comic-container::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(90deg, #764ba2, #667eea);
             }
             
             .comic-image {
-                max-width: 100%;
-                max-height: 70vh;
-                width: auto;
-                height: auto;
+                max-width: none !important;
+                width: auto !important;
+                height: calc(100vh - 180px) !important;
+                min-height: 200px !important;
+                max-height: 350px !important;
+                margin: 0;
+                display: block;
+                object-fit: contain;
+            }
+            
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            .share-container {
+                padding: 0.5rem 0;
+                gap: 0.6rem;
+            }
+            
+            .share-icon {
+                width: 38px;
+                height: 38px;
+            }
+            
+            .banner-ads {
+                display: none;
+            }
+            
+            .footer {
+                margin-top: 1rem;
+                padding: 1rem;
+            }
+            
+            .footer-content {
+                font-size: 0.8rem;
+            }
+            
+            .footer-logo {
+                height: 35px;
             }
         }
         
@@ -552,8 +681,8 @@
             opacity: 1;
         }
         
-        /* ==================== 響應式設計 ==================== */
-        @media (max-width: 768px) {
+        /* ==================== 響應式設計 - 平板和小螢幕桌面 ==================== */
+        @media (min-width: 769px) and (max-width: 1024px) {
             .comic-title {
                 font-size: 2rem;
             }
@@ -565,61 +694,17 @@
             .comic-date {
                 font-size: 1rem;
             }
-        
-            .comic-wrapper {
-                gap: 0.5rem;
-            }
-        
-            .nav-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
-            }
-        
-            .date-button {
-                width: 100%;
-                max-width: 300px;
-            }
-        
-            .share-icon {
-                width: 40px;
-                height: 40px;
-            }
-        
-            .banner-ad {
-                max-width: 100%;
-            }
-        
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .comic-title {
-                font-size: 1.5rem;
-            }
-        
-            .comic-title img {
-                max-height: 50px;
-            }
-        
-            .comic-date {
-                font-size: 0.9rem;
-            }
-        
+            
             .comic-container {
                 min-height: 300px;
             }
+        }
         
-            .share-icon {
-                width: 38px;
-                height: 38px;
-            }
-        
-            .footer-logo {
-                height: 40px;
+        /* ==================== 響應式設計 - 極小螢幕 ==================== */
+        @media (max-width: 480px) {
+            .date-button {
+                width: 100%;
+                max-width: 280px;
             }
         }
     </style>
@@ -641,23 +726,26 @@
             <button class="date-button" id="dateButton">📅 選擇日期</button>
         </div>
 
-        <!-- 漫畫顯示區 -->
-        <div class="comic-container">
-            <div class="loading-spinner" id="loadingSpinner"></div>
-            <img src="" alt="SMALL 連環漫畫" class="comic-image" id="comicImage" style="display: none;">
-            <div class="no-comic-message" id="noComicMessage">
-                <h2>😔 當天尚未更新</h2>
-                <p>這個日期還沒有漫畫喔!<br>請選擇其他日期。</p>
-            </div>
-        </div>
-        
-        <!-- 導航按鈕 -->
+        <!-- 漫畫和導航區域 -->
         <div class="comic-wrapper">
-            <button class="nav-btn" id="firstBtn" aria-label="最舊" title="最舊的漫畫">«</button>
-            <button class="nav-btn" id="prevBtn" aria-label="前一天" title="上一幅">‹</button>
-            <button class="nav-btn random-btn" id="randomBtn" aria-label="隨機" title="隨機漫畫">🎲</button>
-            <button class="nav-btn" id="nextBtn" aria-label="下一天" title="下一幅">›</button>
-            <button class="nav-btn" id="lastBtn" aria-label="最新" title="最新的漫畫">»</button>
+            <!-- 漫畫顯示區 -->
+            <div class="comic-container">
+                <div class="loading-spinner" id="loadingSpinner"></div>
+                <img src="" alt="SMALL 連環漫畫" class="comic-image" id="comicImage" style="display: none;">
+                <div class="no-comic-message" id="noComicMessage">
+                    <h2>😔 當天尚未更新</h2>
+                    <p>這個日期還沒有漫畫喔!<br>請選擇其他日期。</p>
+                </div>
+            </div>
+            
+            <!-- 導航按鈕 -->
+            <div class="nav-buttons-container">
+                <button class="nav-btn" id="firstBtn" aria-label="最舊" title="最舊的漫畫">«</button>
+                <button class="nav-btn" id="prevBtn" aria-label="前一天" title="上一幅">‹</button>
+                <button class="nav-btn random-btn" id="randomBtn" aria-label="隨機" title="隨機漫畫">🎲</button>
+                <button class="nav-btn" id="nextBtn" aria-label="下一天" title="下一幅">›</button>
+                <button class="nav-btn" id="lastBtn" aria-label="最新" title="最新的漫畫">»</button>
+            </div>
         </div>
 
         <!-- 社群分享按鈕 -->
