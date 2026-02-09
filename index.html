@@ -82,7 +82,8 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;  /* 新增:置中對齊 */
+            align-items: center;  /* 新增 */
+            width: 100%;  /* 新增 */
         }
 
         /* ==================== 日期選擇按鈕 ==================== */
@@ -120,9 +121,8 @@
             gap: 1rem;
             margin-bottom: 1rem;
             margin-top: 2rem;
-            width: 100vw;          /* 新增:使用視窗寬度 */
-            max-width: 400px;      /* 新增:限制最大寬度 */
-            position: relative;    /* 新增:獨立定位 */
+            width: 100%;  /* 新增:佔滿寬度 */
+            max-width: 1200px;  /* 新增:與漫畫容器同寬 */
         }
 
         .nav-btn {
@@ -130,6 +130,8 @@
             border: 2px solid #2d3436;
             width: 50px;
             height: 50px;
+            min-width: 50px;  /* 新增:強制最小寬度 */
+            min-height: 50px;  /* 新增:強制最小高度 */
             border-radius: 50%;
             font-size: 1.5rem;
             color: #2d3436;
@@ -140,8 +142,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            flex-shrink: 0;  /* 新增:防止按鈕被壓縮 */
-            min-width: 50px;  /* 新增:最小寬度 */
+            flex-shrink: 0;  /* 新增:禁止收縮 */
         }
 
         .nav-btn:hover:not(:disabled) {
@@ -172,60 +173,58 @@
             border-radius: 10px;
             padding: 1.5rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            flex: 1;
+            width: 100%;  /* 改為100% */
             max-width: 1200px;
             position: relative;
             min-height: 400px;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;  /* 改為從左邊對齊 */
+            align-items: center;
             justify-content: center;
         }
         
-        /* ⭐ 手機直式模式 - 可左右滑動 */
         /* ⭐ 手機直式模式 - 可左右滑動 */
         @media (max-width: 768px) and (orientation: portrait) {
             .comic-container {
                 overflow-x: auto;
                 overflow-y: hidden;
-                padding: 0;  /* 移除內邊距,避免切掉圖片 */
-                align-items: flex-start;  /* 確保從左邊開始 */
+                padding: 0;  /* 移除padding避免切圖 */
+                width: 100%;
             }
             
             .comic-image {
                 max-width: none !important;
                 width: 200% !important;
                 height: auto;
-                margin: 0;  /* 移除所有邊距 */
-                border-radius: 10px;  /* 保持圓角 */
+                margin: 0;
+                display: block;
             }
         }
         
         /* ⭐ 手機橫式模式 - 填滿螢幕 */
         @media (max-width: 768px) and (orientation: landscape) {
             .header {
-                padding: 1rem 1rem 0.5rem;  /* 新增:減少頂部區域的padding */
+                padding: 0.5rem 1rem;  /* 新增:減少頂部padding */
             }
             
             .container {
-                padding: 0 1rem 0.5rem;  /* 新增:減少容器的padding */
+                padding: 0 1rem 0.5rem;  /* 新增:減少容器padding */
             }
             
             .comic-wrapper {
-                margin-top: 0.5rem;  /* 新增:減少按鈕區的上邊距 */
-                margin-bottom: 0.5rem;  /* 新增:減少按鈕區的下邊距 */
+                margin-top: 0.5rem;  /* 新增:減少上邊距 */
+                margin-bottom: 0.5rem;  /* 新增:減少下邊距 */
             }
             
             .comic-container {
-                max-height: 80vh;  /* 改為80vh,增加可用高度 */
+                max-height: 85vh;  /* 增加可用高度 */
                 overflow: auto;
-                padding: 0.5rem;  /* 新增:減少內邊距 */
-                margin: 0;  /* 新增:移除外邊距 */
+                padding: 0.5rem;  /* 減少內邊距 */
             }
             
             .comic-image {
                 max-width: 100% !important;
-                max-height: 80vh;  /* 改為80vh */
+                max-height: 80vh;  /* 增加圖片高度 */
                 width: auto !important;
                 height: auto;
             }
@@ -486,45 +485,48 @@
             .comic-title {
                 font-size: 2rem;
             }
-
+        
             .comic-title img {
                 max-height: 60px;
             }
-
+        
             .comic-date {
                 font-size: 1rem;
             }
-
+        
             .comic-wrapper {
-                display: grid;
-                grid-template-columns: repeat(5, 1fr);
+                display: flex;  /* 改為flex保持一行 */
+                flex-wrap: nowrap;  /* 新增:禁止換行 */
                 gap: 0.5rem;
                 width: 100%;
-                max-width: 400px;
+                max-width: 100%;  /* 新增:移除最大寬度限制 */
+                justify-content: center;  /* 新增:置中 */
                 margin: 2rem auto 1rem;
             }
         
             .nav-btn {
-                width: 50px;  /* 改回固定寬度 */
-                height: 50px;
+                width: 50px;  /* 固定寬度 */
+                height: 50px;  /* 固定高度 */
+                min-width: 50px;  /* 新增 */
+                min-height: 50px;  /* 新增 */
                 font-size: 1.2rem;
-                flex-shrink: 0;  /* 新增:防止按鈕被壓縮 */
+                flex-shrink: 0;  /* 新增:禁止收縮 */
             }
-
+        
             .date-button {
                 width: 100%;
                 max-width: 300px;
             }
-
+        
             .share-icon {
                 width: 40px;
                 height: 40px;
             }
-
+        
             .banner-ad {
                 max-width: 100%;
             }
-
+        
             .footer-content {
                 flex-direction: column;
                 text-align: center;
