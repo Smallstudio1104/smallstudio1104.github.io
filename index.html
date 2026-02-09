@@ -75,7 +75,7 @@
 
         /* ==================== 主容器 ==================== */
         .container {
-            max-width: 1200px;  /* ← 原本是 1000px，改成 1200px */
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem 2rem;
             flex: 1;
@@ -118,7 +118,7 @@
             justify-content: center;
             gap: 1rem;
             margin-bottom: 1rem;
-            margin-top: 2rem;  /* ← 加這行 */
+            margin-top: 2rem;
         }
 
         .nav-btn {
@@ -185,8 +185,8 @@
             }
             
             .comic-image {
-                max-width: none;
-                width: 200%;  /* 放大到兩倍寬 */
+                max-width: none !important;
+                width: 200% !important;
                 height: auto;
             }
         }
@@ -199,9 +199,9 @@
             }
             
             .comic-image {
-                max-width: 100%;
+                max-width: 100% !important;
                 max-height: 70vh;
-                width: auto;
+                width: auto !important;
                 height: auto;
             }
         }
@@ -212,9 +212,9 @@
             border-radius: 5px;
             display: block;
             transition: opacity 0.3s ease;
-            pointer-events: none;  /* ← 加這行，禁止所有滑鼠互動 */
-            user-select: none;     /* ← 加這行，禁止選取 */
-            -webkit-user-drag: none;  /* ← 加這行，禁止拖曳 */
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
         }
 
         .comic-image.loading {
@@ -471,22 +471,18 @@
             }
 
             .comic-wrapper {
-                flex-direction: row;  /* ← 改回 row，原本是 column */
-                flex-wrap: wrap;
-                justify-content: center;
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
                 gap: 0.5rem;
+                width: 100%;
+                max-width: 400px;
+                margin: 2rem auto 1rem;
             }
         
             .nav-btn {
-                width: 50px;   /* ← 原本是 60px */
-                height: 50px;  /* ← 原本是 60px */
-                font-size: 1.3rem;  /* ← 原本是 1.8rem */
-            }
-
-            .nav-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 1.8rem;
+                width: 100%;
+                height: 50px;
+                font-size: 1.2rem;
             }
 
             .date-button {
@@ -615,29 +611,14 @@
         // ==================== ⭐ 配置區域 ====================
         
         const CONFIG = {
-            // Cloudinary 配置
             cloudinaryCloudName: 'ddotapoxu',
-            
-            // ⭐ 日期載入模式: 'json' 或 'inline'
             dateLoadMode: 'json',
-            
-            // JSON 檔案路徑
             jsonFilePath: 'dates.json',
-            
-            // ⭐ 漫畫標題
             comicTitle: 'SMALL',
-            
-            // ⭐ LOGO 圖片網址
             logoImageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png',
-            
-            // ⭐ 自訂背景
             backgroundColor: 'url(https://res.cloudinary.com/ddotapoxu/image/upload/v1770606869/%E8%83%8C%E6%99%AF.jpg)',
-            
-            // 社群分享文字
             shareTitle: 'SMALL 連環漫畫',
             shareDescription: '每日 SMALL 連環漫畫精選',
-            
-            // ⭐ 橫幅廣告配置（最多3個）
             bannerAds: [
                 {
                     imageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png',
@@ -647,33 +628,17 @@
                     imageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770608711/Small_studio%E6%A8%99%E8%AA%8C.png',
                     linkUrl: 'https://lit.link/en/Smallstudio'
                 }
-                // 可以新增第三個廣告
-                // {
-                //     imageUrl: 'https://your-image-url.com/ad3.jpg',
-                //     linkUrl: 'https://your-link.com'
-                // }
             ]
         };
         
         const IMAGE_BASE_URL = `https://res.cloudinary.com/${CONFIG.cloudinaryCloudName}/image/upload/`;
-        
-        // ==================== 內嵌日期資料 ====================
-        let availableDates = [
-            '2025-01-30',
-            '2025-01-31',
-            '2025-02-01',
-        ];
-        
-        // 日期範圍變數
+        let availableDates = ['2025-01-30', '2025-01-31', '2025-02-01'];
         let FIRST_COMIC_DATE;
         let LAST_COMIC_DATE;
-
-        // ==================== 全域變數 ====================
         let currentDate;
         let flatpickrInstance;
         let availableDatesSet;
 
-        // ==================== DOM 元素 ====================
         const dateButton = document.getElementById('dateButton');
         const firstBtn = document.getElementById('firstBtn');
         const prevBtn = document.getElementById('prevBtn');
@@ -688,10 +653,8 @@
         const copyToast = document.getElementById('copyToast');
         const bannerAds = document.getElementById('bannerAds');
 
-        // ==================== 套用自訂背景 ====================
         function applyCustomBackground() {
             document.body.style.background = CONFIG.backgroundColor;
-            
             if (CONFIG.backgroundColor.includes('url(')) {
                 document.body.style.backgroundSize = 'cover';
                 document.body.style.backgroundPosition = 'center';
@@ -699,37 +662,30 @@
             }
         }
 
-        // ==================== 生成橫幅廣告 ====================
         function generateBannerAds() {
             if (!CONFIG.bannerAds || CONFIG.bannerAds.length === 0) {
                 bannerAds.style.display = 'none';
                 return;
             }
-
             bannerAds.innerHTML = '';
-            
             CONFIG.bannerAds.slice(0, 3).forEach(ad => {
                 if (ad.imageUrl && ad.linkUrl) {
                     const bannerDiv = document.createElement('div');
                     bannerDiv.className = 'banner-ad';
                     bannerDiv.onclick = () => window.open(ad.linkUrl, '_blank', 'noopener,noreferrer');
-                    
                     const img = document.createElement('img');
                     img.src = ad.imageUrl;
                     img.alt = 'Advertisement';
-                    
                     bannerDiv.appendChild(img);
                     bannerAds.appendChild(bannerDiv);
                 }
             });
         }
 
-        // ==================== 載入日期資料 ====================
         async function loadDates() {
             if (CONFIG.dateLoadMode === 'json') {
                 try {
                     console.log('📥 正在從 dates.json 載入日期...');
-                    
                     const timestamp = new Date().getTime();
                     const response = await fetch(`${CONFIG.jsonFilePath}?t=${timestamp}`, {
                         cache: 'no-store',
@@ -739,61 +695,39 @@
                             'Expires': '0'
                         }
                     });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     const data = await response.json();
                     availableDates = data.availableDates;
-                    
                     console.log(`✅ 成功載入 ${availableDates.length} 個日期`);
-                    console.log(`📅 日期範圍: ${data.firstDate} 至 ${data.lastDate}`);
-                    
                 } catch (error) {
                     console.error('❌ 載入 dates.json 失敗:', error);
-                    alert('無法載入漫畫日期清單。\n\n請確認：\n1. dates.json 檔案存在\n2. 檔案格式正確\n3. 與 HTML 在同一目錄\n\n錯誤訊息: ' + error.message);
+                    alert('無法載入漫畫日期清單。\n\n請確認：\n1. dates.json 檔案存在\n2. 檔案格式正確\n3. 與 HTML 在同一目錄');
                     return false;
                 }
-            } else {
-                console.log('📝 使用內嵌日期陣列');
             }
-            
             if (!availableDates || availableDates.length === 0) {
-                alert('錯誤：沒有可用的漫畫日期。\n\n請在 availableDates 陣列中添加日期，或設定 dateLoadMode 為 "json"。');
+                alert('錯誤：沒有可用的漫畫日期。');
                 return false;
             }
-            
             FIRST_COMIC_DATE = new Date(availableDates[0]);
             LAST_COMIC_DATE = new Date(availableDates[availableDates.length - 1]);
             availableDatesSet = new Set(availableDates);
-            
             return true;
         }
 
-        // ==================== URL 參數處理 ====================
         function getDateFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
             const dateParam = urlParams.get('date');
-            
-            if (dateParam) {
-                const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-                if (dateRegex.test(dateParam)) {
-                    const date = new Date(dateParam);
-                    if (!isNaN(date.getTime())) {
-                        console.log('📍 從 URL 載入日期:', dateParam);
-                        return date;
-                    }
-                }
+            if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
+                const date = new Date(dateParam);
+                if (!isNaN(date.getTime())) return date;
             }
-            
             return LAST_COMIC_DATE;
         }
 
         function updateURL(date) {
             const dateStr = formatDate(date);
-            const newUrl = `${window.location.pathname}?date=${dateStr}`;
-            window.history.pushState({ date: dateStr }, '', newUrl);
+            window.history.pushState({ date: dateStr }, '', `${window.location.pathname}?date=${dateStr}`);
             updateMetaTags(date);
         }
 
@@ -802,28 +736,22 @@
             const comicUrl = getComicUrl(date);
             const pageUrl = `${window.location.origin}${window.location.pathname}?date=${dateStr}`;
             const title = `${CONFIG.comicTitle} - ${dateStr}`;
-            
             document.getElementById('ogTitle').setAttribute('content', title);
             document.getElementById('ogDescription').setAttribute('content', CONFIG.shareDescription);
             document.getElementById('ogImage').setAttribute('content', comicUrl);
             document.getElementById('ogUrl').setAttribute('content', pageUrl);
-            
             document.getElementById('twitterTitle').setAttribute('content', title);
             document.getElementById('twitterDescription').setAttribute('content', CONFIG.shareDescription);
             document.getElementById('twitterImage').setAttribute('content', comicUrl);
-            
             document.title = title;
         }
 
-        // ==================== 社群分享功能 ====================
         function getCurrentPageUrl() {
-            const dateStr = formatDate(currentDate);
-            return `${window.location.origin}${window.location.pathname}?date=${dateStr}`;
+            return `${window.location.origin}${window.location.pathname}?date=${formatDate(currentDate)}`;
         }
 
         function shareToFacebook() {
-            const url = encodeURIComponent(getCurrentPageUrl());
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getCurrentPageUrl())}`, '_blank', 'width=600,height=400');
         }
 
         function shareToTwitter() {
@@ -860,12 +788,9 @@
 
         function showCopyToast() {
             copyToast.classList.add('show');
-            setTimeout(() => {
-                copyToast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => copyToast.classList.remove('show'), 3000);
         }
 
-        // ==================== 初始化 ====================
         async function init() {
             applyCustomBackground();
             generateBannerAds();
@@ -885,9 +810,7 @@
             if (!loaded) return;
             
             currentDate = getDateFromURL();
-            
             if (!availableDatesSet.has(formatDate(currentDate))) {
-                console.log('⚠️ URL 中的日期無漫畫，顯示最新日期');
                 currentDate = LAST_COMIC_DATE;
             }
             
@@ -900,7 +823,7 @@
                 yearSelectorType: 'static',
                 monthSelectorType: 'static',
                 enable: availableDates,
-                onChange: function(selectedDates, dateStr, instance) {
+                onChange: function(selectedDates) {
                     if (selectedDates.length > 0) {
                         currentDate = selectedDates[0];
                         updateURL(currentDate);
@@ -908,7 +831,6 @@
                     }
                 },
                 onOpen: function(selectedDates, dateStr, instance) {
-                    // 每次打開日曆時，跳到當前顯示的日期
                     instance.jumpToDate(currentDate);
                 }
             });
@@ -919,22 +841,17 @@
             nextBtn.addEventListener('click', showNextComic);
             lastBtn.addEventListener('click', showLastComic);
 
-            // ✅ 改成只綁定 LOGO 圖片
-            const logoImage = document.getElementById('logoImage');
-            const logoText = document.getElementById('logoText');
-            
             if (CONFIG.logoImageUrl) {
                 logoImage.style.cursor = 'pointer';
-                logoImage.addEventListener('click', function() {
+                logoImage.addEventListener('click', () => {
                     currentDate = LAST_COMIC_DATE;
                     flatpickrInstance.setDate(currentDate);
                     updateURL(currentDate);
                     loadComic();
                 });
             } else {
-                // 如果沒有圖片，用文字
                 logoText.style.cursor = 'pointer';
-                logoText.addEventListener('click', function() {
+                logoText.addEventListener('click', () => {
                     currentDate = LAST_COMIC_DATE;
                     flatpickrInstance.setDate(currentDate);
                     updateURL(currentDate);
@@ -943,10 +860,8 @@
             }
 
             loadComic();
-
             document.addEventListener('keydown', handleKeyPress);
-            
-            window.addEventListener('popstate', function(event) {
+            window.addEventListener('popstate', (event) => {
                 if (event.state && event.state.date) {
                     currentDate = new Date(event.state.date);
                     flatpickrInstance.setDate(currentDate);
@@ -954,20 +869,10 @@
                 }
             });
 
-            // 禁止圖片右鍵選單
-            comicImage.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                return false;
-            });
-            
-            // 禁止拖曳圖片
-            comicImage.addEventListener('dragstart', function(e) {
-                e.preventDefault();
-                return false;
-            });
+            comicImage.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
+            comicImage.addEventListener('dragstart', (e) => { e.preventDefault(); return false; });
         }
 
-        // ==================== 日期格式化 ====================
         function formatDate(date) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -976,21 +881,15 @@
         }
 
         function formatDateDisplay(date) {
-            const dateStr = formatDate(date);
             const prefix = date.getDay() === 0 ? '週日' : '每日';
-            return `${prefix} ${CONFIG.comicTitle} ${dateStr}`;
+            return `${prefix} ${CONFIG.comicTitle} ${formatDate(date)}`;
         }
 
-        // ==================== 生成漫畫網址 ====================
         function getComicUrl(date) {
-            const dateStr = formatDate(date);
-            const timestamp = new Date().getTime();
-            return `${IMAGE_BASE_URL}${dateStr}.png?t=${timestamp}`;
+            return `${IMAGE_BASE_URL}${formatDate(date)}.png?t=${new Date().getTime()}`;
         }
 
-        // ==================== 載入漫畫 ====================
-              function loadComic() {
-            // ⭐ 檢查是否為 CCC追漫台 獨家內容
+        function loadComic() {
             const cccExclusiveDates = [
                 '2021-01-28', '2021-01-29', '2021-01-30', '2021-04-06', '2021-04-16',
                 '2021-04-19', '2021-04-24', '2021-04-26', '2021-04-28', '2021-04-29',
@@ -1010,11 +909,9 @@
             
             const currentDateStr = formatDate(currentDate);
             if (cccExclusiveDates.includes(currentDateStr)) {
-                // 顯示提示訊息
                 if (confirm('這個日期的漫畫是 CCC追漫台 獨家內容！\n\n是否前往 CCC追漫台 觀看？')) {
-                    window.location.href = 'https://www.creative-comic.tw/zh/book/268/content';  // ⬅️ 請改成正確的 CCC 網址
+                    window.location.href = 'https://www.creative-comic.tw/zh/book/268/content';
                 } else {
-                    // 使用者取消，跳回最新漫畫
                     currentDate = LAST_COMIC_DATE;
                     flatpickrInstance.setDate(currentDate);
                     updateURL(currentDate);
@@ -1022,7 +919,6 @@
                 return;
             }
         
-            // 原本的程式碼
             comicDate.textContent = formatDateDisplay(currentDate);
             dateButton.textContent = `📅 ${formatDate(currentDate)}`;
             updateNavigationButtons();
@@ -1030,8 +926,6 @@
         
             const dateStr = formatDate(currentDate);
             const timestamp = new Date().getTime();
-            
-            // 嘗試多種格式
             const formats = ['png', 'jpg', 'jpeg'];
             let formatIndex = 0;
             
@@ -1040,27 +934,15 @@
                     showNoComicMessage();
                     return;
                 }
-                
                 const comicUrl = `${IMAGE_BASE_URL}${dateStr}.${formats[formatIndex]}?t=${timestamp}`;
                 const img = new Image();
-                
-                img.onload = function() {
-                    comicImage.src = comicUrl;
-                    showComic();
-                };
-                
-                img.onerror = function() {
-                    formatIndex++;
-                    tryLoadImage();
-                };
-                
+                img.onload = () => { comicImage.src = comicUrl; showComic(); };
+                img.onerror = () => { formatIndex++; tryLoadImage(); };
                 img.src = comicUrl;
             }
-            
             tryLoadImage();
         }
 
-        // ==================== 顯示狀態管理 ====================
         function showLoading() {
             loadingSpinner.classList.add('active');
             comicImage.style.display = 'none';
@@ -1079,25 +961,14 @@
             noComicMessage.classList.add('active');
         }
 
-        // ==================== 導覽功能 ====================
         function findPreviousAvailableDate(date) {
-            const currentDateStr = formatDate(date);
-            const currentIndex = availableDates.indexOf(currentDateStr);
-            
-            if (currentIndex > 0) {
-                return new Date(availableDates[currentIndex - 1]);
-            }
-            return null;
+            const idx = availableDates.indexOf(formatDate(date));
+            return idx > 0 ? new Date(availableDates[idx - 1]) : null;
         }
         
         function findNextAvailableDate(date) {
-            const currentDateStr = formatDate(date);
-            const currentIndex = availableDates.indexOf(currentDateStr);
-            
-            if (currentIndex !== -1 && currentIndex < availableDates.length - 1) {
-                return new Date(availableDates[currentIndex + 1]);
-            }
-            return null;
+            const idx = availableDates.indexOf(formatDate(date));
+            return idx !== -1 && idx < availableDates.length - 1 ? new Date(availableDates[idx + 1]) : null;
         }
         
         function showFirstComic() {
@@ -1109,7 +980,6 @@
 
         function showPreviousComic() {
             const prevDate = findPreviousAvailableDate(currentDate);
-            
             if (prevDate) {
                 currentDate = prevDate;
                 flatpickrInstance.setDate(currentDate);
@@ -1128,7 +998,6 @@
 
         function showNextComic() {
             const nextDate = findNextAvailableDate(currentDate);
-            
             if (nextDate) {
                 currentDate = nextDate;
                 flatpickrInstance.setDate(currentDate);
@@ -1151,22 +1020,14 @@
             lastBtn.disabled = formatDate(currentDate) === formatDate(LAST_COMIC_DATE);
         }
 
-        // ==================== 鍵盤控制 ====================
         function handleKeyPress(e) {
-            if (e.key === 'ArrowLeft') {
-                showPreviousComic();
-            } else if (e.key === 'ArrowRight') {
-                showNextComic();
-            } else if (e.key === 'Home') {
-                showFirstComic();
-            } else if (e.key === 'End') {
-                showLastComic();
-            } else if (e.key === 'r' || e.key === 'R') {
-                showRandomComic();
-            }
+            if (e.key === 'ArrowLeft') showPreviousComic();
+            else if (e.key === 'ArrowRight') showNextComic();
+            else if (e.key === 'Home') showFirstComic();
+            else if (e.key === 'End') showLastComic();
+            else if (e.key === 'r' || e.key === 'R') showRandomComic();
         }
 
-        // ==================== 啟動應用 ====================
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
