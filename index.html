@@ -48,10 +48,9 @@
         .header {
             text-align: center;
             padding: 2rem 1rem 1rem;
-            position: relative;  /* 加這行 */
+            position: relative;
         }
         
-        /* 加入這段 */
         .characters-link {
             position: absolute;
             top: 2rem;
@@ -383,6 +382,42 @@
             transform: scale(1.1);
         }
         
+        /* ==================== 統計資訊樣式 ==================== */
+        .stats-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 1rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #dfe6e9;
+        }
+        
+        .stat-icon {
+            font-size: 1.2rem;
+        }
+        
+        .stat-label {
+            opacity: 0.8;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: #74b9ff;
+            font-size: 1.1rem;
+        }
+        
         /* ==================== Flatpickr 自訂樣式 ==================== */
         .flatpickr-calendar {
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -532,6 +567,20 @@
                 </a>
             </div>
         </div>
+        
+        <!-- 統計資訊區 -->
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-icon">👥</span>
+                <span class="stat-label">總訪客數:</span>
+                <span class="stat-value" id="totalVisitors">載入中...</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">👁️</span>
+                <span class="stat-label">本篇瀏覽:</span>
+                <span class="stat-value" id="comicViews">載入中...</span>
+            </div>
+        </div>
     </footer>
 
     <!-- 複製成功提示 -->
@@ -604,6 +653,86 @@
             '2022-04-25', '2022-04-26', '2022-05-22', '2022-07-17', '2022-07-05',
             '2022-07-03'
         ];
+
+        // ==================== 統計功能 ====================
+        
+        // 使用 CountAPI 來追蹤訪客數和瀏覽數
+        const STATS_API = 'https://api.countapi.xyz';
+        const STATS_NAMESPACE = 'small-comic';
+        
+        // 初始化統計
+        async function initStats() {
+            // 載入總訪客數
+            await updateTotalVisitors();
+            
+            // 載入當前漫畫瀏覽數
+            await updateComicViews(formatDate(currentDate));
+        }
+        
+        // 更新總訪客數 (使用 localStorage 確保同一設備只計數一次)
+        async function updateTotalVisitors() {
+            const visitorKey = 'small_comic_visitor_counted';
+            const hasVisited = localStorage.getItem(visitorKey);
+            
+            try {
+                let endpoint;
+                if (!hasVisited) {
+                    // 第一次訪問，增加計數
+                    endpoint = `${STATS_API}/hit/${STATS_NAMESPACE}/total-visitors`;
+                    localStorage.setItem(visitorKey, 'true');
+                } else {
+                    // 已訪問過，只獲取數據
+                    endpoint = `${STATS_API}/get/${STATS_NAMESPACE}/total-visitors`;
+                }
+                
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                
+                if (data && data.value !== undefined) {
+                    document.getElementById('totalVisitors').textContent = formatNumber(data.value);
+                } else {
+                    document.getElementById('totalVisitors').textContent = '0';
+                }
+            } catch (error) {
+                console.error('載入訪客數失敗:', error);
+                document.getElementById('totalVisitors').textContent = '--';
+            }
+        }
+        
+        // 更新漫畫瀏覽數 (使用 sessionStorage 確保同一 session 中同一漫畫只計數一次)
+        async function updateComicViews(dateStr) {
+            const viewKey = `comic_view_${dateStr}`;
+            const hasViewed = sessionStorage.getItem(viewKey);
+            
+            try {
+                let endpoint;
+                if (!hasViewed) {
+                    // 第一次查看這篇漫畫，增加計數
+                    endpoint = `${STATS_API}/hit/${STATS_NAMESPACE}/comic-${dateStr}`;
+                    sessionStorage.setItem(viewKey, 'true');
+                } else {
+                    // 已查看過，只獲取數據
+                    endpoint = `${STATS_API}/get/${STATS_NAMESPACE}/comic-${dateStr}`;
+                }
+                
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                
+                if (data && data.value !== undefined) {
+                    document.getElementById('comicViews').textContent = formatNumber(data.value);
+                } else {
+                    document.getElementById('comicViews').textContent = '0';
+                }
+            } catch (error) {
+                console.error('載入瀏覽數失敗:', error);
+                document.getElementById('comicViews').textContent = '--';
+            }
+        }
+        
+        // 格式化數字 (加入千位分隔符)
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
 
         function applyCustomBackground() {
             document.body.style.background = CONFIG.backgroundColor;
@@ -766,6 +895,9 @@
                 currentDate = LAST_COMIC_DATE;
             }
             
+            // 初始化統計
+            await initStats();
+            
             flatpickrInstance = flatpickr(dateButton, {
                 locale: 'zh_tw',
                 dateFormat: 'Y-m-d',
@@ -851,12 +983,10 @@
         function loadComic() {
             const currentDateStr = formatDate(currentDate);
             
-            // 修改3: 如果選擇CCC獨家日期,顯示確認對話框
             if (cccExclusiveDates.includes(currentDateStr)) {
                 if (confirm('這個日期的漫畫是 CCC追漫台 獨家內容!\n\n是否前往 CCC追漫台 觀看?')) {
                     window.location.href = 'https://www.creative-comic.tw/zh/book/268/content';
                 }
-                // 如果選擇取消,currentDate保持不變,不做任何操作
                 return;
             }
         
@@ -864,6 +994,9 @@
             dateButton.textContent = `📅 ${formatDate(currentDate)}`;
             updateNavigationButtons();
             showLoading();
+            
+            // 更新當前漫畫的瀏覽數
+            updateComicViews(currentDateStr);
         
             const dateStr = formatDate(currentDate);
             const timestamp = new Date().getTime();
@@ -929,9 +1062,7 @@
             }
         }
 
-        // 修改4和5: 隨機漫畫排除CCC獨家且至少差3天
         function showRandomComic() {
-            // 過濾出非CCC獨家的日期
             const nonCCCDates = availableDates.filter(date => !cccExclusiveDates.includes(date));
             
             if (nonCCCDates.length === 0) {
@@ -942,14 +1073,12 @@
             const currentDateStr = formatDate(currentDate);
             const currentIndex = availableDates.indexOf(currentDateStr);
             
-            // 找出與當前日期至少差3天的候選日期
             const candidateDates = nonCCCDates.filter(dateStr => {
                 const candidateIndex = availableDates.indexOf(dateStr);
                 const daysDiff = Math.abs(candidateIndex - currentIndex);
                 return daysDiff >= 3;
             });
             
-            // 如果沒有符合條件的日期,放寬到所有非CCC日期
             const finalCandidates = candidateDates.length > 0 ? candidateDates : nonCCCDates;
             
             const randomIndex = Math.floor(Math.random() * finalCandidates.length);
