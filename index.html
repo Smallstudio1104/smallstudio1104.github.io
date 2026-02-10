@@ -660,13 +660,12 @@
         const STATS_API = 'https://api.countapi.xyz';
         const STATS_NAMESPACE = 'small-comic';
         
-        // 初始化統計
-        async function initStats() {
-            // 載入總訪客數
-            await updateTotalVisitors();
-            
-            // 載入當前漫畫瀏覽數
-            await updateComicViews(formatDate(currentDate));
+        // 初始化統計 (不阻塞主要功能)
+        function initStats() {
+            // 延遲載入統計,避免阻塞主要功能
+            setTimeout(() => {
+                updateTotalVisitors().catch(err => console.log('統計載入失敗:', err));
+            }, 1000);
         }
         
         // 更新總訪客數 (使用 localStorage 確保同一設備只計數一次)
@@ -685,7 +684,10 @@
                     endpoint = `${STATS_API}/get/${STATS_NAMESPACE}/total-visitors`;
                 }
                 
-                const response = await fetch(endpoint);
+                const response = await fetch(endpoint, { 
+                    method: 'GET',
+                    mode: 'cors'
+                });
                 const data = await response.json();
                 
                 if (data && data.value !== undefined) {
@@ -715,7 +717,10 @@
                     endpoint = `${STATS_API}/get/${STATS_NAMESPACE}/comic-${dateStr}`;
                 }
                 
-                const response = await fetch(endpoint);
+                const response = await fetch(endpoint, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
                 const data = await response.json();
                 
                 if (data && data.value !== undefined) {
@@ -895,8 +900,8 @@
                 currentDate = LAST_COMIC_DATE;
             }
             
-            // 初始化統計
-            await initStats();
+            // 初始化統計 (非阻塞)
+            initStats();
             
             flatpickrInstance = flatpickr(dateButton, {
                 locale: 'zh_tw',
@@ -995,8 +1000,8 @@
             updateNavigationButtons();
             showLoading();
             
-            // 更新當前漫畫的瀏覽數
-            updateComicViews(currentDateStr);
+            // 更新當前漫畫的瀏覽數 (非阻塞)
+            updateComicViews(currentDateStr).catch(err => console.log('瀏覽數更新失敗:', err));
         
             const dateStr = formatDate(currentDate);
             const timestamp = new Date().getTime();
