@@ -1,0 +1,81 @@
+name: 自動更新漫畫日期列表
+
+# 觸發條件
+on:
+  # 每天台灣時間凌晨 1:00 執行 (UTC 17:00 = 台灣時間 01:00)
+  schedule:
+    - cron: '0 17 * * *'
+  
+  # 也可以手動觸發
+  workflow_dispatch:
+  
+  # 當 fetch-cloudinary-dates.js 被修改時也執行
+  push:
+    paths:
+      - 'fetch-cloudinary-dates.js'
+      - '.github/workflows/update-dates.yml'
+
+jobs:
+  update-dates:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # 需要寫入權限才能提交更改
+    
+    steps:
+      # 1. 檢出代碼
+      - name: 📥 檢出代碼
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 完整歷史記錄
+      
+      # 2. 設定 Node.js 環境
+      - name: 🟢 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      # 3. 安裝依賴
+      - name: 📦 安裝依賴
+        run: |
+          npm install cloudinary
+      
+      # 4. 執行腳本
+      - name: 🔄 執行 Cloudinary 日期提取腳本
+        env:
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        run: |
+          node fetch-cloudinary-dates.js
+      
+      # 5. 檢查是否有更改
+      - name: 🔍 檢查檔案更改
+        id: check_changes
+        run: |
+          if git diff --quiet dates.json; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "📌 dates.json 沒有變化"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✨ dates.json 已更新"
+          fi
+      
+      # 6. 提交並推送更改（如果有的話）
+      - name: 💾 提交並推送更改
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dates.json
+          git commit -m "🤖 自動更新漫畫日期列表 - $(date +'%Y-%m-%d %H:%M:%S')"
+          git push
+      
+      # 7. 完成通知
+      - name: ✅ 完成
+        run: |
+          if [ "${{ steps.check_changes.outputs.has_changes }}" == "true" ]; then
+            echo "✨ 自動更新完成！dates.json 已更新並推送"
+          else
+            echo "📌 沒有新的漫畫日期，跳過更新"
+          fi
