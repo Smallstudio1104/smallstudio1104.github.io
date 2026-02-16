@@ -611,11 +611,14 @@
                     imageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770641878/PROMO_BANNER_LOGO_CCC.png',
                     linkUrl: 'https://www.creative-comic.tw/zh/book/268/content'
                 }
-            ]
+            ],
+            // 時區設定（台灣時間 UTC+8）
+            timezoneOffset: 8
         };
         
         const IMAGE_BASE_URL = `https://res.cloudinary.com/${CONFIG.cloudinaryCloudName}/image/upload/`;
-        let availableDates = ['2025-01-30', '2025-01-31', '2025-02-01'];
+        let allDates = []; // 所有日期（包括未來）
+        let availableDates = []; // 可用日期（今天及之前）
         let FIRST_COMIC_DATE;
         let LAST_COMIC_DATE;
         let currentDate;
@@ -653,6 +656,36 @@
             '2022-04-25', '2022-04-26', '2022-05-22', '2022-07-17', '2022-07-05',
             '2022-07-03'
         ];
+
+        // ==================== 日期過濾函數 ====================
+        
+        /**
+         * 獲取當前日期（台灣時間）
+         */
+        function getTodayDate() {
+            const now = new Date();
+            // 轉換為台灣時間 (UTC+8)
+            const taiwanTime = new Date(now.getTime() + (CONFIG.timezoneOffset * 60 * 60 * 1000));
+            // 只保留日期部分
+            const dateStr = taiwanTime.toISOString().split('T')[0];
+            return new Date(dateStr + 'T00:00:00Z');
+        }
+        
+        /**
+         * 檢查日期是否為未來日期
+         */
+        function isFutureDate(dateStr) {
+            const checkDate = new Date(dateStr + 'T00:00:00Z');
+            const today = getTodayDate();
+            return checkDate > today;
+        }
+        
+        /**
+         * 過濾未來日期
+         */
+        function filterFutureDates(dates) {
+            return dates.filter(date => !isFutureDate(date));
+        }
 
         // ==================== 統計功能 ====================
         
@@ -783,8 +816,15 @@
                     });
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     const data = await response.json();
-                    availableDates = data.availableDates;
-                    console.log(`✅ 成功載入 ${availableDates.length} 個日期`);
+                    
+                    // 儲存所有日期
+                    allDates = data.availableDates;
+                    
+                    // 過濾未來日期
+                    availableDates = filterFutureDates(allDates);
+                    
+                    console.log(`✅ 成功載入 ${allDates.length} 個日期`);
+                    console.log(`📅 可用日期 ${availableDates.length} 個 (過濾了 ${allDates.length - availableDates.length} 個未來日期)`);
                 } catch (error) {
                     console.error('❌ 載入 dates.json 失敗:', error);
                     alert('無法載入漫畫日期清單。\n\n請確認:\n1. dates.json 檔案存在\n2. 檔案格式正確\n3. 與 HTML 在同一目錄');
