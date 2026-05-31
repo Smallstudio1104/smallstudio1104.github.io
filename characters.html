@@ -4,12 +4,268 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMALL - 角色介紹</title>
-    <link rel="icon" type="image/png" href="你的icon網址">
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/ddotapoxu/image/upload/v1770658297/ICON2.png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: #ffffff;
+            color: #2d3436;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            padding: 2rem 1rem 1rem;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #2d3436;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover { color: #636e72; transform: translateX(-3px); display: inline-block; }
+
+        .logo-wrap img {
+            max-height: 80px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        .page-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: #636e72;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about-section {
+            max-width: 700px;
+            margin: 3rem auto 3rem;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .about-section h2 {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #2d3436;
+            margin-bottom: 1.2rem;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .about-section p {
+            font-size: 1rem;
+            color: #636e72;
+            line-height: 2;
+        }
+
+        /* ===== DIVIDER ===== */
+        .divider {
+            width: 100%;
+            border: none;
+            border-top: 1.5px solid #e0e0e0;
+            margin: 0;
+        }
+
+        /* ===== MEET THE GANG ===== */
+        .gang-section {
+            padding: 3.5rem 2rem 5rem;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .gang-section h2 {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #2d3436;
+            margin-bottom: 2.5rem;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .gang-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .char-card {
+            width: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #2d3436;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .char-card:hover { transform: translateY(-4px); }
+
+        .char-card:hover .char-name { text-decoration: underline; }
+
+        .char-img-box {
+            width: 160px;
+            height: 160px;
+            border: 3px solid #f5c400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .char-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Placeholder when no image */
+        .char-img-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            background: #fafafa;
+        }
+
+        .char-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d3436;
+            text-align: center;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: #2d3436;
+            color: white;
+            padding: 1.5rem 1rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-left { font-size: 0.9rem; color: #dfe6e9; }
+
+        .footer-logo {
+            height: 50px;
+            width: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .footer-logo:hover { transform: scale(1.1); }
+
+        @media (max-width: 600px) {
+            .back-link { font-size: 0.85rem; top: 1.2rem; left: 1rem; }
+            .char-img-box { width: 130px; height: 130px; }
+            .char-card { width: 145px; }
+        }
+    </style>
 </head>
 <body>
-    <h1>角色介紹</h1>
-    <button onclick="location.href='index.html'">← 返回漫畫</button>
-    
-    <!-- 未來放角色內容 -->
+
+    <header class="header">
+        <a class="back-link" href="index.html">← 返回漫畫</a>
+        <div class="logo-wrap">
+            <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png"
+                 alt="SMALL"
+                 onclick="location.href='index.html'">
+        </div>
+        <p class="page-label">關於 SMALL</p>
+    </header>
+
+    <!-- ABOUT -->
+    <section class="about-section">
+        <h2>關於這部漫畫</h2>
+        <p>
+            在這個不大不小的世界裡，<br>
+            住著一個戴棒球帽的浪漫主義者、一隻見錢眼開的兔子、<br>
+            一個沒什麼天使氣質的天使，還有一個躲在面具後面的小惡魔。<br><br>
+            這是他們平凡又荒謬的日常。
+        </p>
+    </section>
+
+    <hr class="divider">
+
+    <!-- MEET THE GANG -->
+    <section class="gang-section">
+        <h2>Meet the Gang</h2>
+        <div class="gang-grid">
+
+            <a class="char-card" href="char-Kalos.html">
+                <div class="char-img-box">
+                    <div class="char-img-placeholder">🧢</div>
+                </div>
+                <div class="char-name">卡羅斯</div>
+            </a>
+
+            <a class="char-card" href="char-Prittle.html">
+                <div class="char-img-box">
+                    <div class="char-img-placeholder">🐰</div>
+                </div>
+                <div class="char-name">花生糖</div>
+            </a>
+
+            <a class="char-card" href="char-Annie.html">
+                <div class="char-img-box">
+                    <div class="char-img-placeholder">😇</div>
+                </div>
+                <div class="char-name">安妮</div>
+            </a>
+
+            <a class="char-card" href="char-Rann.html">
+                <div class="char-img-box">
+                    <div class="char-img-placeholder">😈</div>
+                </div>
+                <div class="char-name">雷恩</div>
+            </a>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">© SMALL 連環漫畫 ・ 保留所有權利</div>
+            <img class="footer-logo"
+                 src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png"
+                 alt="SMALL Logo"
+                 onclick="location.href='index.html'">
+        </div>
+    </footer>
+
 </body>
 </html>
