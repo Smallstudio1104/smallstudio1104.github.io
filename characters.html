@@ -20,23 +20,40 @@
             text-align: center;
             padding: 2rem 1rem 1rem;
             position: relative;
-            background: #ffffff;
+            background: url(https://res.cloudinary.com/ddotapoxu/image/upload/v1770654939/SMALL_PATTERN_BG.jpg);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        .back-link {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            font-size: 1rem;
-            font-weight: 500;
+        .header { padding: 1rem; }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav a {
+            font-size: 1.25rem;
+            font-weight: 700;
             color: #2d3436;
             text-decoration: none;
-            transition: all 0.3s ease;
+            letter-spacing: 0.05em;
         }
-        .back-link:hover { color: #636e72; transform: translateX(-3px); display: inline-block; }
 
-        .logo-wrap img {
-            max-height: 80px;
+        .nav a:hover { text-decoration: underline; }
+
+        .nav-logo img {
+            max-height: 70px;
             height: auto;
             cursor: pointer;
         }
@@ -199,13 +216,20 @@
 <body>
 
     <header class="header">
-        <a class="back-link" href="index.html">← 返回漫畫</a>
-        <div class="logo-wrap">
-            <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png"
-                 alt="SMALL"
-                 onclick="location.href='index.html'">
-        </div>
-        <p class="page-label">關於 SMALL</p>
+        <nav class="nav">
+            <div class="nav-left">
+                <a href="index.html">漫畫</a>
+                <a href="characters.html">關於</a>
+            </div>
+            <div class="nav-logo">
+                <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png"
+                    alt="SMALL" onclick="location.href='index.html'">
+            </div>
+            <div class="nav-right">
+                <a href="#">連載</a>
+                <a href="#">更多</a>
+            </div>
+        </nav>
     </header>
 
     <!-- ABOUT -->
@@ -259,7 +283,7 @@
 
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-left">© SMALL 連環漫畫 ・ 保留所有權利</div>
+            <div class="footer-left">© Smallstudio1104 / 股等</div>
             <img class="footer-logo"
                  src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png"
                  alt="SMALL Logo"

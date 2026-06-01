@@ -51,21 +51,31 @@
             position: relative;
         }
         
-        .characters-link {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            font-size: 1rem;
-            font-weight: 500;
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            gap: 2rem;
+            min-width: 100px;
+        }
+
+        .nav-right { justify-content: flex-end; }
+
+        .nav a {
+            font-size: 1.25rem;
+            font-weight: 700;
             color: #2d3436;
             text-decoration: none;
-            transition: all 0.3s ease;
+            letter-spacing: 0.05em;
         }
-        
-        .characters-link:hover {
-            color: #636e72;
-            transform: translateY(-2px);
-        }
+
+        .nav a:hover { text-decoration: underline; }
         
         .comic-title {
             font-size: 2.5rem;
@@ -497,25 +507,42 @@
         .copy-toast.show {
             opacity: 1;
         }
+        .floating-random {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            font-size: 1.8rem;
+            z-index: 1001;
+            pointer-events: auto;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
     </style>
 </head>
+
 <body>
     <!-- 頂部標題區 -->
     <div class="header">
-        <a href="characters.html" class="characters-link">👥 角色介紹</a>
-        <h1 class="comic-title" id="comicTitle">
-            <img src="" alt="SMALL" id="logoImage" style="display: none;">
-            <span id="logoText">SMALL</span>
-        </h1>
+        <nav class="nav">
+            <div class="nav-left">
+                <a href="index.html">漫畫</a>
+                <a href="characters.html">關於</a>
+            </div>
+            <h1 class="comic-title" id="comicTitle">
+                <img src="" alt="SMALL" id="logoImage" style="display: none;">
+                <span id="logoText">SMALL</span>
+            </h1>
+            <div class="nav-right">
+                <a href="#">連載</a>
+                <a href="#">更多</a>
+            </div>
+        </nav>
         <div class="comic-date" id="comicDate">每日 SMALL 2025-02-09</div>
     </div>
 
     <!-- 主容器 -->
     <div class="container">
-        <!-- 日期選擇按鈕 -->
-        <div class="date-controls">
-            <button class="date-button" id="dateButton">📅 選擇日期</button>
-        </div>
 
         <!-- 漫畫和導航區域 -->
         <div class="comic-wrapper">
@@ -531,11 +558,11 @@
             
             <!-- 導航按鈕 -->
             <div class="nav-buttons-container">
-                <button class="nav-btn" id="firstBtn" aria-label="最舊" title="最舊的漫畫">«</button>
-                <button class="nav-btn" id="prevBtn" aria-label="前一天" title="上一幅">‹</button>
-                <button class="nav-btn random-btn" id="randomBtn" aria-label="隨機" title="隨機漫畫">🎲</button>
-                <button class="nav-btn" id="nextBtn" aria-label="下一天" title="下一幅">›</button>
-                <button class="nav-btn" id="lastBtn" aria-label="最新" title="最新的漫畫">»</button>
+            <button class="nav-btn" id="firstBtn" aria-label="最舊" title="最舊的漫畫">«</button>
+            <button class="nav-btn" id="prevBtn" aria-label="前一天" title="上一幅">‹</button>
+            <button class="date-button" id="dateButton">📅</button>
+            <button class="nav-btn" id="nextBtn" aria-label="下一天" title="下一幅">›</button>
+            <button class="nav-btn" id="lastBtn" aria-label="最新" title="最新的漫畫">»</button>
             </div>
         </div>
 
@@ -547,7 +574,7 @@
             <button class="share-icon copy" onclick="copyLink()" title="複製連結"></button>
         </div>
     </div>
-
+    <button type="button" class="nav-btn random-btn floating-random" id="randomBtn" aria-label="隨機" title="隨機漫畫">🎲</button>
     <!-- 橫幅廣告區 -->
     <div class="banner-ads" id="bannerAds">
         <!-- 廣告將由 JavaScript 動態生成 -->
@@ -589,6 +616,7 @@
     <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh-tw.js"></script>
+    
 
     <script>
         // ==================== ⭐ 配置區域 ====================
@@ -1167,5 +1195,6 @@
 
         window.addEventListener('DOMContentLoaded', init);
     </script>
+    
 </body>
 </html>
