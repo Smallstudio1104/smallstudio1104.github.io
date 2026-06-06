@@ -595,18 +595,12 @@
             </div>
         </div>
         
-        <!-- 統計資訊區 -->
-        <div class="stats-container">
-            <div class="stat-item">
-                <span class="stat-icon">👥</span>
-                <span class="stat-label">總訪客數:</span>
-                <span class="stat-value" id="totalVisitors">載入中...</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-icon">👁️</span>
-                <span class="stat-label">本篇瀏覽:</span>
-                <span class="stat-value" id="comicViews">載入中...</span>
-            </div>
+        <!-- 統計資訊已移除 -->
+        <div class="footer-links">
+            <a href="index.html">漫畫連載</a>·
+            <a href="characters.html">關於與角色</a>·
+            <a href="#">其他連載</a>·
+            <a href="#">更多作品</a>
         </div>
     </footer>
 
@@ -968,8 +962,7 @@
                 currentDate = LAST_COMIC_DATE;
             }
             
-            // 初始化統計 (非阻塞)
-            initStats();
+            // 統計已移除
             
             flatpickrInstance = flatpickr(dateButton, {
                 locale: 'zh_tw',

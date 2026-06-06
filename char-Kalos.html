@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -6,328 +6,37 @@
     <title>SMALL - 卡羅斯</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/ddotapoxu/image/upload/v1770658297/ICON2.png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background: #ffffff;
-            color: #2d3436;
-        }
-
-        /* HEADER */
-                .header {
-            text-align: center;
-            padding: 2rem 1rem 1rem;
-            position: relative;
-            background: url(https://res.cloudinary.com/ddotapoxu/image/upload/v1770654939/SMALL_PATTERN_BG.jpg);
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-
-        .header { padding: 1rem; }
-
-        .nav {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .nav-left, .nav-right {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .nav a {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #2d3436;
-            text-decoration: none;
-            letter-spacing: 0.05em;
-        }
-
-        .nav a:hover { text-decoration: underline; }
-
-        .nav-logo img {
-            max-height: 70px;
-            height: auto;
-            cursor: pointer;
-        }
-
-        .page-label {
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 0.3em;
-            color: #636e72;
-            text-transform: uppercase;
-            margin-top: 0.5rem;
-        }
-
-        /* PROFILE SECTION */
-        .profile-section {
-            max-width: 820px;
-            margin: 2.5rem auto 0;
-            padding: 0 2rem;
-        }
-
-        .char-title {
-            font-size: 1.1rem;
-            font-weight: 900;
-            letter-spacing: 0.2em;
-            text-align: center;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-card {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 0;
-            border: 2px solid #2d3436;
-        }
-
-        .profile-img-col {
-            border-right: 2px solid #2d3436;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            min-height: 300px;
-            background: #fff;
-        }
-
-        .profile-img-col .placeholder {
-            font-size: 8rem;
-            line-height: 1;
-        }
-
-        .profile-img-col img {
-            max-width: 100%;
-            max-height: 260px;
-            object-fit: contain;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .profile-info-col {
-            padding: 2rem 2.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .info-block-label {
-            font-size: 0.8rem;
-            font-weight: 900;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #2d3436;
-            margin-bottom: 0.4rem;
-        }
-
-        .info-block-value {
-            font-size: 0.95rem;
-            color: #636e72;
-            line-height: 1.8;
-        }
-
-        /* QUOTE BLOCK */
-        .quote-block {
-            max-width: 820px;
-            margin: 2.5rem auto 0;
-            padding: 0 2rem;
-        }
-
-        .quote-inner {
-            background: #f5c400;
-            padding: 1.8rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 500;
-            line-height: 1.8;
-            color: #2d3436;
-        }
-
-        /* DIVIDER */
-        .divider {
-            width: 100%;
-            border: none;
-            border-top: 1.5px solid #e0e0e0;
-            margin: 3rem 0 0;
-        }
-
-        /* GANG NAV */
-        .gang-nav {
-            padding: 3rem 2rem 4rem;
-            max-width: 820px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .gang-nav h3 {
-            font-size: 1rem;
-            font-weight: 900;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            text-decoration: underline;
-            text-underline-offset: 4px;
-            margin-bottom: 2rem;
-        }
-
-        .gang-mini-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1.2rem;
-        }
-
-        .mini-card {
-            width: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            color: #2d3436;
-            transition: transform 0.2s ease;
-        }
-        .mini-card:hover { transform: translateY(-3px); }
-        .mini-card:hover .mini-name { text-decoration: underline; }
-
-        .mini-img-box {
-            width: 100px;
-            height: 100px;
-            border: 2.5px solid #f5c400;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            background: #fff;
-        }
-
-        .mini-img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .mini-name {
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-
-        .mini-card.active .mini-img-box {
-            border-color: #2d3436;
-            border-width: 3px;
-        }
-
-        /* FOOTER */
-        .footer {
-            background: #2d3436;
-            color: white;
-            padding: 1.5rem 1rem;
-        }
-
-        .footer-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .footer-left { font-size: 0.9rem; color: #dfe6e9; }
-
-        .footer-logo {
-            height: 50px;
-            width: auto;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .footer-logo:hover { transform: scale(1.1); }
-
-        @media (max-width: 640px) {
-            .profile-card { grid-template-columns: 1fr; }
-            .profile-img-col { border-right: none; border-bottom: 2px solid #2d3436; min-height: 200px; }
-            .profile-info-col { padding: 1.5rem; }
-            .back-link { font-size: 0.85rem; top: 1.2rem; left: 1rem; }
-        }
-    </style>
+    <link rel="stylesheet" href="char-template.css">
 </head>
 <body>
-
-    <header class="header">
-        <nav class="nav">
-            <div class="nav-left">
-                <a href="index.html">漫畫</a>
-                <a href="characters.html">關於</a>
-            </div>
-            <div class="nav-logo">
-                <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png"
-                    alt="SMALL" onclick="location.href='index.html'">
-            </div>
-            <div class="nav-right">
-                <a href="#">連載</a>
-                <a href="#">更多</a>
-            </div>
-        </nav>
-    </header>
-
-    <section class="profile-section">
-        <div class="char-title">卡羅斯</div>
-        <div class="profile-card">
-            <div class="profile-img-col">
-                <div class="placeholder">🧢</div>
-            </div>
-            <div class="profile-info-col">
-                <div class="info-block"><div class="info-block-label">身份</div><div class="info-block-value">主角</div></div>
-<div class="info-block"><div class="info-block-label">特徵</div><div class="info-block-value">戴著棒球帽，圍著藍色圍巾</div></div>
-<div class="info-block"><div class="info-block-label">關於</div><div class="info-block-value">一個無藥可救的浪漫主義者。總是用一種比現實更美好的眼光看待一切，哪怕這個世界並不打算配合他。</div></div>
-
-            </div>
-        </div>
-    </section>
-
-    <div class="quote-block"><div class="quote-inner">把卡羅斯的名言放在這裡</div></div>
-
-    <hr class="divider">
-
-    <section class="gang-nav">
-        <h3>Meet the Gang</h3>
-        <div class="gang-mini-grid">
-            <a class="mini-card active" href="char-Kalos.html">
-                <div class="mini-img-box">🧢</div>
-                <div class="mini-name">卡羅斯</div>
-            </a>
-            <a class="mini-card " href="char-Prittle.html">
-                <div class="mini-img-box">🐰</div>
-                <div class="mini-name">花生糖</div>
-            </a>
-            <a class="mini-card " href="char-Annie.html">
-                <div class="mini-img-box">😇</div>
-                <div class="mini-name">安妮</div>
-            </a>
-            <a class="mini-card " href="char-Rann.html">
-                <div class="mini-img-box">😈</div>
-                <div class="mini-name">雷恩</div>
-            </a>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-left">© SMALL 連環漫畫 ・ 保留所有權利</div>
-            <img class="footer-logo"
-                 src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png"
-                 alt="SMALL Logo"
-                 onclick="location.href='index.html'">
-        </div>
-    </footer>
-
+<div id="page-root"></div>
+<script src="char-template.js"></script>
+<script>
+renderCharacterPage({
+    pageTitle: 'SMALL - 卡羅斯',
+    hero: {
+        name: '卡羅斯',
+        enName: 'Kalos',
+        image: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art.png',
+        fallback: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png',
+        firstAppearance: '2021-01-01',
+        description: '卡羅斯是個樂觀、充滿毅力的男孩，但也很常陷入過度的擔心以及內耗之中。他諸事不順，或是結果不是他所預期的。他總是去籃球場投籃，但似乎總有力量與之作對，讓他每次都無法順利的進球。他也一直很喜歡隔壁班的女孩珍妮，但他要馬被忽視，要馬無法順利告白。他也常將事情過度浪漫化，使他一次又一次的被現實擊垮。儘管因此陷入沮喪的情緒中，他最終總會站起來，又開始了新一輪的循環。',
+        trivia: '卡羅斯原本是沒有帽子的，但後來因為發現要天天畫他的大圓頭太麻煩了，因此決定給他戴上一頂棒球帽。'
+    },
+    quote: '「AI取代不了我的存在焦慮！」',
+    slides: [
+        { date: '2025-04-30', image: 'https://res.cloudinary.com/ddotapoxu/image/upload/2025-04-30.png' },
+        { date: '2023-02-02', image: 'https://res.cloudinary.com/ddotapoxu/image/upload/2023-02-02.png' },
+        { date: '2026-05-28', image: 'https://res.cloudinary.com/ddotapoxu/image/upload/2026-05-28.png' }
+    ],
+    activeName: '卡羅斯',
+    gangList: [
+        { href: 'char-Kalos.html', name: '卡羅斯', emoji: '🧢' },
+        { href: 'char-Prittle.html', name: '花生糖', emoji: '🐰' },
+        { href: 'char-Annie.html', name: '安妮', emoji: '😇' },
+        { href: 'char-Rann.html', name: '雷恩', emoji: '😈' }
+    ]
+});
+</script>
 </body>
 </html>

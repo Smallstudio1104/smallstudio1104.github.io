@@ -6,6 +6,7 @@
     <title>SMALL - 角色介紹</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/ddotapoxu/image/upload/v1770658297/ICON2.png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="char-template.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -100,84 +101,7 @@
             margin: 0;
         }
 
-        /* ===== MEET THE GANG ===== */
-        .gang-section {
-            padding: 3.5rem 2rem 5rem;
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .gang-section h2 {
-            font-size: 1.1rem;
-            font-weight: 900;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #2d3436;
-            margin-bottom: 2.5rem;
-            text-decoration: underline;
-            text-underline-offset: 4px;
-        }
-
-        .gang-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-
-        .char-card {
-            width: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-            color: #2d3436;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .char-card:hover { transform: translateY(-4px); }
-
-        .char-card:hover .char-name { text-decoration: underline; }
-
-        .char-img-box {
-            width: 160px;
-            height: 160px;
-            border: 3px solid #f5c400;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #fff;
-            overflow: hidden;
-        }
-
-        .char-img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        /* Placeholder when no image */
-        .char-img-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            background: #fafafa;
-        }
-
-        .char-name {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #2d3436;
-            text-align: center;
-        }
+        /* Meet the Gang uses shared `char-template.css` */
 
         /* ===== FOOTER ===== */
         .footer {
@@ -247,37 +171,63 @@
 
     <!-- MEET THE GANG -->
     <section class="gang-section">
-        <h2>Meet the Gang</h2>
+        <h2>角色介紹</h2>
         <div class="gang-grid">
-
             <a class="char-card" href="char-Kalos.html">
                 <div class="char-img-box">
-                    <div class="char-img-placeholder">🧢</div>
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art.png" alt="卡羅斯">
                 </div>
                 <div class="char-name">卡羅斯</div>
             </a>
 
             <a class="char-card" href="char-Prittle.html">
                 <div class="char-img-box">
-                    <div class="char-img-placeholder">🐰</div>
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art.png" alt="花生糖">
                 </div>
                 <div class="char-name">花生糖</div>
             </a>
 
             <a class="char-card" href="char-Annie.html">
                 <div class="char-img-box">
-                    <div class="char-img-placeholder">😇</div>
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art.png" alt="安妮">
                 </div>
                 <div class="char-name">安妮</div>
             </a>
 
             <a class="char-card" href="char-Rann.html">
                 <div class="char-img-box">
-                    <div class="char-img-placeholder">😈</div>
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art.png" alt="雷恩">
                 </div>
                 <div class="char-name">雷恩</div>
             </a>
+            
+            <a class="char-card" href="char-Hook.html">
+                <div class="char-img-box">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art.png" alt="虎仔">
+                </div>
+                <div class="char-name">虎仔</div>
+            </a>
 
+            <a class="char-card" href="char-Cled.html">
+                <div class="char-img-box">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art.png" alt="克勒德">
+                </div>
+                <div class="char-name">克勒德</div>
+            </a>
+
+            <a class="char-card" href="char-Penny.html">
+                <div class="char-img-box">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art.png" alt="潘妮">
+                </div>
+                <div class="char-name">潘妮</div>
+            </a>
+
+            <a class="char-card" href="char-Guden.html">
+                <div class="char-img-box">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art.png" alt="小蝸牛股等">
+                </div>
+                <div class="char-name">小蝸牛股等</div>
+            </a>
         </div>
     </section>
 
@@ -288,6 +238,12 @@
                  src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770606840/SMALLL.png"
                  alt="SMALL Logo"
                  onclick="location.href='index.html'">
+        </div>
+        <div class="footer-links">
+            <a href="index.html">漫畫連載</a>·
+            <a href="characters.html">關於與角色</a>·
+            <a href="#">其他連載</a>·
+            <a href="#">更多作品</a>
         </div>
     </footer>
 
