@@ -29,7 +29,7 @@ const CONFIG = {
   dateRegex: /^\d{4}-\d{2}-\d{2}$/,
   
   // 輸出 JSON 檔案路徑
-  outputFile: 'dates.json'
+  outputFile: 'SMALL/dates.json'
 };
 
 // ==================== 主函數 ====================

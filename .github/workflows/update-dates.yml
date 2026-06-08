@@ -53,7 +53,7 @@ jobs:
       - name: 🔍 檢查檔案更改
         id: check_changes
         run: |
-          if git diff --quiet dates.json; then
+          if git diff --quiet SMALL/dates.json; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "📌 dates.json 沒有變化"
           else
@@ -67,7 +67,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add dates.json
+          git add SMALL/dates.json
           git commit -m "🤖 自動更新漫畫日期列表 - $(date +'%Y-%m-%d %H:%M:%S')"
           git push
       
