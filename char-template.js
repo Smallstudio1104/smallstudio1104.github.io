@@ -24,8 +24,9 @@ function buildGangHtml(activeName, gangList = defaultGangCharacters) {
 
     return finalList.map(item => {
         const activeClass = item.name === activeName ? ' active' : '';
+        const lineUrl = item.iconUrl ? item.iconUrl.replace(/(\.[^./?#]+)$/, '_line$1') : null;
         const iconHtml = item.iconUrl
-            ? `<img src="${item.iconUrl}" alt="${item.name}" />`
+            ? `<img src="${lineUrl}" data-color-src="${item.iconUrl}" alt="${item.name}" />`
             : (item.emoji ? `<div class="char-img-placeholder">${item.emoji}</div>` : `<div class="char-img-placeholder">?</div>`);
 
         return `
@@ -51,6 +52,47 @@ function buildSlidesHtml(slides) {
             </div>
         `;
     }).join('');
+}
+
+function initScrollReveal() {
+    const targets = document.querySelectorAll(
+        '.hero, .quote-section, .comics-section, .gang-section h2'
+    );
+    const cards = document.querySelectorAll('.gang-grid .char-card');
+
+    // batch counter: cards that enter viewport together get sequential delay from 0
+    let batchTimer = null;
+    let batchIndex = 0;
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                sectionObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.08 });
+
+    targets.forEach(el => sectionObserver.observe(el));
+
+    const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            // reset batch index whenever a new wave of cards arrives
+            clearTimeout(batchTimer);
+            batchTimer = setTimeout(() => { batchIndex = 0; }, 80);
+
+            entry.target.style.transitionDelay = `${batchIndex * 0.055}s`;
+            batchIndex++;
+            entry.target.classList.add('visible');
+            cardObserver.unobserve(entry.target);
+        });
+    }, { threshold: 0.08 });
+
+    cards.forEach(card => {
+        card.style.transitionDelay = '0s';
+        cardObserver.observe(card);
+    });
 }
 
 function renderCharacterPage(config) {
@@ -143,6 +185,9 @@ function renderCharacterPage(config) {
         </footer>
     `;
 
+    initCharacterLineArt();
+    initScrollReveal();
+
     const track = document.getElementById('sliderTrack');
     const slides = track.querySelectorAll('.slide-item');
     const total = slides.length;
@@ -159,6 +204,38 @@ function renderCharacterPage(config) {
 
     document.getElementById('sliderNext').addEventListener('click', function() {
         goTo(current + 1);
+    });
+}
+
+function initCharacterLineArt() {
+    const charCards = document.querySelectorAll('.gang-grid .char-card');
+    charCards.forEach(card => {
+        const img = card.querySelector('img');
+        if (!img) return;
+
+        const colorSrc = img.dataset.colorSrc;
+        const lineSrc = img.dataset.lineSrc || img.src;
+        img.dataset.lineSrc = lineSrc;
+        img.style.transition = 'opacity 0.25s ease';
+
+        // preload colour image immediately so hover swap is instant
+        if (colorSrc) {
+            const preload = new Image();
+            preload.src = colorSrc;
+        }
+
+        card.addEventListener('mouseenter', () => {
+            if (!colorSrc) return;
+            img.src = colorSrc;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            img.src = lineSrc;
+        });
+
+        img.addEventListener('error', () => {
+            if (img.src === lineSrc && colorSrc) img.src = colorSrc;
+        });
     });
 }
 

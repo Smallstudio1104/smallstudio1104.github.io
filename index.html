@@ -5,32 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMALL 連環漫畫</title>
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/ddotapoxu/image/upload/v1770658297/ICON2.png">
-    <!-- Open Graph Meta Tags for Social Sharing -->
     <meta property="og:title" content="SMALL 連環漫畫" id="ogTitle">
     <meta property="og:description" content="每日 SMALL 連環漫畫" id="ogDescription">
     <meta property="og:image" content="" id="ogImage">
     <meta property="og:url" content="" id="ogUrl">
     <meta property="og:type" content="website">
-    
-    <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SMALL 連環漫畫" id="twitterTitle">
     <meta name="twitter:description" content="每日 SMALL 連環漫畫" id="twitterDescription">
     <meta name="twitter:image" content="" id="twitterImage">
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <style>
-        /* ==================== 全域樣式 ==================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Noto Sans TC', sans-serif;
@@ -44,7 +32,6 @@
             flex-direction: column;
         }
         
-        /* ==================== 頂部標題區 ==================== */
         .header {
             text-align: center;
             padding: 2rem 1rem 1rem;
@@ -100,10 +87,9 @@
             color: #636e72;
         }
         
-        /* ==================== 主容器 ==================== */
+        /* ===== CHANGE 1: container is full-width ===== */
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
             padding: 0 1rem 2rem;
             flex: 1;
             display: flex;
@@ -111,7 +97,6 @@
             justify-content: center;
         }
         
-        /* ==================== 日期選擇按鈕 ==================== */
         .date-controls {
             display: flex;
             justify-content: center;
@@ -138,7 +123,6 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         
-        /* ==================== 漫畫顯示區 ==================== */
         .comic-wrapper {
             display: flex;
             align-items: center;
@@ -198,39 +182,41 @@
             transform: scale(1.1) rotate(360deg);
         }
         
+        /*
+         * 漫畫框包著圖片走，圖片寬度透過 CSS 變數 --comic-scale 控制
+         * 只需調整 CONFIG 裡的 comicScale / comicScaleSunday，CSS 和 JS 共用同一個值
+         */
         .comic-container {
             background: white;
             border-radius: 10px;
             padding: 1.5rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            flex: 1;
-            max-width: 1200px;
+            width: fit-content;
+            max-width: 100%;
             position: relative;
-            min-height: 200px;
-            display: flex;
+            display: inline-flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             margin: 0 auto;
-            width: 100%;
+            min-height: 60vh;
         }
         
         .comic-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
             display: block;
-            transition: opacity 0.3s ease;
+            height: auto;
+            /* --comic-scale 由 JS 寫入，CSS 直接讀取 */
+            width: calc(1200px * var(--comic-scale, 1.2));
+            max-width: 100vw;
+            border-radius: 5px;
+            transition: width 0.4s ease, opacity 0.3s ease;
             pointer-events: none;
             user-select: none;
             -webkit-user-drag: none;
         }
         
-        .comic-image.loading {
-            opacity: 0.5;
-        }
+        .comic-image.loading { opacity: 0.5; }
         
-        /* 載入動畫 */
         .loading-spinner {
             display: none;
             width: 50px;
@@ -242,16 +228,13 @@
             position: absolute;
         }
         
-        .loading-spinner.active {
-            display: block;
-        }
+        .loading-spinner.active { display: block; }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
         
-        /* 無漫畫提示 */
         .no-comic-message {
             display: none;
             text-align: center;
@@ -259,9 +242,7 @@
             color: #636e72;
         }
         
-        .no-comic-message.active {
-            display: block;
-        }
+        .no-comic-message.active { display: block; }
         
         .no-comic-message h2 {
             font-size: 1.5rem;
@@ -269,11 +250,8 @@
             color: #2d3436;
         }
         
-        .no-comic-message p {
-            font-size: 1rem;
-        }
+        .no-comic-message p { font-size: 1rem; }
         
-        /* ==================== 社群分享按鈕(純圖片版) ==================== */
         .share-container {
             display: flex;
             justify-content: center;
@@ -299,27 +277,119 @@
             padding: 0;
         }
         
-        .share-icon:hover {
-            transform: translateY(-3px) scale(1.1);
+        .share-icon:hover { transform: translateY(-3px) scale(1.1); }
+        .share-icon.facebook { background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641549/20673.png'); }
+        .share-icon.twitter  { background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641592/X_icon.svg.png'); }
+        .share-icon.line     { background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641570/82105.png'); }
+        .share-icon.copy     { background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641690/copy-link-face.png'); }
+
+        /* ===== CHANGE 3: gang section — full-width, white background ===== */
+        .gang-section {
+            padding: 2.5rem 1.5rem 3rem;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 25vh 0 0;   /* 確保角色介紹在折疊線以下 */
+            text-align: center;
+            background: #ffffff;
+            border-radius: 0;
+            box-shadow: none;
         }
-        
-        .share-icon.facebook {
-            background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641549/20673.png');
+
+        /* ===== CHANGE 2: gang title — scroll-reveal initial state ===== */
+        .gang-section h2 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #2d3436;
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
         }
-        
-        .share-icon.twitter {
-            background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641592/X_icon.svg.png');
+
+        .gang-section h2.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        
-        .share-icon.line {
-            background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641570/82105.png');
+
+        .gang-grid {
+            display: grid;
+            /* 8 columns on full width → all 8 in one row */
+            grid-template-columns: repeat(8, 160px);
+            gap: 1.5rem;
+            justify-content: center;
+            margin: 0 auto;
         }
-        
-        .share-icon.copy {
-            background-image: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770641690/copy-link-face.png');
+
+        /* ===== CHANGE 2: char-card — scroll-reveal initial state ===== */
+        .char-card {
+            flex: 0 0 160px;
+            width: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #2d3436;
+            cursor: pointer;
+            transition: opacity 0.55s ease, translate 0.55s ease, transform 0.22s ease;
+            opacity: 0;
+            translate: 0 40px;
         }
-        
-        /* ==================== 橫幅廣告區 ==================== */
+
+        .char-card.visible {
+            opacity: 1;
+            translate: 0 0;
+        }
+
+        .char-card:hover { transform: translateY(-4px); }
+        .char-card:hover .char-name { text-decoration: underline; }
+
+        .char-img-box {
+            width: 160px;
+            height: 160px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .char-img-box img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            pointer-events: none;
+            user-select: none;
+            display: block;
+        }
+
+        .char-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2d3436;
+            text-align: center;
+        }
+
+        @media (max-width: 1400px) {
+            .gang-grid { grid-template-columns: repeat(4, 160px); }
+        }
+        @media (max-width: 900px) {
+            .gang-grid { grid-template-columns: repeat(4, 130px); }
+            .char-card { width: 130px; }
+            .char-img-box { width: 130px; height: 130px; }
+        }
+        @media (max-width: 600px) {
+            .gang-grid { grid-template-columns: repeat(2, 130px); }
+            .char-card { width: 130px; }
+            .char-img-box { width: 130px; height: 130px; }
+        }
+
         .banner-ads {
             max-width: 1000px;
             margin: 2rem auto 1rem;
@@ -346,13 +416,8 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
         
-        .banner-ad img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+        .banner-ad img { width: 100%; height: auto; display: block; }
         
-        /* ==================== 底部資訊面板 ==================== */
         .footer {
             background: #2d3436;
             color: white;
@@ -370,16 +435,8 @@
             gap: 1rem;
         }
         
-        .footer-left {
-            font-size: 0.9rem;
-            color: #dfe6e9;
-        }
-        
-        .footer-right {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        .footer-left { font-size: 0.9rem; color: #dfe6e9; }
+        .footer-right { display: flex; align-items: center; gap: 0.5rem; }
         
         .footer-logo {
             height: 50px;
@@ -388,74 +445,24 @@
             transition: all 0.3s ease;
         }
         
-        .footer-logo:hover {
-            transform: scale(1.1);
-        }
-        
-        /* ==================== 統計資訊樣式 ==================== */
-        .stats-container {
+        .footer-logo:hover { transform: scale(1.1); }
+
+        .footer-links {
             max-width: 1000px;
-            margin: 0 auto;
-            padding: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: 1rem;
-        }
-        
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
+            margin: 0.75rem auto 0;
+            text-align: center;
             color: #dfe6e9;
+            font-size: 0.95rem;
         }
         
-        .stat-icon {
-            font-size: 1.2rem;
-        }
+        .footer-links a { color: #dfe6e9; text-decoration: none; margin: 0 0.6rem; }
+        .footer-links a:hover { text-decoration: underline; }
         
-        .stat-label {
-            opacity: 0.8;
-        }
-        
-        .stat-value {
-            font-weight: 700;
-            color: #74b9ff;
-            font-size: 1.1rem;
-        }
-        
-        /* ==================== Flatpickr 自訂樣式 ==================== */
-        .flatpickr-calendar {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            border-radius: 10px;
-        }
-        
-        .flatpickr-day.selected {
-            background: #2d3436;
-            border-color: #2d3436;
-        }
-        
-        .flatpickr-day.enabled {
-            background-color: #f0f0f0;
-            font-weight: 600;
-            color: #2d3436;
-            position: relative;
-        }
-        
-        .flatpickr-day.enabled:hover {
-            background: #2d3436;
-            color: white;
-        }
-        
-        .flatpickr-day.flatpickr-disabled {
-            color: #dfe6e9;
-            cursor: not-allowed;
-        }
-        
+        .flatpickr-calendar { box-shadow: 0 10px 30px rgba(0,0,0,0.2); border-radius: 10px; }
+        .flatpickr-day.selected { background: #2d3436; border-color: #2d3436; }
+        .flatpickr-day.enabled { background-color: #f0f0f0; font-weight: 600; color: #2d3436; position: relative; }
+        .flatpickr-day.enabled:hover { background: #2d3436; color: white; }
+        .flatpickr-day.flatpickr-disabled { color: #dfe6e9; cursor: not-allowed; }
         .flatpickr-day.enabled::after {
             content: '';
             position: absolute;
@@ -467,28 +474,11 @@
             background-color: #2d3436;
             border-radius: 50%;
         }
+        .flatpickr-day.selected.enabled::after { background-color: white; }
+        .flatpickr-day.ccc-exclusive { background-color: rgb(200, 187, 155) !important; color: #2d3436; }
+        .flatpickr-day.ccc-exclusive:hover { background-color: rgb(180, 167, 135) !important; color: white; }
+        .flatpickr-day.ccc-exclusive.selected { background-color: rgb(160, 147, 115) !important; color: white; }
         
-        .flatpickr-day.selected.enabled::after {
-            background-color: white;
-        }
-        
-        /* CCC獨家內容標記 */
-        .flatpickr-day.ccc-exclusive {
-            background-color: rgb(200, 187, 155) !important;
-            color: #2d3436;
-        }
-        
-        .flatpickr-day.ccc-exclusive:hover {
-            background-color: rgb(180, 167, 135) !important;
-            color: white;
-        }
-        
-        .flatpickr-day.ccc-exclusive.selected {
-            background-color: rgb(160, 147, 115) !important;
-            color: white;
-        }
-        
-        /* ==================== 複製成功提示 ==================== */
         .copy-toast {
             position: fixed;
             bottom: 20px;
@@ -504,17 +494,57 @@
             font-weight: 600;
         }
         
-        .copy-toast.show {
-            opacity: 1;
-        }
-        .floating-random {
+        .copy-toast.show { opacity: 1; }
+
+        /* ===== CHANGE 4: floating random button + tooltip ===== */
+        .floating-random-wrapper {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .random-tooltip {
+            position: relative;
+            background: #2d3436;
+            color: #fff;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(6px) scale(0.92);
+            transition: opacity 0.22s ease, transform 0.22s ease;
+        }
+
+        /* small arrow pointing down toward the button */
+        .random-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #2d3436;
+        }
+
+        .floating-random-wrapper:hover .random-tooltip {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .floating-random {
             width: 56px;
             height: 56px;
             font-size: 1.8rem;
-            z-index: 1001;
             pointer-events: auto;
             box-shadow: 0 6px 20px rgba(0,0,0,0.25);
         }
@@ -522,7 +552,6 @@
 </head>
 
 <body>
-    <!-- 頂部標題區 -->
     <div class="header">
         <nav class="nav">
             <div class="nav-left">
@@ -541,13 +570,9 @@
         <div class="comic-date" id="comicDate">每日 SMALL 2025-02-09</div>
     </div>
 
-    <!-- 主容器 -->
     <div class="container">
-
-        <!-- 漫畫和導航區域 -->
         <div class="comic-wrapper">
-            <!-- 漫畫顯示區 -->
-            <div class="comic-container">
+            <div class="comic-container" id="comicContainer">
                 <div class="loading-spinner" id="loadingSpinner"></div>
                 <img src="" alt="SMALL 連環漫畫" class="comic-image" id="comicImage" style="display: none;">
                 <div class="no-comic-message" id="noComicMessage">
@@ -556,46 +581,112 @@
                 </div>
             </div>
             
-            <!-- 導航按鈕 -->
             <div class="nav-buttons-container">
-            <button class="nav-btn" id="firstBtn" aria-label="最舊" title="最舊的漫畫">«</button>
-            <button class="nav-btn" id="prevBtn" aria-label="前一天" title="上一幅">‹</button>
-            <button class="date-button" id="dateButton">📅</button>
-            <button class="nav-btn" id="nextBtn" aria-label="下一天" title="下一幅">›</button>
-            <button class="nav-btn" id="lastBtn" aria-label="最新" title="最新的漫畫">»</button>
+                <button class="nav-btn" id="firstBtn" aria-label="最舊" title="最舊的漫畫">«</button>
+                <button class="nav-btn" id="prevBtn" aria-label="前一天" title="上一幅">‹</button>
+                <button class="date-button" id="dateButton">📅</button>
+                <button class="nav-btn" id="nextBtn" aria-label="下一天" title="下一幅">›</button>
+                <button class="nav-btn" id="lastBtn" aria-label="最新" title="最新的漫畫">»</button>
             </div>
         </div>
 
-        <!-- 社群分享按鈕 -->
         <div class="share-container">
             <button class="share-icon facebook" onclick="shareToFacebook()" title="分享到 Facebook"></button>
-            <button class="share-icon twitter" onclick="shareToTwitter()" title="分享到 Twitter"></button>
-            <button class="share-icon line" onclick="shareToLine()" title="分享到 LINE"></button>
-            <button class="share-icon copy" onclick="copyLink()" title="複製連結"></button>
+            <button class="share-icon twitter"  onclick="shareToTwitter()"  title="分享到 Twitter"></button>
+            <button class="share-icon line"      onclick="shareToLine()"     title="分享到 LINE"></button>
+            <button class="share-icon copy"      onclick="copyLink()"        title="複製連結"></button>
         </div>
-    </div>
-    <button type="button" class="nav-btn random-btn floating-random" id="randomBtn" aria-label="隨機" title="隨機漫畫">🎲</button>
-    <!-- 橫幅廣告區 -->
-    <div class="banner-ads" id="bannerAds">
-        <!-- 廣告將由 JavaScript 動態生成 -->
+
+        <!-- CHANGE 3: full-width white gang section -->
+        <section class="gang-section">
+            <h2 id="gangTitle">角色介紹</h2>
+            <div class="gang-grid">
+                <a class="char-card" href="char-Kalos.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art.png" 
+                             alt="卡羅斯">
+                    </div>
+                    <div class="char-name">卡羅斯</div>
+                </a>
+                <a class="char-card" href="char-Prittle.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art.png" 
+                             alt="花生糖">
+                    </div>
+                    <div class="char-name">花生糖</div>
+                </a>
+                <a class="char-card" href="char-Annie.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art.png" 
+                             alt="安妮">
+                    </div>
+                    <div class="char-name">安妮</div>
+                </a>
+                <a class="char-card" href="char-Rann.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art.png" 
+                             alt="雷恩">
+                    </div>
+                    <div class="char-name">雷恩</div>
+                </a>
+                <a class="char-card" href="char-Hook.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art.png" 
+                             alt="虎仔">
+                    </div>
+                    <div class="char-name">虎仔</div>
+                </a>
+                <a class="char-card" href="char-Cled.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art.png" 
+                             alt="克勒德">
+                    </div>
+                    <div class="char-name">克勒德</div>
+                </a>
+                <a class="char-card" href="char-Penny.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art.png" 
+                             alt="潘妮">
+                    </div>
+                    <div class="char-name">潘妮</div>
+                </a>
+                <a class="char-card" href="char-Guden.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art.png" 
+                             alt="小蝸牛股等">
+                    </div>
+                    <div class="char-name">小蝸牛股等</div>
+                </a>
+            </div>
+        </section>
     </div>
 
-    <!-- 底部資訊面板 -->
+    <!-- CHANGE 4: floating random button wrapped with tooltip -->
+    <div class="floating-random-wrapper">
+        <div class="random-tooltip">按這裡可以閱讀隨機的漫畫!</div>
+        <button type="button" class="nav-btn random-btn floating-random" id="randomBtn" aria-label="隨機" title="隨機漫畫">🎲</button>
+    </div>
+
+    <div class="banner-ads" id="bannerAds"></div>
+
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-left">
-                © Smallstudio1104 / 股等
-            </div>
+            <div class="footer-left">© Smallstudio1104 / 股等</div>
             <div class="footer-right">
                 <a href="https://lit.link/en/Smallstudio" target="_blank" rel="noopener noreferrer">
                     <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770608711/Small_studio%E6%A8%99%E8%AA%8C.png" 
-                         alt="Small Studio Logo" 
-                         class="footer-logo">
+                         alt="Small Studio Logo" class="footer-logo">
                 </a>
             </div>
         </div>
-        
-        <!-- 統計資訊已移除 -->
         <div class="footer-links">
             <a href="index.html">漫畫連載</a>·
             <a href="characters.html">關於與角色</a>·
@@ -604,17 +695,12 @@
         </div>
     </footer>
 
-    <!-- 複製成功提示 -->
     <div class="copy-toast" id="copyToast">✓ 連結已複製!</div>
 
-    <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh-tw.js"></script>
-    
 
     <script>
-        // ==================== ⭐ 配置區域 ====================
-        
         const CONFIG = {
             cloudinaryCloudName: 'ddotapoxu',
             dateLoadMode: 'json',
@@ -625,171 +711,70 @@
             shareTitle: 'SMALL 連環漫畫',
             shareDescription: '每日 SMALL 連環漫畫精選',
             bannerAds: [
-                {
-                    imageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770640977/PROMO_BANNER_LOGO.png',
-                    linkUrl: 'https://cxc.today/zh/@Smallstudio/book/46322'
-                },
-                {
-                    imageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770641878/PROMO_BANNER_LOGO_CCC.png',
-                    linkUrl: 'https://www.creative-comic.tw/zh/book/268/content'
-                }
+                { imageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770640977/PROMO_BANNER_LOGO.png', linkUrl: 'https://cxc.today/zh/@Smallstudio/book/46322' },
+                { imageUrl: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1770641878/PROMO_BANNER_LOGO_CCC.png', linkUrl: 'https://www.creative-comic.tw/zh/book/268/content' }
             ],
-            // 時區設定（台灣時間 UTC+8）
-            timezoneOffset: 8
+            timezoneOffset: 8,
+            // ===== 漫畫圖片寬度參數 =====
+            // 基準 1200px × 倍率 = 圖片實際寬度，CSS 和 JS 共用，只改這裡
+            comicScale:       1.2,   // 平日（1200 × 1.2 = 1440px）
+            comicScaleSunday: 0.8    // 周日（1200 × 0.8 = 960px）
         };
         
-        const IMAGE_BASE_URL = `https://res.cloudinary.com/${CONFIG.cloudinaryCloudName}/image/upload/`;
-        let allDates = []; // 所有日期（包括未來）
-        let availableDates = []; // 可用日期（今天及之前）
+        const IMAGE_BASE_URL = `https://res.cloudinary.com/${CONFIG.cloudinaryCloudName}/image/upload/q_50,w_1600/`;
+        let allDates = [];
+        let availableDates = [];
         let FIRST_COMIC_DATE;
         let LAST_COMIC_DATE;
         let currentDate;
         let flatpickrInstance;
         let availableDatesSet;
 
-        const dateButton = document.getElementById('dateButton');
-        const firstBtn = document.getElementById('firstBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        const randomBtn = document.getElementById('randomBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const lastBtn = document.getElementById('lastBtn');
-        const comicImage = document.getElementById('comicImage');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const noComicMessage = document.getElementById('noComicMessage');
-        const comicTitle = document.getElementById('comicTitle');
-        const comicDate = document.getElementById('comicDate');
-        const copyToast = document.getElementById('copyToast');
-        const bannerAds = document.getElementById('bannerAds');
+        const dateButton    = document.getElementById('dateButton');
+        const firstBtn      = document.getElementById('firstBtn');
+        const prevBtn       = document.getElementById('prevBtn');
+        const randomBtn     = document.getElementById('randomBtn');
+        const nextBtn       = document.getElementById('nextBtn');
+        const lastBtn       = document.getElementById('lastBtn');
+        const comicImage    = document.getElementById('comicImage');
+        const loadingSpinner= document.getElementById('loadingSpinner');
+        const noComicMessage= document.getElementById('noComicMessage');
+        const comicTitle    = document.getElementById('comicTitle');
+        const comicDate     = document.getElementById('comicDate');
+        const copyToast     = document.getElementById('copyToast');
+        const bannerAds     = document.getElementById('bannerAds');
 
-        // CCC獨家內容日期列表
         const cccExclusiveDates = [
-            '2021-01-28', '2021-01-29', '2021-01-30', '2021-04-06', '2021-04-16',
-            '2021-04-19', '2021-04-24', '2021-04-26', '2021-04-28', '2021-04-29',
-            '2021-05-07', '2021-05-10', '2021-05-12', '2021-05-29', '2021-05-30',
-            '2021-05-31', '2021-06-05', '2021-06-12', '2021-06-15', '2021-06-14',
-            '2021-06-22', '2021-06-23', '2021-06-25', '2021-06-26', '2021-06-28',
-            '2021-06-29', '2021-07-01', '2021-07-04', '2021-07-02', '2021-07-22',
-            '2021-08-06', '2021-08-16', '2021-08-29', '2021-08-13', '2021-08-28',
-            '2021-09-24', '2021-10-20', '2021-10-25', '2021-11-01', '2021-11-02',
-            '2021-12-18', '2022-01-02', '2022-01-06', '2022-01-08', '2022-01-24',
-            '2022-02-13', '2022-02-15', '2022-02-18', '2022-02-19', '2022-03-30',
-            '2022-03-19', '2022-03-13', '2022-03-27', '2022-04-05', '2022-04-06',
-            '2022-04-12', '2022-04-14', '2022-04-16', '2022-04-21', '2022-04-23',
-            '2022-04-25', '2022-04-26', '2022-05-22', '2022-07-17', '2022-07-05',
+            '2021-01-28','2021-01-29','2021-01-30','2021-04-06','2021-04-16',
+            '2021-04-19','2021-04-24','2021-04-26','2021-04-28','2021-04-29',
+            '2021-05-07','2021-05-10','2021-05-12','2021-05-29','2021-05-30',
+            '2021-05-31','2021-06-05','2021-06-12','2021-06-15','2021-06-14',
+            '2021-06-22','2021-06-23','2021-06-25','2021-06-26','2021-06-28',
+            '2021-06-29','2021-07-01','2021-07-04','2021-07-02','2021-07-22',
+            '2021-08-06','2021-08-16','2021-08-29','2021-08-13','2021-08-28',
+            '2021-09-24','2021-10-20','2021-10-25','2021-11-01','2021-11-02',
+            '2021-12-18','2022-01-02','2022-01-06','2022-01-08','2022-01-24',
+            '2022-02-13','2022-02-15','2022-02-18','2022-02-19','2022-03-30',
+            '2022-03-19','2022-03-13','2022-03-27','2022-04-05','2022-04-06',
+            '2022-04-12','2022-04-14','2022-04-16','2022-04-21','2022-04-23',
+            '2022-04-25','2022-04-26','2022-05-22','2022-07-17','2022-07-05',
             '2022-07-03'
         ];
 
-        // ==================== 日期過濾函數 ====================
-        
-        /**
-         * 獲取當前日期（台灣時間）
-         */
         function getTodayDate() {
             const now = new Date();
-            // 轉換為台灣時間 (UTC+8)
             const taiwanTime = new Date(now.getTime() + (CONFIG.timezoneOffset * 60 * 60 * 1000));
-            // 只保留日期部分
-            const dateStr = taiwanTime.toISOString().split('T')[0];
-            return new Date(dateStr + 'T00:00:00Z');
+            return new Date(taiwanTime.toISOString().split('T')[0] + 'T00:00:00Z');
         }
         
-        /**
-         * 檢查日期是否為未來日期
-         */
         function isFutureDate(dateStr) {
-            const checkDate = new Date(dateStr + 'T00:00:00Z');
-            const today = getTodayDate();
-            return checkDate > today;
+            return new Date(dateStr + 'T00:00:00Z') > getTodayDate();
         }
         
-        /**
-         * 過濾未來日期
-         */
         function filterFutureDates(dates) {
             return dates.filter(date => !isFutureDate(date));
         }
 
-        // ==================== 統計功能 ====================
-        
-        // 使用 CountAPI 來追蹤訪客數和瀏覽數
-        const STATS_API = 'https://api.countapi.xyz';
-        const STATS_NAMESPACE = 'small-comic';
-        
-        // 初始化統計 (不阻塞主要功能)
-        function initStats() {
-            // 延遲載入統計,避免阻塞主要功能
-            setTimeout(() => {
-                updateTotalVisitors().catch(err => console.log('統計載入失敗:', err));
-            }, 1000);
-        }
-        
-        // 更新總訪客數 (使用 localStorage 確保同一設備只計數一次)
-        async function updateTotalVisitors() {
-            const visitorKey = 'small_comic_visitor_counted';
-            const hasVisited = localStorage.getItem(visitorKey);
-            
-            try {
-                let endpoint;
-                if (!hasVisited) {
-                    // 第一次訪問，增加計數
-                    endpoint = `${STATS_API}/hit/${STATS_NAMESPACE}/total-visitors`;
-                    localStorage.setItem(visitorKey, 'true');
-                } else {
-                    // 已訪問過，只獲取數據
-                    endpoint = `${STATS_API}/get/${STATS_NAMESPACE}/total-visitors`;
-                }
-                
-                const response = await fetch(endpoint, { 
-                    method: 'GET',
-                    mode: 'cors'
-                });
-                const data = await response.json();
-                
-                if (data && data.value !== undefined) {
-                    document.getElementById('totalVisitors').textContent = formatNumber(data.value);
-                } else {
-                    document.getElementById('totalVisitors').textContent = '0';
-                }
-            } catch (error) {
-                console.error('載入訪客數失敗:', error);
-                document.getElementById('totalVisitors').textContent = '--';
-            }
-        }
-        
-        // 更新漫畫瀏覽數 (使用 sessionStorage 確保同一 session 中同一漫畫只計數一次)
-        async function updateComicViews(dateStr) {
-            const viewKey = `comic_view_${dateStr}`;
-            const hasViewed = sessionStorage.getItem(viewKey);
-            
-            try {
-                let endpoint;
-                if (!hasViewed) {
-                    // 第一次查看這篇漫畫，增加計數
-                    endpoint = `${STATS_API}/hit/${STATS_NAMESPACE}/comic-${dateStr}`;
-                    sessionStorage.setItem(viewKey, 'true');
-                } else {
-                    // 已查看過，只獲取數據
-                    endpoint = `${STATS_API}/get/${STATS_NAMESPACE}/comic-${dateStr}`;
-                }
-                
-                const response = await fetch(endpoint, {
-                    method: 'GET',
-                    mode: 'cors'
-                });
-                const data = await response.json();
-                
-                if (data && data.value !== undefined) {
-                    document.getElementById('comicViews').textContent = formatNumber(data.value);
-                } else {
-                    document.getElementById('comicViews').textContent = '0';
-                }
-            } catch (error) {
-                console.error('載入瀏覽數失敗:', error);
-                document.getElementById('comicViews').textContent = '--';
-            }
-        }
-        
-        // 格式化數字 (加入千位分隔符)
         function formatNumber(num) {
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
@@ -804,10 +789,7 @@
         }
 
         function generateBannerAds() {
-            if (!CONFIG.bannerAds || CONFIG.bannerAds.length === 0) {
-                bannerAds.style.display = 'none';
-                return;
-            }
+            if (!CONFIG.bannerAds || CONFIG.bannerAds.length === 0) { bannerAds.style.display = 'none'; return; }
             bannerAds.innerHTML = '';
             CONFIG.bannerAds.slice(0, 3).forEach(ad => {
                 if (ad.imageUrl && ad.linkUrl) {
@@ -826,39 +808,24 @@
         async function loadDates() {
             if (CONFIG.dateLoadMode === 'json') {
                 try {
-                    console.log('📥 正在從 dates.json 載入日期...');
                     const timestamp = new Date().getTime();
                     const response = await fetch(`${CONFIG.jsonFilePath}?t=${timestamp}`, {
                         cache: 'no-store',
-                        headers: {
-                            'Cache-Control': 'no-cache, no-store, must-revalidate',
-                            'Pragma': 'no-cache',
-                            'Expires': '0'
-                        }
+                        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' }
                     });
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     const data = await response.json();
-                    
-                    // 儲存所有日期
                     allDates = data.availableDates;
-                    
-                    // 過濾未來日期
                     availableDates = filterFutureDates(allDates);
-                    
-                    console.log(`✅ 成功載入 ${allDates.length} 個日期`);
-                    console.log(`📅 可用日期 ${availableDates.length} 個 (過濾了 ${allDates.length - availableDates.length} 個未來日期)`);
                 } catch (error) {
                     console.error('❌ 載入 dates.json 失敗:', error);
                     alert('無法載入漫畫日期清單。\n\n請確認:\n1. dates.json 檔案存在\n2. 檔案格式正確\n3. 與 HTML 在同一目錄');
                     return false;
                 }
             }
-            if (!availableDates || availableDates.length === 0) {
-                alert('錯誤:沒有可用的漫畫日期。');
-                return false;
-            }
+            if (!availableDates || availableDates.length === 0) { alert('錯誤:沒有可用的漫畫日期。'); return false; }
             FIRST_COMIC_DATE = new Date(availableDates[0]);
-            LAST_COMIC_DATE = new Date(availableDates[availableDates.length - 1]);
+            LAST_COMIC_DATE  = new Date(availableDates[availableDates.length - 1]);
             availableDatesSet = new Set(availableDates);
             return true;
         }
@@ -882,8 +849,8 @@
         function updateMetaTags(date) {
             const dateStr = formatDate(date);
             const comicUrl = getComicUrl(date);
-            const pageUrl = `${window.location.origin}${window.location.pathname}?date=${dateStr}`;
-            const title = `${CONFIG.comicTitle} - ${dateStr}`;
+            const pageUrl  = `${window.location.origin}${window.location.pathname}?date=${dateStr}`;
+            const title    = `${CONFIG.comicTitle} - ${dateStr}`;
             document.getElementById('ogTitle').setAttribute('content', title);
             document.getElementById('ogDescription').setAttribute('content', CONFIG.shareDescription);
             document.getElementById('ogImage').setAttribute('content', comicUrl);
@@ -898,58 +865,74 @@
             return `${window.location.origin}${window.location.pathname}?date=${formatDate(currentDate)}`;
         }
 
-        function shareToFacebook() {
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getCurrentPageUrl())}`, '_blank', 'width=600,height=400');
-        }
-
-        function shareToTwitter() {
-            const url = encodeURIComponent(getCurrentPageUrl());
-            const text = encodeURIComponent(`${CONFIG.shareTitle} - ${formatDate(currentDate)}`);
-            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
-        }
-
-        function shareToLine() {
-            const url = encodeURIComponent(getCurrentPageUrl());
-            const text = encodeURIComponent(`${CONFIG.shareTitle} - ${formatDate(currentDate)}`);
-            window.open(`https://social-plugins.line.me/lineit/share?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
-        }
+        function shareToFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getCurrentPageUrl())}`, '_blank', 'width=600,height=400'); }
+        function shareToTwitter()  { const u = encodeURIComponent(getCurrentPageUrl()); const t = encodeURIComponent(`${CONFIG.shareTitle} - ${formatDate(currentDate)}`); window.open(`https://twitter.com/intent/tweet?url=${u}&text=${t}`, '_blank', 'width=600,height=400'); }
+        function shareToLine()     { const u = encodeURIComponent(getCurrentPageUrl()); const t = encodeURIComponent(`${CONFIG.shareTitle} - ${formatDate(currentDate)}`); window.open(`https://social-plugins.line.me/lineit/share?url=${u}&text=${t}`, '_blank', 'width=600,height=400'); }
 
         async function copyLink() {
             const url = getCurrentPageUrl();
-            try {
-                await navigator.clipboard.writeText(url);
-                showCopyToast();
-            } catch (err) {
-                const textArea = document.createElement('textarea');
-                textArea.value = url;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showCopyToast();
-                } catch (err) {
-                    alert('無法複製連結,請手動複製:\n' + url);
-                }
-                document.body.removeChild(textArea);
+            try { await navigator.clipboard.writeText(url); showCopyToast(); }
+            catch (err) {
+                const ta = document.createElement('textarea');
+                ta.value = url; document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); showCopyToast(); } catch { alert('無法複製連結,請手動複製:\n' + url); }
+                document.body.removeChild(ta);
             }
         }
 
-        function showCopyToast() {
-            copyToast.classList.add('show');
-            setTimeout(() => copyToast.classList.remove('show'), 3000);
+        function showCopyToast() { copyToast.classList.add('show'); setTimeout(() => copyToast.classList.remove('show'), 3000); }
+
+        function initCharacterLineArt() {
+            document.querySelectorAll('.gang-grid .char-card').forEach(card => {
+                const img = card.querySelector('img');
+                if (!img) return;
+                const colorSrc = img.dataset.colorSrc;
+                const lineSrc  = img.dataset.lineSrc || img.src;
+                img.dataset.lineSrc = lineSrc;
+                if (colorSrc) { const preload = new Image(); preload.src = colorSrc; }
+                card.addEventListener('mouseenter', () => { if (colorSrc) img.src = colorSrc; });
+                card.addEventListener('mouseleave', () => { img.src = lineSrc; });
+                img.addEventListener('error', () => { if (img.src === lineSrc && colorSrc) img.src = colorSrc; });
+            });
+        }
+
+        // ===== CHANGE 2: scroll-reveal via IntersectionObserver =====
+        function initScrollReveal() {
+            const title = document.getElementById('gangTitle');
+            const cards = document.querySelectorAll('.char-card');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            if (title) observer.observe(title);
+            cards.forEach((card, i) => {
+                card.style.transitionDelay = `${i * 0.06}s`;
+                observer.observe(card);
+            });
         }
 
         async function init() {
             applyCustomBackground();
             generateBannerAds();
+            initCharacterLineArt();
+            initScrollReveal();
+
+            // CSS 變數初始化（平日預設值）
+            document.documentElement.style.setProperty('--comic-scale', CONFIG.comicScale);
             
             const logoImage = document.getElementById('logoImage');
-            const logoText = document.getElementById('logoText');
+            const logoText  = document.getElementById('logoText');
             
             if (CONFIG.logoImageUrl) {
                 logoImage.src = CONFIG.logoImageUrl;
                 logoImage.style.display = 'block';
-                logoText.style.display = 'none';
+                logoText.style.display  = 'none';
             } else {
                 logoText.textContent = CONFIG.comicTitle;
             }
@@ -958,11 +941,7 @@
             if (!loaded) return;
             
             currentDate = getDateFromURL();
-            if (!availableDatesSet.has(formatDate(currentDate))) {
-                currentDate = LAST_COMIC_DATE;
-            }
-            
-            // 統計已移除
+            if (!availableDatesSet.has(formatDate(currentDate))) currentDate = LAST_COMIC_DATE;
             
             flatpickrInstance = flatpickr(dateButton, {
                 locale: 'zh_tw',
@@ -974,20 +953,11 @@
                 monthSelectorType: 'static',
                 enable: availableDates,
                 onChange: function(selectedDates) {
-                    if (selectedDates.length > 0) {
-                        currentDate = selectedDates[0];
-                        updateURL(currentDate);
-                        loadComic();
-                    }
+                    if (selectedDates.length > 0) { currentDate = selectedDates[0]; updateURL(currentDate); loadComic(); }
                 },
-                onOpen: function(selectedDates, dateStr, instance) {
-                    instance.jumpToDate(currentDate);
-                },
+                onOpen: function(selectedDates, dateStr, instance) { instance.jumpToDate(currentDate); },
                 onDayCreate: function(dObj, dStr, fp, dayElem) {
-                    const dateStr = formatDate(dayElem.dateObj);
-                    if (cccExclusiveDates.includes(dateStr)) {
-                        dayElem.classList.add('ccc-exclusive');
-                    }
+                    if (cccExclusiveDates.includes(formatDate(dayElem.dateObj))) dayElem.classList.add('ccc-exclusive');
                 }
             });
 
@@ -997,23 +967,14 @@
             nextBtn.addEventListener('click', showNextComic);
             lastBtn.addEventListener('click', showLastComic);
 
-            if (CONFIG.logoImageUrl) {
-                logoImage.style.cursor = 'pointer';
-                logoImage.addEventListener('click', () => {
-                    currentDate = LAST_COMIC_DATE;
-                    flatpickrInstance.setDate(currentDate);
-                    updateURL(currentDate);
-                    loadComic();
-                });
-            } else {
-                logoText.style.cursor = 'pointer';
-                logoText.addEventListener('click', () => {
-                    currentDate = LAST_COMIC_DATE;
-                    flatpickrInstance.setDate(currentDate);
-                    updateURL(currentDate);
-                    loadComic();
-                });
-            }
+            const logoClickTarget = CONFIG.logoImageUrl ? logoImage : logoText;
+            logoClickTarget.style.cursor = 'pointer';
+            logoClickTarget.addEventListener('click', () => {
+                currentDate = LAST_COMIC_DATE;
+                flatpickrInstance.setDate(currentDate);
+                updateURL(currentDate);
+                loadComic();
+            });
 
             loadComic();
             document.addEventListener('keydown', handleKeyPress);
@@ -1026,20 +987,16 @@
             });
 
             comicImage.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
-            comicImage.addEventListener('dragstart', (e) => { e.preventDefault(); return false; });
+            comicImage.addEventListener('dragstart',   (e) => { e.preventDefault(); return false; });
             updateMetaTags(currentDate);
         }
 
         function formatDate(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
+            return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
         }
 
         function formatDateDisplay(date) {
-            const prefix = date.getDay() === 0 ? '週日' : '每日';
-            return `${prefix} ${CONFIG.comicTitle} ${formatDate(date)}`;
+            return `${date.getDay() === 0 ? '週日' : '每日'} ${CONFIG.comicTitle} ${formatDate(date)}`;
         }
 
         function getComicUrl(date) {
@@ -1055,14 +1012,16 @@
                 }
                 return;
             }
+
+            // 根據星期幾設定 CSS 變數，CSS 的 width: calc(1200px * var(--comic-scale)) 自動更新
+            const isSunday = currentDate.getDay() === 0;
+            const scale = isSunday ? CONFIG.comicScaleSunday : CONFIG.comicScale;
+            document.documentElement.style.setProperty('--comic-scale', scale);
         
             comicDate.textContent = formatDateDisplay(currentDate);
             dateButton.textContent = `📅 ${formatDate(currentDate)}`;
             updateNavigationButtons();
             showLoading();
-            
-            // 更新當前漫畫的瀏覽數 (非阻塞)
-            updateComicViews(currentDateStr).catch(err => console.log('瀏覽數更新失敗:', err));
         
             const dateStr = formatDate(currentDate);
             const timestamp = new Date().getTime();
@@ -1070,10 +1029,7 @@
             let formatIndex = 0;
             
             function tryLoadImage() {
-                if (formatIndex >= formats.length) {
-                    showNoComicMessage();
-                    return;
-                }
+                if (formatIndex >= formats.length) { showNoComicMessage(); return; }
                 const comicUrl = `${IMAGE_BASE_URL}${dateStr}.${formats[formatIndex]}?t=${timestamp}`;
                 const img = new Image();
                 img.onload = () => { comicImage.src = comicUrl; showComic(); };
@@ -1083,89 +1039,34 @@
             tryLoadImage();
         }
 
-        function showLoading() {
-            loadingSpinner.classList.add('active');
-            comicImage.style.display = 'none';
-            noComicMessage.classList.remove('active');
-        }
+        function showLoading()        { loadingSpinner.classList.add('active'); comicImage.style.display = 'none'; noComicMessage.classList.remove('active'); document.getElementById('comicContainer').style.minHeight = '60vh'; }
+        function showComic()          { loadingSpinner.classList.remove('active'); comicImage.style.display = 'block'; noComicMessage.classList.remove('active'); document.getElementById('comicContainer').style.minHeight = '0'; }
+        function showNoComicMessage() { loadingSpinner.classList.remove('active'); comicImage.style.display = 'none'; noComicMessage.classList.add('active'); document.getElementById('comicContainer').style.minHeight = '0'; }
 
-        function showComic() {
-            loadingSpinner.classList.remove('active');
-            comicImage.style.display = 'block';
-            noComicMessage.classList.remove('active');
-        }
-
-        function showNoComicMessage() {
-            loadingSpinner.classList.remove('active');
-            comicImage.style.display = 'none';
-            noComicMessage.classList.add('active');
-        }
-
-        function findPreviousAvailableDate(date) {
-            const idx = availableDates.indexOf(formatDate(date));
-            return idx > 0 ? new Date(availableDates[idx - 1]) : null;
-        }
+        function findPreviousAvailableDate(date) { const idx = availableDates.indexOf(formatDate(date)); return idx > 0 ? new Date(availableDates[idx-1]) : null; }
+        function findNextAvailableDate(date)     { const idx = availableDates.indexOf(formatDate(date)); return idx !== -1 && idx < availableDates.length-1 ? new Date(availableDates[idx+1]) : null; }
         
-        function findNextAvailableDate(date) {
-            const idx = availableDates.indexOf(formatDate(date));
-            return idx !== -1 && idx < availableDates.length - 1 ? new Date(availableDates[idx + 1]) : null;
-        }
-        
-        function showFirstComic() {
-            currentDate = FIRST_COMIC_DATE;
-            flatpickrInstance.setDate(currentDate);
-            updateURL(currentDate);
-            loadComic();
-        }
+        function showFirstComic()  { currentDate = FIRST_COMIC_DATE; flatpickrInstance.setDate(currentDate); updateURL(currentDate); loadComic(); }
+        function showLastComic()   { currentDate = LAST_COMIC_DATE;  flatpickrInstance.setDate(currentDate); updateURL(currentDate); loadComic(); }
 
         function showPreviousComic() {
             const prevDate = findPreviousAvailableDate(currentDate);
-            if (prevDate) {
-                currentDate = prevDate;
-                flatpickrInstance.setDate(currentDate);
-                updateURL(currentDate);
-                loadComic();
-            }
-        }
-
-        function showRandomComic() {
-            const nonCCCDates = availableDates.filter(date => !cccExclusiveDates.includes(date));
-            
-            if (nonCCCDates.length === 0) {
-                alert('沒有可用的隨機漫畫!');
-                return;
-            }
-            
-            const currentDateStr = formatDate(currentDate);
-            const currentIndex = availableDates.indexOf(currentDateStr);
-            
-            const candidateDates = nonCCCDates.filter(dateStr => {
-                const candidateIndex = availableDates.indexOf(dateStr);
-                const daysDiff = Math.abs(candidateIndex - currentIndex);
-                return daysDiff >= 3;
-            });
-            
-            const finalCandidates = candidateDates.length > 0 ? candidateDates : nonCCCDates;
-            
-            const randomIndex = Math.floor(Math.random() * finalCandidates.length);
-            currentDate = new Date(finalCandidates[randomIndex]);
-            flatpickrInstance.setDate(currentDate);
-            updateURL(currentDate);
-            loadComic();
+            if (prevDate) { currentDate = prevDate; flatpickrInstance.setDate(currentDate); updateURL(currentDate); loadComic(); }
         }
 
         function showNextComic() {
             const nextDate = findNextAvailableDate(currentDate);
-            if (nextDate) {
-                currentDate = nextDate;
-                flatpickrInstance.setDate(currentDate);
-                updateURL(currentDate);
-                loadComic();
-            }
+            if (nextDate) { currentDate = nextDate; flatpickrInstance.setDate(currentDate); updateURL(currentDate); loadComic(); }
         }
 
-        function showLastComic() {
-            currentDate = LAST_COMIC_DATE;
+        function showRandomComic() {
+            const nonCCCDates = availableDates.filter(date => !cccExclusiveDates.includes(date));
+            if (nonCCCDates.length === 0) { alert('沒有可用的隨機漫畫!'); return; }
+            const currentDateStr = formatDate(currentDate);
+            const currentIndex   = availableDates.indexOf(currentDateStr);
+            const candidateDates = nonCCCDates.filter(dateStr => Math.abs(availableDates.indexOf(dateStr) - currentIndex) >= 3);
+            const finalCandidates = candidateDates.length > 0 ? candidateDates : nonCCCDates;
+            currentDate = new Date(finalCandidates[Math.floor(Math.random() * finalCandidates.length)]);
             flatpickrInstance.setDate(currentDate);
             updateURL(currentDate);
             loadComic();
@@ -1173,16 +1074,16 @@
 
         function updateNavigationButtons() {
             firstBtn.disabled = formatDate(currentDate) === formatDate(FIRST_COMIC_DATE);
-            prevBtn.disabled = findPreviousAvailableDate(currentDate) === null;
-            nextBtn.disabled = findNextAvailableDate(currentDate) === null;
-            lastBtn.disabled = formatDate(currentDate) === formatDate(LAST_COMIC_DATE);
+            prevBtn.disabled  = findPreviousAvailableDate(currentDate) === null;
+            nextBtn.disabled  = findNextAvailableDate(currentDate) === null;
+            lastBtn.disabled  = formatDate(currentDate) === formatDate(LAST_COMIC_DATE);
         }
 
         function handleKeyPress(e) {
-            if (e.key === 'ArrowLeft') showPreviousComic();
+            if (e.key === 'ArrowLeft')  showPreviousComic();
             else if (e.key === 'ArrowRight') showNextComic();
-            else if (e.key === 'Home') showFirstComic();
-            else if (e.key === 'End') showLastComic();
+            else if (e.key === 'Home')  showFirstComic();
+            else if (e.key === 'End')   showLastComic();
             else if (e.key === 'r' || e.key === 'R') showRandomComic();
         }
 

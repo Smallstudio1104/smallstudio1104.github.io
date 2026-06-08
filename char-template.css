@@ -37,9 +37,14 @@ body {
     color: #2d3436;
     text-decoration: none;
     letter-spacing: 0.05em;
+    display: inline-block;
+    transition: transform 0.2s ease;
 }
 
-.nav a:hover { text-decoration: underline; }
+.nav a:hover {
+    text-decoration: underline;
+    transform: scale(1.12);
+}
 
 .nav-logo img {
     max-height: 70px;
@@ -56,6 +61,14 @@ body {
     grid-template-columns: 420px 1fr;
     gap: 3.5rem;
     align-items: center;
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.hero.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .hero-img {
@@ -134,7 +147,7 @@ body {
 }
 
 .trivia-text {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #636e72;
     line-height: 1.8;
 }
@@ -149,12 +162,20 @@ hr.divider {
 .quote-section {
     background: white;
     padding: 2.5rem 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.quote-section.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .quote-inner {
     max-width: 760px;
     margin: 0 auto;
-    font-size: 1.25rem;
+    font-size: 2rem;
     font-weight: 800;
     line-height: 1.9;
     color: #2d3436;
@@ -179,6 +200,14 @@ hr.divider {
     max-width: 980px;
     margin: 0 auto;
     padding: 3.5rem 3.25rem 4.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.comics-section.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .section-title {
@@ -275,6 +304,14 @@ hr.divider {
     margin-bottom: 2.5rem;
     text-decoration: underline;
     text-underline-offset: 4px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.gang-section h2.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .gang-grid {
@@ -295,7 +332,14 @@ hr.divider {
     text-decoration: none;
     color: #2d3436;
     cursor: pointer;
-    transition: transform 0.22s ease;
+    opacity: 0;
+    translate: 0 40px;
+    transition: opacity 0.55s ease, translate 0.55s ease, transform 0.22s ease;
+}
+
+.char-card.visible {
+    opacity: 1;
+    translate: 0 0;
 }
 
 .char-card:hover { transform: translateY(-4px); }
@@ -304,19 +348,19 @@ hr.divider {
 .char-img-box {
     width: 200px;
     height: 200px;
-    border: 3px solid #f5c400;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #fff;
     overflow: hidden;
-    border-radius: 50%;
+    border-radius: 0;
 }
 
 .char-img-box img {
-    width: 105%;
-    height: 105%;
-    object-fit: cover;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
     pointer-events: none;
     user-select: none;
     display: block;
@@ -333,8 +377,7 @@ hr.divider {
 }
 
 .char-card.active .char-img-box {
-    border-color: #2d3436;
-    border-width: 3px;
+    border: none;
 }
 
 .char-name {

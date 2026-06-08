@@ -49,31 +49,29 @@
             color: #2d3436;
             text-decoration: none;
             letter-spacing: 0.05em;
+            display: inline-block;
+            transition: transform 0.2s ease;
         }
 
-        .nav a:hover { text-decoration: underline; }
-
-        .nav-logo img {
-            max-height: 70px;
-            height: auto;
-            cursor: pointer;
+        .nav a:hover {
+            text-decoration: underline;
+            transform: scale(1.12);
         }
 
-        .page-label {
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 0.3em;
-            color: #636e72;
-            text-transform: uppercase;
-            margin-top: 0.5rem;
-        }
-
-        /* ===== ABOUT SECTION ===== */
+        /* scroll-reveal: about section */
         .about-section {
             max-width: 700px;
             margin: 3rem auto 3rem;
             padding: 0 2rem;
             text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .about-section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .about-section h2 {
@@ -175,56 +173,72 @@
         <div class="gang-grid">
             <a class="char-card" href="char-Kalos.html">
                 <div class="char-img-box">
-                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art.png" alt="卡羅斯">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art_line.png" 
+                         data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art.png" 
+                         alt="卡羅斯">
                 </div>
                 <div class="char-name">卡羅斯</div>
             </a>
 
             <a class="char-card" href="char-Prittle.html">
                 <div class="char-img-box">
-                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art.png" alt="花生糖">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art_line.png" 
+                         data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art.png" 
+                         alt="花生糖">
                 </div>
                 <div class="char-name">花生糖</div>
             </a>
 
             <a class="char-card" href="char-Annie.html">
                 <div class="char-img-box">
-                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art.png" alt="安妮">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art_line.png" 
+                         data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art.png" 
+                         alt="安妮">
                 </div>
                 <div class="char-name">安妮</div>
             </a>
 
             <a class="char-card" href="char-Rann.html">
                 <div class="char-img-box">
-                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art.png" alt="雷恩">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art_line.png" 
+                         data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art.png" 
+                         alt="雷恩">
                 </div>
                 <div class="char-name">雷恩</div>
             </a>
             
             <a class="char-card" href="char-Hook.html">
                 <div class="char-img-box">
-                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art.png" alt="虎仔">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art_line.png" 
+                         data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art.png" 
+                         alt="虎仔">
                 </div>
                 <div class="char-name">虎仔</div>
             </a>
 
             <a class="char-card" href="char-Cled.html">
                 <div class="char-img-box">
-                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art.png" alt="克勒德">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art_line.png" 
+                         data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art.png" 
+                         alt="克勒德">
                 </div>
                 <div class="char-name">克勒德</div>
             </a>
 
             <a class="char-card" href="char-Penny.html">
                 <div class="char-img-box">
-                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art.png" alt="潘妮">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art_line.png" 
+                         data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art.png" 
+                         alt="潘妮">
                 </div>
                 <div class="char-name">潘妮</div>
             </a>
 
             <a class="char-card" href="char-Guden.html">
                 <div class="char-img-box">
-                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art.png" alt="小蝸牛股等">
+                    <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art_line.png" 
+                         data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art.png" 
+                         alt="小蝸牛股等">
                 </div>
                 <div class="char-name">小蝸牛股等</div>
             </a>
@@ -247,5 +261,81 @@
         </div>
     </footer>
 
+    <script>
+        function initCharacterLineArt() {
+            const charCards = document.querySelectorAll('.gang-grid .char-card');
+            charCards.forEach(card => {
+                const img = card.querySelector('img');
+                if (!img) return;
+
+                const colorSrc = img.dataset.colorSrc;
+                const lineSrc = img.dataset.lineSrc || img.src;
+                img.dataset.lineSrc = lineSrc;
+                img.style.transition = 'opacity 0.25s ease';
+
+                if (colorSrc) {
+                    const preload = new Image();
+                    preload.src = colorSrc;
+                }
+
+                card.addEventListener('mouseenter', () => {
+                    if (!colorSrc) return;
+                    img.src = colorSrc;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    img.src = lineSrc;
+                });
+
+                img.addEventListener('error', () => {
+                    if (img.src === lineSrc && colorSrc) img.src = colorSrc;
+                });
+            });
+        }
+
+        function initScrollReveal() {
+            const gangTitle = document.querySelector('.gang-section h2');
+            const aboutSection = document.querySelector('.about-section');
+            const cards = document.querySelectorAll('.gang-grid .char-card');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08 });
+
+            if (aboutSection) observer.observe(aboutSection);
+            if (gangTitle) observer.observe(gangTitle);
+
+            let batchTimer = null;
+            let batchIndex = 0;
+
+            const cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    clearTimeout(batchTimer);
+                    batchTimer = setTimeout(() => { batchIndex = 0; }, 80);
+
+                    entry.target.style.transitionDelay = `${batchIndex * 0.055}s`;
+                    batchIndex++;
+                    entry.target.classList.add('visible');
+                    cardObserver.unobserve(entry.target);
+                });
+            }, { threshold: 0.08 });
+
+            cards.forEach(card => {
+                card.style.transitionDelay = '0s';
+                cardObserver.observe(card);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharacterLineArt();
+            initScrollReveal();
+        });
+    </script>
 </body>
 </html>
