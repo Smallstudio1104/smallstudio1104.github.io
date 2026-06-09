@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Studio</title>
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/ddotapoxu/image/upload/v1770658297/ICON2.png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+
+            --black: #2d2a1e;      /* 原本 #1a1a1a，改成深褐黑 */
+            --white: #f5f4f0;      /* 原本 #ffffff，改成米白灰 */
+            --yellow: #ffd93d;     /* 原本 #f5c400，改成更亮的黃 */
+            --grey: #7a7060;       /* 原本 #636e72，改成暖灰 */
+            --light: #e8e6e0;      /* 原本 #f0f0f0，改成帶暖色的淺灰 */
+        
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770606869/%E8%83%8C%E6%99%AF.jpg') center center / cover no-repeat;
+            z-index: 0;
+        }
+
+        .hero-logo {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            width: 85%;
+            pointer-events: auto;
+            user-select: none;
+            margin-top: -12vh;
+            
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), filter 0.35s ease;
+            cursor: pointer;
+        }
+
+        .hero-logo:hover {
+            transform: scale(1.06);
+           
+        }
+
+        /* Hamburger — always fixed top-left */
+        .hamburger {
+            position: fixed;
+            top: 1rem;
+            left: 1.5rem;
+            z-index: 1000;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 8px;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--white);
+            transition: all 0.35s ease;
+            transform-origin: center;
+        }
+
+        .hamburger.dark span { background: var(--black); }
+
+        .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* ===== SIDE DRAWER ===== */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100%;
+            background: var(--black);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 3rem 3rem;
+            padding-top: 7rem;
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 4px 0 24px rgba(0,0,0,0.3);
+        }
+
+        .menu-overlay.open {
+            transform: translateX(0);
+        }
+
+        /* Backdrop */
+        .menu-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .menu-backdrop.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-nav {
+            list-style: none;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .menu-nav a {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: 0.12em;
+            transition: color 0.2s ease;
+            display: inline-block;
+        }
+
+        .menu-nav a:hover { color: var(--yellow); }
+
+        /* ===== STICKY NAV ===== */
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 2rem;
+            background: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770606869/%E8%83%8C%E6%99%AF.jpg') center top / cover no-repeat;
+            border-bottom: 1.5px solid rgba(255,255,255,0.15);
+            transform: translateY(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        .sticky-nav img {
+            height: 45px;
+            width: auto;
+            cursor: pointer;
+        }
+
+        .sticky-nav.visible { transform: translateY(0); }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            padding-top: 0;
+        }
+
+        /* ===== SECTION BASE ===== */
+        .section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        /* 每個區塊佔滿一整個畫面 */
+        .news-section,
+        .works-section-wrap,
+        .about-section-wrap {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: underline;
+            text-underline-offset: 8px;
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        /* ===== NEWS CAROUSEL ===== */
+        .news-section {
+            padding: 5rem 0;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .news-section .section-title {
+            padding: 0 2rem;
+        }
+
+        .carousel-track-wrap {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 1rem;
+            transition: transform 0.4s ease;
+            padding: 0 2rem;
+        }
+
+        .carousel-item {
+            flex-shrink: 0;
+            width: calc(50% - 2.5rem);
+            aspect-ratio: 16/9;
+            background: var(--light);
+            overflow: hidden;
+            border-radius: 16px;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            user-select: none;
+            display: block;
+        }
+
+        /* placeholder when no image */
+        .carousel-placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: var(--grey);
+            letter-spacing: 0.1em;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding: 0 2rem;
+        }
+
+        /* ===== ROUND CORNERS ON BUTTONS ===== */
+        .carousel-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--black);
+            background: var(--white);
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+        }
+
+        .carousel-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        /* ===== FADE-UP SCROLL ANIMATION ===== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* staggered delay for grid children */
+        .fade-up:nth-child(2) { transition-delay: 0.1s; }
+        .fade-up:nth-child(3) { transition-delay: 0.2s; }
+        .fade-up:nth-child(4) { transition-delay: 0.3s; }
+
+        /* ===== DIVIDER STRIP ===== */
+        .strip-divider {
+            background: var(--yellow);
+            padding: 1.1rem 2rem;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--black);
+        }
+
+        /* ===== WORKS ===== */
+        .works-section-full {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 5rem 2rem;
+        }
+
+        .works-section-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .work-card {
+            display: block;
+            text-decoration: none;
+            color: var(--black);
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background: var(--light);
+            transition: transform 0.3s ease;
+            border-radius: 18px;
+        }
+
+        .work-card:hover { transform: translateY(-4px); }
+
+        .work-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+            transition: transform 0.4s ease;
+        }
+
+        .work-card:hover img { transform: scale(1.04); }
+
+        .work-card-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26,26,26,0.85);
+            color: var(--white);
+            padding: 1rem 1.2rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        /* placeholder work card */
+        .work-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: var(--grey);
+            letter-spacing: 0.1em;
+        }
+
+        /* ===== ABOUT ===== */
+        .about-section {
+            border-top: 1.5px solid #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .about-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: underline;
+            text-underline-offset: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            color: var(--grey);
+            line-height: 2;
+            margin-bottom: 2rem;
+        }
+
+        .about-btn {
+            display: inline-block;
+            border: 2px solid var(--black);
+            padding: 0.9rem 2.5rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            color: var(--black);
+            transition: all 0.2s ease;
+            border-radius: 999px;
+        }
+
+        .about-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .about-img {
+            aspect-ratio: 1;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: var(--grey);
+            letter-spacing: 0.1em;
+            border-radius: 20px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-left { font-size: 0.85rem; color: #aaa; }
+
+        .footer-logo {
+            height: 50px;
+            width: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .footer-logo:hover { transform: scale(1.08); }
+
+        .footer-links {
+            max-width: 1200px;
+            margin: 0.75rem auto 0;
+            text-align: center;
+            color: #dfe6e9;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a { 
+            color: #dfe6e9; 
+            text-decoration: none; 
+            margin: 0 0.6rem; 
+        }
+
+        .footer-links a:hover { text-decoration: underline; }
+
+
+        /* ===== FOOTER ===== */        .char-carousel-btn {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--black);
+            background: var(--white);
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .char-carousel-btn:hover {
+            background: var(--black);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .carousel-item { width: calc(85% - 1rem); }
+            .about-inner { grid-template-columns: 1fr; gap: 2rem; }
+            .menu-nav a { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HAMBURGER -->
+    <button class="hamburger" id="hamburger" aria-label="選單">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- MENU BACKDROP -->
+    <div class="menu-backdrop" id="menuBackdrop"></div>
+
+    <!-- MENU SIDE DRAWER -->
+    <div class="menu-overlay" id="menuOverlay">
+        <ul class="menu-nav">
+            <li><a href="#" onclick="closeMenu()">首頁</a></li>
+            <li><a href="#about" onclick="closeMenu()">關於</a></li>
+            <li><a href="#works" onclick="closeMenu()">作品</a></li>
+            <li><a href="/characters.html" onclick="closeMenu()">角色</a></li>
+            <li><a href="SMALL/index.html" onclick="closeMenu()">SMALL</a></li>
+            <li><a href="#" onclick="closeMenu()">商品</a></li>
+        </ul>
+    </div>
+
+    <!-- STICKY NAV -->
+    <nav class="sticky-nav" id="stickyNav">
+        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770608711/Small_studio%E6%A8%99%E8%AA%8C.png"
+             alt="Small Studio"
+             onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <img class="hero-logo"
+             src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770608711/Small_studio%E6%A8%99%E8%AA%8C.png"
+             alt="Small Studio">
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- NEWS -->
+        <section class="news-section fade-up">
+            <div class="section-title">新聞</div>
+            <div class="carousel-track-wrap">
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- 把 src 換成你的新聞圖片網址 -->
+                    <div class="carousel-item">
+                        <div class="carousel-placeholder">新聞圖片 1</div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-placeholder">新聞圖片 2</div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-placeholder">新聞圖片 3</div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-placeholder">新聞圖片 4</div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-btn" id="carouselPrev">‹</button>
+                <button class="carousel-btn" id="carouselNext">›</button>
+            </div>
+        </section>
+
+        <!-- STRIP DIVIDER -->
+        <div class="strip-divider fade-up">
+            最新消息與活動 ・ NEWS & UPDATES
+        </div>
+
+        <!-- WORKS -->
+        <section class="works-section-full fade-up" id="works">
+            <div class="works-section-inner">
+                <div class="section-title">作品</div>
+                <div class="works-grid">
+                    <!-- 把 href 換成作品網址，src 換成封面圖 -->
+                    <a class="work-card fade-up" href="SMALL/index.html">
+                        <div class="work-placeholder">SMALL 封面圖</div>
+                        <div class="work-card-label">SMALL</div>
+                    </a>
+                    <a class="work-card fade-up" href="#">
+                        <div class="work-placeholder">黑狗兄 封面圖</div>
+                        <div class="work-card-label">黑狗兄</div>
+                    </a>
+                    <!-- 之後可以繼續加 -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ABOUT -->
+        <section class="section about-section fade-up" id="about">
+            <div class="about-inner">
+                <div class="about-text">
+                    <h2>關於我</h2>
+                    <p>
+                        在這裡放你的簡短自我介紹。<br><br>
+                        幾句話說明你是誰、你做什麼、你的創作方向。
+                    </p>
+                    <a class="about-btn" href="#">了解更多 →</a>
+                </div>
+                <div class="about-img">個人照片或插圖</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">© Small Studio ・ 保留所有權利</div>
+            <img class="footer-logo"
+                 src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770608711/Small_studio%E6%A8%99%E8%AA%8C.png"
+                 alt="Small Studio"
+                 onclick="window.scrollTo({top:0,behavior:'smooth'})">
+            <nav class="footer-links">
+                <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'})">首頁</a>
+                <a href="#about">關於</a>
+                <a href="#works">作品</a>
+                <a href="/characters.html">角色</a>
+                <a href="SMALL/index.html">SMALL</a>
+                <a href="#">商品</a>
+            </nav>
+        </div>
+    </footer>
+        
+    <script>
+        // ===== HAMBURGER + DRAWER =====
+        const hamburger = document.getElementById('hamburger');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const menuBackdrop = document.getElementById('menuBackdrop');
+
+        hamburger.addEventListener('click', () => {
+            const isOpen = menuOverlay.classList.toggle('open');
+            menuBackdrop.classList.toggle('open', isOpen);
+            hamburger.classList.toggle('open', isOpen);
+        });
+
+        menuBackdrop.addEventListener('click', closeMenu);
+
+        function closeMenu() {
+            menuOverlay.classList.remove('open');
+            menuBackdrop.classList.remove('open');
+            hamburger.classList.remove('open');
+        }
+
+        // ===== STICKY NAV + HAMBURGER STATE =====
+        const stickyNav = document.getElementById('stickyNav');
+        const hero = document.getElementById('hero');
+        let pastHero = false;
+
+        function onScroll() {
+            const heroBottom = hero.getBoundingClientRect().bottom;
+            pastHero = heroBottom <= 0;
+            stickyNav.classList.toggle('visible', pastHero);
+            // hamburger: when inside nav area show dark lines, else white
+            hamburger.classList.toggle('dark', pastHero);
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        // ===== FADE-UP SCROLL OBSERVER =====
+        const fadeEls = document.querySelectorAll('.fade-up');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        fadeEls.forEach(el => observer.observe(el));
+
+        // ===== CAROUSEL =====
+        const track = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('carouselPrev');
+        const nextBtn = document.getElementById('carouselNext');
+        let currentIndex = 0;
+
+        function getItemWidth() {
+            const item = track.querySelector('.carousel-item');
+            return item ? item.offsetWidth + 16 : 0; // 16 = gap
+        }
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentIndex * getItemWidth()}px)`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) { currentIndex--; updateCarousel(); }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            const total = track.querySelectorAll('.carousel-item').length;
+            const visible = window.innerWidth <= 640 ? 1 : 2;
+            if (currentIndex < total - visible) { currentIndex++; updateCarousel(); }
+        });
+
+        // ===== CHARACTER CAROUSEL =====
+        const characters = [
+            {
+                id: 'small',
+                name: '卡羅斯',
+                displayName: '卡羅斯',
+                image: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art_line.png',
+                colorImage: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art.png'
+            },
+            {
+                id: 'small',
+                name: '花生糖',
+                displayName: '花生糖',
+                image: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art_line.png',
+                colorImage: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art.png'
+            },
+            {
+                id: 'small',
+                name: '安妮',
+                displayName: '安妮',
+                image: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art_line.png',
+                colorImage: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art.png'
+            },
+            {
+                id: 'small',
+                name: '雷恩',
+                displayName: '雷恩',
+                image: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art_line.png',
+                colorImage: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art.png'
+            },
+            {
+                id: 'small',
+                name: '虎仔',
+                displayName: '虎仔',
+                image: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art_line.png',
+                colorImage: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art.png'
+            },
+            {
+                id: 'small',
+                name: '克勒德',
+                displayName: '克勒德',
+                image: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art_line.png',
+                colorImage: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art.png'
+            },
+            {
+                id: 'small',
+                name: '潘妮',
+                displayName: '潘妮',
+                image: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art_line.png',
+                colorImage: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art.png'
+            },
+            {
+                id: 'small',
+                name: '小蝸牛股等',
+                displayName: '小蝸牛股等',
+                image: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art_line.png',
+                colorImage: 'https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art.png'
+            }
+        ];
+
+        let currentCharIndex = Math.floor(Math.random() * characters.length);
+        const charImage = document.getElementById('carouselCharImage');
+        const charName = document.getElementById('carouselCharName');
+        const charPrevBtn = document.getElementById('charPrevBtn');
+        const charNextBtn = document.getElementById('charNextBtn');
+        const randomCharBtn = document.getElementById('randomCharBtn');
+
+        function updateCharacterDisplay() {
+            const char = characters[currentCharIndex];
+            charImage.src = char.image;
+            charName.textContent = char.displayName;
+            charImage.style.transition = 'opacity 0.4s ease';
+            charImage.style.opacity = '1';
+        }
+
+        function nextCharacter() {
+            currentCharIndex = (currentCharIndex + 1) % characters.length;
+            charImage.style.opacity = '0';
+            setTimeout(updateCharacterDisplay, 200);
+        }
+
+        function prevCharacter() {
+            currentCharIndex = (currentCharIndex - 1 + characters.length) % characters.length;
+            charImage.style.opacity = '0';
+            setTimeout(updateCharacterDisplay, 200);
+        }
+
+        function randomCharacter() {
+            const newIndex = Math.floor(Math.random() * characters.length);
+            currentCharIndex = newIndex;
+            charImage.style.opacity = '0';
+            setTimeout(updateCharacterDisplay, 200);
+        }
+
+        charPrevBtn.addEventListener('click', prevCharacter);
+        charNextBtn.addEventListener('click', nextCharacter);
+        randomCharBtn.addEventListener('click', randomCharacter);
+
+        // Initialize character display
+        updateCharacterDisplay();
+
+        // Add character line art hover effect
+        charImage.addEventListener('mouseenter', () => {
+            const char = characters[currentCharIndex];
+            if (char.colorImage) charImage.src = char.colorImage;
+        });
+
+        charImage.addEventListener('mouseleave', () => {
+            const char = characters[currentCharIndex];
+            charImage.src = char.image;
+        });
+    </script>
+
+</body>
+</html>

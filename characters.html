@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Studio - 角色介紹</title>
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/ddotapoxu/image/upload/v1770658297/ICON2.png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #2d2a1e;
+            --white: #f5f4f0;
+            --yellow: #ffd93d;
+            --grey: #7a7060;
+            --light: #e8e6e0;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* ===== HAMBURGER ===== */
+        .hamburger {
+            position: fixed;
+            top: 1rem;
+            left: 1.5rem;
+            z-index: 1000;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 8px;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--black);
+            transition: all 0.35s ease;
+            transform-origin: center;
+        }
+
+        .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* ===== MENU ===== */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100%;
+            background: var(--black);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 3rem 3rem;
+            padding-top: 7rem;
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 4px 0 24px rgba(0,0,0,0.3);
+        }
+
+        .menu-overlay.open { transform: translateX(0); }
+
+        .menu-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .menu-backdrop.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-nav {
+            list-style: none;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .menu-nav a {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: 0.12em;
+            transition: color 0.2s ease;
+            display: inline-block;
+        }
+
+        .menu-nav a:hover { color: var(--yellow); }
+
+        /* ===== STICKY NAV ===== */
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 2rem;
+            background: url('https://res.cloudinary.com/ddotapoxu/image/upload/v1770606869/%E8%83%8C%E6%99%AF.jpg') center top / cover no-repeat;
+            border-bottom: 1.5px solid rgba(255,255,255,0.15);
+            transform: translateY(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        .sticky-nav img {
+            height: 45px;
+            width: auto;
+            cursor: pointer;
+        }
+
+        .sticky-nav.visible { transform: translateY(0); }
+
+        /* ===== HEADER ===== */
+        .header {
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: underline;
+            text-underline-offset: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .header-subtitle {
+            font-size: 1.1rem;
+            color: var(--grey);
+            letter-spacing: 0.05em;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* ===== COLLECTION SECTION ===== */
+        .collection {
+            margin: 4rem 0;
+            padding: 3rem 0;
+            border-top: 2px solid var(--light);
+        }
+
+        .collection:first-of-type { border-top: none; }
+
+        .collection-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: underline;
+            text-underline-offset: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--black);
+        }
+
+        .gang-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 2rem;
+            justify-items: center;
+        }
+
+        .char-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--black);
+            transition: transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .char-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .char-card:hover { transform: translateY(-8px); }
+
+        .char-img-box {
+            width: 180px;
+            height: 160px;
+            
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            
+        }
+
+        .char-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .char-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+
+        /* ===== PLACEHOLDER SECTION ===== */
+        .coming-soon {
+            background: var(--light);
+            border: 2px dashed var(--grey);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .coming-soon-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--grey);
+            margin-bottom: 0.5rem;
+        }
+
+        .coming-soon-text {
+            color: var(--grey);
+            font-size: 1rem;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-left { font-size: 0.85rem; color: #aaa; }
+
+        .footer-logo {
+            height: 50px;
+            width: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .footer-logo:hover { transform: scale(1.08); }
+
+        .footer-links {
+            max-width: 1200px;
+            margin: 0.75rem auto 0;
+            text-align: center;
+            color: #dfe6e9;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a { 
+            color: #dfe6e9; 
+            text-decoration: none; 
+            margin: 0 0.6rem; 
+        }
+
+        .footer-links a:hover { text-decoration: underline; }
+
+        /* ===== FADE-UP SCROLL ===== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .gang-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1.5rem;
+            }
+            .char-img-box { width: 140px; height: 140px; }
+            .char-name { font-size: 1rem; }
+            .header-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HAMBURGER -->
+    <button class="hamburger" id="hamburger" aria-label="選單">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- MENU BACKDROP -->
+    <div class="menu-backdrop" id="menuBackdrop"></div>
+
+    <!-- MENU SIDE DRAWER -->
+    <div class="menu-overlay" id="menuOverlay">
+        <ul class="menu-nav">
+            <li><a href="index.html#" onclick="closeMenu()">首頁</a></li>
+            <li><a href="index.html#about" onclick="closeMenu()">關於</a></li>
+            <li><a href="index.html#works" onclick="closeMenu()">作品</a></li>
+            <li><a href="#" onclick="closeMenu()">角色</a></li>
+            <li><a href="SMALL/index.html" onclick="closeMenu()">SMALL</a></li>
+            <li><a href="#" onclick="closeMenu()">商品</a></li>
+        </ul>
+    </div>
+
+    <!-- STICKY NAV -->
+    <nav class="sticky-nav" id="stickyNav">
+        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770608711/Small_studio%E6%A8%99%E8%AA%8C.png"
+             alt="Small Studio"
+             onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <header class="header fade-up">
+        <h1 class="header-title">角色介紹</h1>
+        <p class="header-subtitle">Small Studio 所有作品的角色展示</p>
+    </header>
+
+    <main class="main-content">
+
+        <!-- SMALL COLLECTION -->
+        <section class="collection fade-up">
+            <h2 class="collection-title">SMALL - 連環漫畫</h2>
+            <div class="gang-grid" id="smallGangGrid">
+                <a class="char-card" href="SMALL/char-Kalos.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Kalos_Char_Art.png" 
+                             alt="卡羅斯">
+                    </div>
+                    <div class="char-name">卡羅斯</div>
+                </a>
+
+                <a class="char-card" href="SMALL/char-Prittle.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Prittle_Char_Art.png" 
+                             alt="花生糖">
+                    </div>
+                    <div class="char-name">花生糖</div>
+                </a>
+
+                <a class="char-card" href="SMALL/char-Annie.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Annie_Char_Art.png" 
+                             alt="安妮">
+                    </div>
+                    <div class="char-name">安妮</div>
+                </a>
+
+                <a class="char-card" href="SMALL/char-Rann.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780753720/Rann_Char_Art.png" 
+                             alt="雷恩">
+                    </div>
+                    <div class="char-name">雷恩</div>
+                </a>
+
+                <a class="char-card" href="SMALL/char-Hook.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Hook_Char_Art.png" 
+                             alt="虎仔">
+                    </div>
+                    <div class="char-name">虎仔</div>
+                </a>
+
+                <a class="char-card" href="SMALL/char-Cled.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762173/Cled_Char_Art.png" 
+                             alt="克勒德">
+                    </div>
+                    <div class="char-name">克勒德</div>
+                </a>
+
+                <a class="char-card" href="SMALL/char-Penny.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Penny_Char_Art.png" 
+                             alt="潘妮">
+                    </div>
+                    <div class="char-name">潘妮</div>
+                </a>
+
+                <a class="char-card" href="SMALL/char-Guden.html">
+                    <div class="char-img-box">
+                        <img src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art_line.png" 
+                             data-color-src="https://res.cloudinary.com/ddotapoxu/image/upload/v1780762172/Guden_Char_Art.png" 
+                             alt="小蝸牛股等">
+                    </div>
+                    <div class="char-name">小蝸牛股等</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 其他作品 PLACEHOLDER -->
+        <section class="collection fade-up">
+            <h2 class="collection-title">其他作品</h2>
+            <div class="coming-soon">
+                <div class="coming-soon-title">🎨 敬請期待</div>
+                <div class="coming-soon-text">更多作品的角色介紹將陸續推出</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">© Small Studio ・ 保留所有權利</div>
+            <img class="footer-logo"
+                 src="https://res.cloudinary.com/ddotapoxu/image/upload/v1770608711/Small_studio%E6%A8%99%E8%AA%8C.png"
+                 alt="Small Studio"
+                 onclick="window.scrollTo({top:0,behavior:'smooth'})">
+            <nav class="footer-links">
+                <a href="index.html">首頁</a>
+                <a href="index.html#about">關於</a>
+                <a href="index.html#works">作品</a>
+                <a href="characters.html">角色</a>
+                <a href="SMALL/index.html">SMALL</a>
+                <a href="#">商品</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        // ===== HAMBURGER + DRAWER =====
+        const hamburger = document.getElementById('hamburger');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const menuBackdrop = document.getElementById('menuBackdrop');
+
+        hamburger.addEventListener('click', () => {
+            const isOpen = menuOverlay.classList.toggle('open');
+            menuBackdrop.classList.toggle('open', isOpen);
+            hamburger.classList.toggle('open', isOpen);
+        });
+
+        menuBackdrop.addEventListener('click', closeMenu);
+
+        function closeMenu() {
+            menuOverlay.classList.remove('open');
+            menuBackdrop.classList.remove('open');
+            hamburger.classList.remove('open');
+        }
+
+        // ===== STICKY NAV =====
+        const stickyNav = document.getElementById('stickyNav');
+        let pastHeader = false;
+
+        function onScroll() {
+            const headerElement = document.querySelector('.header');
+            const headerBottom = headerElement ? headerElement.getBoundingClientRect().bottom : 0;
+            pastHeader = headerBottom <= 0;
+            stickyNav.classList.toggle('visible', pastHeader);
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        // ===== CHARACTER LINE ART =====
+        function initCharacterLineArt() {
+            document.querySelectorAll('.gang-grid .char-card').forEach(card => {
+                const img = card.querySelector('img');
+                if (!img) return;
+                const colorSrc = img.dataset.colorSrc;
+                const lineSrc = img.dataset.lineSrc || img.src;
+                img.dataset.lineSrc = lineSrc;
+                img.style.transition = 'opacity 0.25s ease';
+                if (colorSrc) {
+                    const preload = new Image();
+                    preload.src = colorSrc;
+                }
+                card.addEventListener('mouseenter', () => {
+                    if (colorSrc) img.src = colorSrc;
+                });
+                card.addEventListener('mouseleave', () => {
+                    img.src = lineSrc;
+                });
+                img.addEventListener('error', () => {
+                    if (img.src === lineSrc && colorSrc) img.src = colorSrc;
+                });
+            });
+        }
+
+        // ===== FADE-UP SCROLL OBSERVER =====
+        function initScrollReveal() {
+            const fadeEls = document.querySelectorAll('.fade-up, .char-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeEls.forEach((el, i) => {
+                if (el.classList.contains('char-card')) {
+                    el.style.transitionDelay = `${(i % 8) * 0.06}s`;
+                }
+                observer.observe(el);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharacterLineArt();
+            initScrollReveal();
+        });
+    </script>
+
+</body>
+</html>
